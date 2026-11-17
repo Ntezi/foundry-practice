@@ -595,8 +595,8 @@
       },
       {
         "id": "d",
-        "text": "Change the input from primary keys to an array of `Truck` objects passed in by Workshop",
-        "why": "An object array is loaded up front before the Function body runs, so the loading cost is moved rather than removed, and the sum is still computed in memory."
+        "text": "Keep one query per truck but have each query select only the `payloadTonnes` property",
+        "why": "Selecting only the property that is read makes each response smaller, but the Function still issues a separate query for every truck, so the number of requests is unchanged."
       },
       {
         "id": "e",

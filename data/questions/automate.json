@@ -848,7 +848,7 @@
       },
       {
         "id": "b",
-        "text": "The automation is muted, perhaps by auto-mute; an Editor has to unmute it",
+        "text": "The automation is muted, perhaps by auto-mute; an Editor can unmute it",
         "why": "Correct. A muted automation keeps evaluating its condition and recording activity but triggers no effects, and auto-mute can apply this after repeated effect failures."
       },
       {
@@ -865,7 +865,7 @@
     "answer": [
       "b"
     ],
-    "explanation": "Muting and pausing differ in what continues. A muted automation still evaluates its condition and records activity but runs no effects, whereas a paused one does not run scheduled or live triggers at all. With the auto-mute setting enabled, an automation is muted automatically when its effects keep failing, and it stays muted until a user with the Editor role unmutes it.",
+    "explanation": "Muting and pausing differ in what continues. A muted automation still evaluates its condition and records activity but runs no effects, whereas a paused one does not run scheduled or live triggers at all. With the auto-mute setting enabled, an automation is muted automatically after repeated effect failures, and a user with the Editor role on the automation can unmute it at any time.",
     "source": {
       "title": "Automate: Muting, pausing, and expiration",
       "url": "https://www.palantir.com/docs/foundry/automate/muting-pausing-expiration/"

@@ -457,7 +457,7 @@
       {
         "id": "b",
         "text": "The release fails, because functions may not be placed in subdirectories",
-        "why": "Grouping functions into subdirectories of the functions directory is supported and recommended."
+        "why": "Grouping functions into subdirectories of the functions directory is supported."
       },
       {
         "id": "c",
@@ -1069,7 +1069,7 @@
       {
         "id": "a",
         "text": "Have the Action only record a request object, and run the long step in an automation",
-        "why": "Correct. The Action returns quickly, functions run asynchronously in Automate, and the request object's status tracks the work instead of a waiting browser."
+        "why": "Correct. The Action returns quickly, and an automation triggered by the new request object does the long work in the background. Function effects in Automate run asynchronously, but they do not apply Ontology edits, so the results and the request status are written back through an Action."
       },
       {
         "id": "b",
@@ -1096,7 +1096,7 @@
       "a",
       "c"
     ],
-    "explanation": "Long work does not belong in a call that the user waits on. A quick Action can create or update a request object, an automation can run the function in the background, and the module can read the request's status. Disabling the trigger while a request is open stops duplicate submissions.",
+    "explanation": "Long work does not belong in a call that the user waits on. A quick Action can create or update a request object, and an automation watching for new requests can run the long step in the background. Function effects in Automate run asynchronously, but a function that returns Ontology edits does not have them applied as a function effect, so the plan and the request status must be written through an Action. The module reads the request status, and disabling the button while a request is open stops duplicate submissions.",
     "source": {
       "title": "Functions: Use functions in the platform",
       "url": "https://www.palantir.com/docs/foundry/functions/use-functions/"
