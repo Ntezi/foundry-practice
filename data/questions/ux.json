@@ -37,8 +37,8 @@
     ],
     "explanation": "Workshop's application events can open another Foundry tool, including Object Explorer, and hand it the current value of a variable such as an object set. Redirecting to Object Explorer gives analysts its built-in filters, charts and saved explorations instead of rebuilding that functionality inside the module.",
     "source": {
-      "title": "Workshop: Events",
-      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/"
+      "title": "Carbon: Configure navigation between modules",
+      "url": "https://www.palantir.com/docs/foundry/carbon/modules-navigation/"
     }
   },
   {
@@ -672,8 +672,8 @@
     ],
     "explanation": "Workshop's application events (Open Workshop module, Object view, Object Explorer and others) normally open the target resource in a new browser tab. When the module is running in a Carbon workspace, the same events open the target in a new Carbon tab, letting users step through a workflow without losing the state of the module they came from.",
     "source": {
-      "title": "Workshop: Events",
-      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/"
+      "title": "Carbon: Configure navigation between modules",
+      "url": "https://www.palantir.com/docs/foundry/carbon/modules-navigation/"
     }
   },
   {

@@ -644,7 +644,7 @@
     "answer": [
       "a"
     ],
-    "explanation": "Transform tables are computed in the browser and are limited to 50,000 rows, whether the rows come from the starting object set or from a join. The recommended approach for a larger object set is to reduce it with a Filter object set card before passing it into the transform table.",
+    "explanation": "Transform tables are computed in the browser and are limited to 50,000 rows, whether the rows come from the starting object set or from a join. A larger object set has to be reduced first, for example with a Filter object set card, before it is passed into the transform table.",
     "source": {
       "title": "Quiver: Transform tables",
       "url": "https://www.palantir.com/docs/foundry/quiver/cards-transform-table/"

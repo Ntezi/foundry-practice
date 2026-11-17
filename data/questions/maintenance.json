@@ -93,7 +93,7 @@
     },
     "difficulty": "medium",
     "format": "multi",
-    "stem": "At Brightwater Utilities the `Asset` object type has been made a protected resource. An engineer opens it in Ontology Manager on main, adds a property, and goes to save. Meanwhile a colleague has saved a different change to `Asset` on main. Which statements describe what the engineer should expect? Select TWO.",
+    "stem": "At Brightwater Utilities the `Asset` object type has been made a protected resource. An engineer opens it in Ontology Manager on main, adds a property, and goes to save. Meanwhile a different change to `Asset` by a colleague has been merged into main. Which statements describe what the engineer should expect? Select TWO.",
     "options": [
       {
         "id": "a",

@@ -78,7 +78,7 @@ The rules are implemented in [`src/engine.js`](src/engine.js) and tested in [`te
 - **True/False** is a practice format inspired by the Foundry Aware exam experience. It is not listed in the official Associate material, so it is never part of the Associate mock, and the optional True/False mix in a 2026-guide form is labelled a practice variation.
 - No exam dumps, recalled exam questions, or third-party question banks were used.
 
-- **Answer-key review** (17 November 2026): the 186 questions in the six newer files, plus three flagged older ones, were each checked by an independent reviewer against the cited documentation pages. No wrong answer key was found; one ambiguous distractor and two overstated explanations were corrected. The 157 other older questions were read in full for tagging and plausibility but were not re-checked against the documentation page by page.
+- **Answer-key review** (17 November 2026): all 346 questions were each checked by an independent reviewer against the cited documentation pages. No wrong answer key was found. One ambiguous distractor and two overstated explanations were corrected, and a few stems, explanations and source links were tidied. The reviewers were AI models working from the public documentation, not Foundry practitioners; if you find an error, please open an issue.
 
 Documentation changes. Run `npm run check:links` to confirm every cited page still resolves, and re-read a page before trusting an old explanation.
 
