@@ -255,3 +255,13 @@ dialog p { margin: 0 0 18px; color: var(--fg-2); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 @media print { .topbar, .footer, .filters, .btn { display: none !important; } }
+
+/* Number of questions, weak topics */
+input[type="number"] { padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--bg); width: 96px; min-height: 38px; }
+.progress.weak > i { background: var(--bad); }
+.weak { list-style: none; padding: 0; margin: 10px 0 14px; display: grid; gap: 8px; counter-reset: weak; }
+.weak li { counter-increment: weak; padding: 10px 14px 10px 44px; border: 1px solid var(--line); border-left: 4px solid var(--bad); border-radius: 8px; position: relative; }
+.weak li::before { content: counter(weak); position: absolute; left: 12px; top: 10px; width: 22px; height: 22px; border-radius: 6px; background: var(--bg-3); color: var(--fg-2); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.weak-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.notice ul { margin: 6px 0 10px; padding-left: 20px; }
+.prose h3 { font-size: 15px; margin: 18px 0 4px; }

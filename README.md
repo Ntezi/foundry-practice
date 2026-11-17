@@ -1,6 +1,6 @@
 # Foundry Practice
 
-Mock exams and practice questions for the Palantir Foundry Application Developer certification. A companion to [Foundry Learn](https://ntezi.github.io/foundry-learn/).
+Mock exams and practice questions for the Palantir Application Developer Associate certification. A companion to [Foundry Learn](https://ntezi.github.io/foundry-learn/).
 
 Live site: <https://ntezi.github.io/foundry-practice/>
 
@@ -8,40 +8,46 @@ Live site: <https://ntezi.github.io/foundry-practice/>
 
 ## What it does
 
-- **Mock Exam**: a complete 60-question form, one question at a time, forward-only. Each answer is locked when you advance; you can skip a question, and a skipped question is scored as unanswered. Feedback appears only after you submit.
-- **Practice**: pick sections, question formats and session length, move backwards and forwards, and choose feedback after each answer ("Check answer") or at the end. A True/False-only drill is one click.
-- **Timed or untimed** in either mode. Only the timed, forward-only mock with the guide's formats is labelled the guide-based simulation. An untimed mock is labelled "Untimed Mock Exam".
-- **Review answers** after every session: the question, your answer or its unanswered status, the correct answer, the explanation, why each option is right or falls short, and the documentation source. Filter by all, correct, missed or unanswered.
-- **Progress** by section for every attempt, and by topic across practice sessions.
+- **Mock Exam**: a full exam, one question at a time, sequential and forward-only. Each answer is locked when you advance; you can skip a question, and a skipped question is scored as unanswered. Feedback appears only after you submit. Two blueprints:
+  - **Current official Associate guide** (default): 85 multiple-choice questions, 180 minutes, 60 of 85 to pass. Every attempt is a fresh random draw across the eight official domains.
+  - **2026 PDF certification guide**: the earlier 60-question, 120-minute exam, as two fixed forms.
+- **Practice**: any number of questions, from one to everything that matches the domains and formats you pick. By default you review each answer as you go: "Check answer" shows whether you were right, the correct answer, the explanation and the documentation source before you move on. Feedback at the end is the alternative. A True/False-only drill is one click.
+- **Timed or untimed** in either mode. Only a timed, forward-only mock is labelled as following a guide. An untimed mock is labelled "Untimed Mock Exam".
+- **Where to focus**: after every session the results list the topics where you scored below 70%, weakest first, with the documentation pages behind the questions you missed and a button that starts a practice session on exactly those topics. The Progress page does the same across all practice sessions.
+- **Review answers** after every session: the question, your answer or its unanswered status, the correct answer, the explanation, why each option is right or falls short, and the source. Filter by all, correct, missed or unanswered.
 - Timed sessions count down to a saved deadline, so a refresh or a closed tab does not stop the clock. An attempt whose deadline has passed is submitted automatically, including when you come back later.
 - Everything is stored in the browser's local storage. There is no backend, account or analytics.
 
-## Exam blueprint and how it differs from the live exam
+## How the simulator follows the official guide
 
-The simulator baseline is the 2026 Application Developer Certification Guide the author studied from: 60 questions, 120 minutes, a 70% passing score, and questions presented in sequence with no way back. That PDF is marked proprietary, so it is **not** in this repository (`*.pdf` is git-ignored); only its structure is encoded in [`data/blueprint.json`](data/blueprint.json).
+The default mock follows the current [Application Developer Associate Certification Exam Guide](https://learn.palantir.com/page/palantir-application-developer-associate-certification-exam-guide), published when Palantir refreshed its Associate exams on 3 August 2026 ([announcement](https://community.palantir.com/t/palantir-certifications-are-getting-a-refresh-with-a-brand-new-ai-engineer-exam-launching-3-august/7022)). Checked on 17 November 2026.
 
-| Section | Weight | Questions per form |
+Taken from the official guide:
+
+| Topic | Official guide | Simulator |
 | --- | --- | --- |
-| Application Design | 30% | 18 |
-| Application Implementation | 30% | 18 |
-| UX and Cross-Application Workflows | 20% | 12 |
-| Application Maintenance | 20% | 12 |
+| Questions | 85 | 85 |
+| Duration | 3 hours | 180 minutes |
+| Passing score | 70% | 70%, which is 60 of 85 |
+| Question order | "Questions are sequential" | One at a time, no way back |
+| Format | Multiple-choice (per the announcement) | Single-select and multi-select only |
+| Content | Eight domains | The same eight domains, with results reported per domain |
 
-Palantir refreshed its Associate exams on 3 August 2026. The current official guidance, checked on 17 November 2026, describes a different exam:
+The eight domains: Ontology Schema Design and Workflow Assembly; Action Types and Write-Back Patterns; Ontology Functions; Workshop Application Development; OSDK, APIs, and External Applications; Automate and Operational Workflows; AIP Logic and AI-Powered Applications; Application Security, Governance, and Operations.
 
-| Topic | This simulator (baseline guide) | Current official Associate guidance |
-| --- | --- | --- |
-| Questions | 60 | 85 |
-| Duration | 120 minutes | 3 hours |
-| Passing score | 70% (42 of 60) | 70% |
-| Navigation | Forward-only | "Questions are sequential" |
-| Formats | Single-select, multi-select, discrete options, hotspot, matching | The launch announcement says "multiple-choice"; no other format is mentioned |
-| True/False | Practice only, plus an optional, labelled mix in mock forms | Not mentioned |
-| Content outline | Four weighted sections (above) | Eight domains without published weights: Ontology Schema Design and Workflow Assembly; Action Types and Write-Back Patterns; Ontology Functions; Workshop Application Development; OSDK, APIs, and External Applications; Automate and Operational Workflows; AIP Logic and AI-Powered Applications; Application Security, Governance, and Operations |
-| Coverage gaps | Covers Quiver, Scenarios, Foundry Rules, Object Views and Carbon, as the baseline guide lists them | OSDK and external applications, Automate, AIP Logic, Python functions, and security and governance are exam domains that this bank covers only in passing or not at all |
-| Conditions | In the browser, unproctored | Timed and open-book, valid for two years |
+Where the guide is silent, the simulator assumes:
 
-Sources: [Application Developer Associate Certification Exam Guide](https://learn.palantir.com/page/palantir-application-developer-associate-certification-exam-guide) and the [certification refresh announcement](https://community.palantir.com/t/palantir-certifications-are-getting-a-refresh-with-a-brand-new-ai-engineer-exam-launching-3-august/7022). The same comparison is shown in the app under **About & scoring** and lives in [`data/guidance.json`](data/guidance.json); update that file when the guidance changes. A pass here shows topic knowledge. It does not predict a result on the live exam.
+- **Domain weights** are not published, so the 85 questions are spread as evenly as possible: 11 for each of the first five domains and 10 for each of the last three (`blueprint.exams[associate].quotas`).
+- **Scoring**: one point per question, no partial credit for multi-select.
+- **Skipping** is allowed and scored as unanswered.
+- **Open book**: the live exam is open-book; the simulator neither prevents nor assists look-ups.
+- **Other formats**: True/False, hotspot, matching and discrete options are not mentioned in the official material, so they are offered in Practice and in the 2026 PDF guide mock only.
+
+The same lists are shown in the app under **About & scoring** and live in [`data/guidance.json`](data/guidance.json); update that file when the guidance changes. A pass here shows topic knowledge. It does not predict a result on the live exam.
+
+### The earlier 2026 PDF guide
+
+The site was first built on a 2026 Application Developer Certification Guide PDF that describes an earlier exam: 60 questions, 120 minutes, 70% to pass, and four weighted sections (Application Design 30%, Application Implementation 30%, UX and Cross-Application Workflows 20%, Application Maintenance 20%), with hotspot, matching and discrete-options questions. It is kept as a second mock blueprint. That PDF is marked proprietary, so it is **not** in this repository (`*.pdf` is git-ignored); only its structure is encoded in `blueprint.guide2026`. Its Quiver, Scenarios, Foundry Rules, Object Views and Carbon topics are not in the current outline and appear in Practice as "Earlier-guide topics".
 
 ## Scoring rules
 
@@ -56,9 +62,10 @@ Every question is worth one point, with no partial credit and no penalty for a w
 | Matching | Every item on the left is matched to its keyed answer. |
 | True/False | You choose the keyed value. |
 
-- A 60-question mock passes at 70% with equal weights: **42 of 60 passes, 41 of 60 does not**. The check is `correct * 100 >= 70 * total`, in integers, so there is no rounding.
+- A mock passes at 70% with equal weights. For the Associate mock that is **60 of 85 (59 does not pass)**; for the 2026 PDF guide mock, **42 of 60 (41 does not pass)**. The check is `correct * 100 >= 70 * total`, in integers, so there is no rounding.
 - Skipped and unanswered questions score zero and are reported as unanswered.
-- Results show the overall score and correct/total per section. Practice sessions have no pass or fail; their scores feed the progress-by-topic table.
+- Results show the overall score and correct/total per domain. Practice sessions have no pass or fail; their scores feed the progress-by-topic table.
+- A topic counts as a weakness when its share correct is below 70% (`blueprint.practice.weakBelowPercent`). Unanswered questions count as missed. On the Progress page a topic needs at least three practice questions behind it.
 - A timed session that reaches its deadline is scored on the answers saved by then.
 
 The rules are implemented in [`src/engine.js`](src/engine.js) and tested in [`test/engine.test.mjs`](test/engine.test.mjs).
@@ -66,9 +73,9 @@ The rules are implemented in [`src/engine.js`](src/engine.js) and tested in [`te
 ## Source provenance
 
 - **Questions** are original, scenario-based and written for this project. Each one cites a public page under `https://www.palantir.com/docs/foundry/` that supports the keyed answer.
-- **Blueprint** (question count, time limit, pass mark, sections and weights, formats) comes from the baseline guide described above.
+- **Blueprints** (question count, time limit, pass mark, domains, formats) come from the two guides described above.
 - **Diagrams** in hotspot questions are original and drawn by the site from data in the question file. No Palantir screenshots or artwork are used.
-- **True/False** is a practice format inspired by the Foundry Aware exam experience. It is not listed in the official Associate material, so the optional True/False mix in a mock form is labelled a practice variation.
+- **True/False** is a practice format inspired by the Foundry Aware exam experience. It is not listed in the official Associate material, so it is never part of the Associate mock, and the optional True/False mix in a 2026-guide form is labelled a practice variation.
 - No exam dumps, recalled exam questions, or third-party question banks were used.
 
 Documentation changes. Run `npm run check:links` to confirm every cited page still resolves, and re-read a page before trusting an old explanation.
@@ -95,10 +102,12 @@ npm run check:links  # check every documentation link (needs network)
 ## How it fits together
 
 ```
-data/blueprint.json      sections, objectives, formats, baseline numbers
-data/questions/*.json    the question bank, one file per section
-data/forms.json          the mock forms (lists of question ids) and their True/False swaps
-data/guidance.json       the comparison with current official guidance
+data/blueprint.json      the two exam blueprints, the eight official domains and their objectives, formats
+data/questions/*.json    the question bank (every file in the folder is loaded)
+data/forms.json          the fixed 2026-guide forms (lists of question ids) and their True/False swaps
+data/guidance.json       what is taken from the official guide and what is assumed
+data/SCHEMA.md           the question data shape
+data/AUTHORING.md        the quality bar and sourcing rules for new questions
 src/engine.js            sessions, scoring, deadlines (no DOM, unit-tested)
 src/question.js          question and feedback rendering for every format
 src/app.js               setup, session, results, review, progress and about views
@@ -120,13 +129,13 @@ If the repository is renamed, change `BASE_PATH` in `scripts/config.mjs`, the ca
 
 ## How to add questions
 
-1. Open the section file in `data/questions/` and add an object. [`data/SCHEMA.md`](data/SCHEMA.md) describes every field and format. Minimal single-select example:
+1. Add an object to any file in `data/questions/`, or add a new `.json` file there; every file in the folder is loaded. [`data/SCHEMA.md`](data/SCHEMA.md) describes every field and format, and [`data/AUTHORING.md`](data/AUTHORING.md) the quality bar. Minimal single-select example:
 
    ```json
    {
-     "id": "des-037",
-     "domain": "design",
-     "objective": "tool-selection",
+     "id": "osdk-027",
+     "domain": "osdk",
+     "objective": "authentication",
      "difficulty": "medium",
      "format": "single",
      "stem": "A scenario with a realistic constraint, then the question.",
@@ -144,8 +153,8 @@ If the repository is renamed, change `BASE_PATH` in `scripts/config.mjs`, the ca
 
 2. Give it a new id and never reuse or renumber an existing one: saved attempts refer to questions by id.
 3. Write original scenarios, cite one public documentation page, and explain every option. Options are shuffled per attempt, so do not refer to an option by letter and do not use "all of the above". Keep True and False keys balanced.
-4. Run `npm run validate`. It checks ids, objectives, answer keys, per-option explanations, hotspot geometry, True/False balance and the forms.
-5. A new question is available to Practice straight away. To use it in a mock, edit `data/forms.json`; each form must keep 18 / 18 / 12 / 12 questions per section, share no question with another form, and include every guide format. `scripts/build-forms.mjs` regenerates both forms from the id convention, and overwrites manual edits to `forms.json`.
+4. Run `npm run validate`. It checks ids, domains and objectives, answer keys, per-option explanations, hotspot geometry, True/False balance, the forms, and that every official domain has enough multiple-choice questions to fill the Associate mock.
+5. A new question is available to Practice straight away. A single-select or multi-select question in one of the eight official domains also joins the pool the Associate mock draws from; nothing else needs editing. The fixed 2026-guide forms in `data/forms.json` only take questions that carry a `guide` placement.
 
 ## Accessibility
 

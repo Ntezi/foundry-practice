@@ -72,29 +72,67 @@ export function passes(correct, total, passPercent) {
   return total > 0 && correct * 100 >= passPercent * total;
 }
 
+/** Which outline a session reports against: the fixed 2026-guide forms use that guide's four sections. */
+export const outlineOf = (session) => (session.examId === 'guide2026' ? 'guide2026' : 'associate');
+
+/** Where a question sits in an outline. Returns null when a question has no place in the 2026 guide. */
+export function placeOf(q, outline) {
+  if (outline === 'guide2026') return q.guide ? { domain: q.guide.section, objective: q.guide.objective } : null;
+  return { domain: q.domain, objective: q.objective };
+}
+
+/** The domains (or guide sections) of an outline as [{ id, title, objectives: [{ id, title }] }]. */
+export function outlineDomains(blueprint, outline) {
+  if (outline !== 'guide2026') return blueprint.domains;
+  return blueprint.guide2026.sections.map((s) => ({ id: s.id, title: s.title, objectives: s.objectives.map((o) => ({ id: o, title: o.replace(/-/g, ' ') })) }));
+}
+
 export function scoreSession(session, byId, blueprint) {
+  const outline = outlineOf(session);
   const byDomain = {}, byObjective = {};
-  for (const d of blueprint.domains) byDomain[d.id] = { correct: 0, total: 0 };
   let correct = 0, answered = 0;
   for (const qid of session.qids) {
     const q = byId.get(qid);
     if (!q) continue;
+    const place = placeOf(q, outline) || { domain: 'other', objective: 'other' };
     const st = statusOf(q, session.responses[qid]?.value);
-    const key = `${q.domain}/${q.objective}`;
+    const key = `${place.domain}/${place.objective}`;
+    byDomain[place.domain] ||= { correct: 0, total: 0 };
     byObjective[key] ||= { correct: 0, total: 0 };
-    byDomain[q.domain].total++; byObjective[key].total++;
+    byDomain[place.domain].total++; byObjective[key].total++;
     if (st !== 'unanswered') answered++;
-    if (st === 'correct') { correct++; byDomain[q.domain].correct++; byObjective[key].correct++; }
+    if (st === 'correct') { correct++; byDomain[place.domain].correct++; byObjective[key].correct++; }
   }
   const total = session.qids.length;
-  const isFullMock = session.mode === 'mock' && total === blueprint.baseline.questions;
+  const exam = session.mode === 'mock' ? blueprint.exams.find((e) => e.id === session.examId) : null;
+  const isFullMock = !!exam && total === exam.questions;
   return {
     correct, total, answered, unanswered: total - answered,
     percent: total ? Math.round((correct / total) * 1000) / 10 : 0,
-    passed: isFullMock ? passes(correct, total, blueprint.baseline.passPercent) : null,
-    needed: isFullMock ? Math.ceil((blueprint.baseline.passPercent * total) / 100) : null,
+    passed: isFullMock ? passes(correct, total, exam.passPercent) : null,
+    needed: isFullMock ? Math.ceil((exam.passPercent * total) / 100) : null,
+    passPercent: isFullMock ? exam.passPercent : null,
     byDomain, byObjective,
   };
+}
+
+/**
+ * The topics to work on after an attempt: objectives scored below the threshold, weakest first.
+ * Ties go to the topic with more questions behind it, since that is stronger evidence.
+ */
+export function weaknesses(score, blueprint, outline = 'associate', limit = 5) {
+  const threshold = blueprint.practice.weakBelowPercent;
+  const rows = [];
+  for (const d of outlineDomains(blueprint, outline)) {
+    for (const o of d.objectives) {
+      const s = score.byObjective[`${d.id}/${o.id}`];
+      if (!s || !s.total) continue;
+      const pct = (s.correct / s.total) * 100;
+      if (pct < threshold) rows.push({ domain: d.id, domainTitle: d.title, objective: o.id, title: o.title, key: `${d.id}/${o.id}`, correct: s.correct, total: s.total, missed: s.total - s.correct, percent: Math.round(pct) });
+    }
+  }
+  rows.sort((a, b) => a.percent - b.percent || b.missed - a.missed || b.total - a.total);
+  return rows.slice(0, limit);
 }
 
 /** The per-attempt display order of options (and of right-hand items for matching). */
@@ -110,41 +148,57 @@ export function mockQuestionIds(form, tfMix) {
   return form.questions.map((id) => swap.get(id) || id);
 }
 
-export function practicePool(bank, { domains, formats }) {
+/** Draws the Associate mock: a random quota per official domain from the exam's formats, then mixed. */
+export function assembleExam(exam, bank, rng = Math.random) {
+  const picked = [];
+  for (const [domain, n] of Object.entries(exam.quotas)) {
+    const pool = shuffle(bank.filter((q) => q.domain === domain && exam.formats.includes(q.format)), rng);
+    picked.push(...pool.slice(0, n));
+  }
+  return shuffle(picked, rng).map((q) => q.id);
+}
+
+/** opts.objectives (optional) narrows the pool to "domain/objective" keys, used for focused practice. */
+export function practicePool(bank, { domains, formats, objectives }) {
+  if (objectives?.length) return bank.filter((q) => objectives.includes(`${q.domain}/${q.objective}`) && formats.includes(q.format));
   return bank.filter((q) => domains.includes(q.domain) && formats.includes(q.format));
 }
 
 /**
- * opts: { mode: 'mock'|'practice', timed, feedback: 'each'|'end', formId, tfMix, domains, formats, length }
+ * opts: { mode: 'mock'|'practice', timed, feedback: 'each'|'end', examId, formId, tfMix, domains, formats, objectives, length }
  */
 export function createSession(opts, { bank, forms, blueprint }, now = Date.now(), rng = Math.random) {
   const byId = new Map(bank.map((q) => [q.id, q]));
+  const mock = opts.mode === 'mock';
+  const exam = mock ? blueprint.exams.find((e) => e.id === opts.examId) || blueprint.exams[0] : null;
+  const form = exam?.assembly === 'forms' ? forms.find((f) => f.id === opts.formId) || forms[0] : null;
+  const tfMix = !!form && !!opts.tfMix;
   let qids, title;
-  if (opts.mode === 'mock') {
-    const form = forms.find((f) => f.id === opts.formId) || forms[0];
-    qids = mockQuestionIds(form, opts.tfMix);
-    title = `${opts.timed ? 'Mock Exam' : 'Untimed Mock Exam'} · ${form.title}${opts.tfMix ? ' · True/False mix' : ''}`;
+  if (mock) {
+    qids = form ? mockQuestionIds(form, tfMix) : assembleExam(exam, bank, rng);
+    title = `${opts.timed ? 'Mock Exam' : 'Untimed Mock Exam'} · ${exam.short}${form ? ` · ${form.title}` : ''}${tfMix ? ' · True/False mix' : ''}`;
   } else {
     const pool = shuffle(practicePool(bank, opts), rng);
-    qids = pool.slice(0, Math.max(1, Math.min(opts.length || pool.length, pool.length))).map((q) => q.id);
+    const want = Math.floor(Number(opts.length)) || pool.length;
+    qids = pool.slice(0, Math.max(1, Math.min(want, pool.length))).map((q) => q.id);
     const tfOnly = opts.formats.length === 1 && opts.formats[0] === 'truefalse';
-    title = `${tfOnly ? 'True/False drill' : 'Practice'} · ${qids.length} question${qids.length === 1 ? '' : 's'}`;
+    title = `${opts.objectives?.length ? 'Focused practice' : tfOnly ? 'True/False drill' : 'Practice'} · ${qids.length} question${qids.length === 1 ? '' : 's'}`;
   }
-  const minutes = opts.mode === 'mock'
-    ? blueprint.baseline.minutes
-    : Math.ceil((qids.length * blueprint.practice.secondsPerQuestion) / 60);
+  const minutes = mock ? exam.minutes : Math.ceil((qids.length * blueprint.practice.secondsPerQuestion) / 60);
   const order = {};
   for (const id of qids) { const o = buildOrder(byId.get(id), rng); if (o) order[id] = o; }
   return {
-    v: 1,
+    v: 2,
     id: `${now.toString(36)}-${Math.floor(rng() * 1e6).toString(36)}`,
     mode: opts.mode,
     timed: !!opts.timed,
-    feedback: opts.mode === 'mock' ? 'end' : opts.feedback,
-    formId: opts.mode === 'mock' ? (forms.find((f) => f.id === opts.formId) || forms[0]).id : null,
-    tfMix: opts.mode === 'mock' && !!opts.tfMix,
-    // Only the timed, forward-only mock with the guide's formats is presented as the guide-based simulation.
-    guideBased: opts.mode === 'mock' && !!opts.timed && !opts.tfMix,
+    feedback: mock ? 'end' : opts.feedback,
+    examId: exam ? exam.id : null,
+    formId: form ? form.id : null,
+    tfMix,
+    // Only a timed, forward-only mock in the guide's own formats is presented as a simulation of that guide.
+    guideBased: mock && !!opts.timed && !tfMix,
+    focus: !mock && opts.objectives?.length ? [...opts.objectives] : null,
     title, qids, order,
     minutes: opts.timed ? minutes : null,
     startedAt: now,

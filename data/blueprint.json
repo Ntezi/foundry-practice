@@ -1,77 +1,165 @@
 {
   "name": "Foundry Practice",
-  "certification": "Palantir Foundry Application Developer",
-  "baseline": {
-    "label": "2026 Application Developer Certification Guide (attached guide, not redistributed)",
-    "questions": 60,
-    "minutes": 120,
-    "passPercent": 70,
-    "navigation": "forward-only"
-  },
+  "certification": "Palantir Application Developer Associate",
+  "exams": [
+    {
+      "id": "associate",
+      "title": "Current official Associate guide",
+      "short": "Associate",
+      "source": "Application Developer Associate Certification Exam Guide, learn.palantir.com",
+      "questions": 85,
+      "minutes": 180,
+      "passPercent": 70,
+      "navigation": "forward-only",
+      "assembly": "dynamic",
+      "formats": ["single", "multi"],
+      "quotas": { "ontology": 11, "actions": 11, "functions": 11, "workshop": 11, "osdk": 11, "automate": 10, "aip": 10, "security": 10 },
+      "quotaNote": "The official guide publishes no domain weights, so the simulator spreads the 85 questions as evenly as possible over the eight domains."
+    },
+    {
+      "id": "guide2026",
+      "title": "2026 PDF certification guide",
+      "short": "2026 PDF guide",
+      "source": "2026 Application Developer Certification Guide (PDF, not redistributed)",
+      "questions": 60,
+      "minutes": 120,
+      "passPercent": 70,
+      "navigation": "forward-only",
+      "assembly": "forms"
+    }
+  ],
   "practice": {
-    "secondsPerQuestion": 120,
-    "lengths": [10, 20, 30, 60]
+    "secondsPerQuestion": 127,
+    "presets": [5, 10, 20, 40],
+    "defaultLength": 10,
+    "focusLength": 15,
+    "weakBelowPercent": 70
   },
   "domains": [
     {
-      "id": "design",
-      "title": "Application Design",
-      "weightPercent": 30,
-      "questions": 18,
+      "id": "ontology",
+      "number": 1,
+      "title": "Ontology Schema Design and Workflow Assembly",
+      "inOutline": true,
       "objectives": [
-        { "id": "tool-selection", "title": "Choose the right Foundry application for a workflow" },
-        { "id": "ontology-pipeline-design", "title": "Design ontology and pipelines from business requirements" },
-        { "id": "operational-workflows", "title": "Turn dashboards into operational workflows" },
-        { "id": "ux-design", "title": "Optimize application and cross-application UX" }
+        { "id": "modeling", "title": "Model object types, properties, interfaces, shared properties and value types" },
+        { "id": "identity-links", "title": "Choose stable identity, cardinality and meaningful link types" },
+        { "id": "workflow-assembly", "title": "Assemble operational workflows across Ontology, Workshop, Functions, Actions and Automate" },
+        { "id": "change-impact", "title": "Understand impact and evolve the schema without breaking consumers" }
       ]
     },
     {
-      "id": "implementation",
-      "title": "Application Implementation",
-      "weightPercent": 30,
-      "questions": 18,
+      "id": "actions",
+      "number": 2,
+      "title": "Action Types and Write-Back Patterns",
+      "inOutline": true,
       "objectives": [
-        { "id": "object-types", "title": "Implement object type changes" },
-        { "id": "link-types", "title": "Implement link type changes" },
-        { "id": "actions", "title": "Implement Action types" },
-        { "id": "typescript-functions", "title": "Implement TypeScript Functions" },
-        { "id": "quiver", "title": "Implement interactive Quiver analyses" },
-        { "id": "workshop", "title": "Implement Workshop modules" }
+        { "id": "rules-design", "title": "Choose declarative edit rules or a function-backed Action" },
+        { "id": "parameters-validation", "title": "Configure parameters, validation, submission criteria and forms" },
+        { "id": "side-effects", "title": "Configure side effects, notifications and webhooks" },
+        { "id": "security-troubleshooting", "title": "Reason about Action security layers and troubleshoot rejected Actions" }
       ]
     },
     {
-      "id": "ux",
-      "title": "UX and Cross-Application Workflows",
-      "weightPercent": 20,
-      "questions": 12,
+      "id": "functions",
+      "number": 3,
+      "title": "Ontology Functions",
+      "inOutline": true,
       "objectives": [
-        { "id": "redirects", "title": "Redirect users to tools with the functionality they need" },
-        { "id": "embedding", "title": "Embed applications within one another" },
-        { "id": "scenarios", "title": "Configure Scenarios for what-if analysis" },
-        { "id": "foundry-rules", "title": "Configure Foundry Rules for user-managed logic" }
+        { "id": "paradigm", "title": "Choose between TypeScript, Python and AIP Logic" },
+        { "id": "query-edit", "title": "Query, aggregate, traverse links and edit objects safely" },
+        { "id": "versioning-publishing", "title": "Version, publish and consume Functions" },
+        { "id": "testing-debugging", "title": "Test Functions and diagnose common failures" }
       ]
     },
     {
-      "id": "maintenance",
-      "title": "Application Maintenance",
-      "weightPercent": 20,
-      "questions": 12,
+      "id": "workshop",
+      "number": 4,
+      "title": "Workshop Application Development",
+      "inOutline": true,
       "objectives": [
-        { "id": "release-management", "title": "Apply release management best practices" },
-        { "id": "data-freshness", "title": "Keep application data fresh and correct" },
-        { "id": "ontology-changes", "title": "Identify resources affected by Ontology changes" },
-        { "id": "migration", "title": "Plan migration strategies" },
-        { "id": "debugging", "title": "Debug application issues" }
+        { "id": "layout-widgets", "title": "Design pages, sections, layouts, widgets and conditional visibility" },
+        { "id": "variables-events", "title": "Design variable, filter and event flows" },
+        { "id": "data-actions-functions", "title": "Connect Workshop to Ontology data, Actions, Functions and AIP" },
+        { "id": "performance-deployment", "title": "Diagnose stale or slow modules, publish safely and preserve module interfaces" }
+      ]
+    },
+    {
+      "id": "osdk",
+      "number": 5,
+      "title": "OSDK, APIs, and External Applications",
+      "inOutline": true,
+      "objectives": [
+        { "id": "app-registration", "title": "Register applications, configure OAuth, scope resources and generate the OSDK" },
+        { "id": "authentication", "title": "Choose user-based or service-based authentication without exposing secrets" },
+        { "id": "sdk-usage", "title": "Fetch, paginate, aggregate, invoke Actions and use REST APIs" },
+        { "id": "troubleshooting", "title": "Diagnose scopes, authentication failures, stale SDKs, rate limits and deployment issues" }
+      ]
+    },
+    {
+      "id": "automate",
+      "number": 6,
+      "title": "Automate and Operational Workflows",
+      "inOutline": true,
+      "objectives": [
+        { "id": "triggers-conditions", "title": "Select triggers, conditions and evaluation modes" },
+        { "id": "effects-execution", "title": "Configure effects, execution modes, ownership and scope" },
+        { "id": "reliability", "title": "Design for retries, repeated events, duplicate effects and race conditions" },
+        { "id": "testing-monitoring", "title": "Test automations safely and diagnose failures" }
+      ]
+    },
+    {
+      "id": "aip",
+      "number": 7,
+      "title": "AIP Logic and AI-Powered Applications",
+      "inOutline": true,
+      "objectives": [
+        { "id": "logic-building", "title": "Configure prompts, typed inputs and outputs, tools, blocks, agents and AI-backed Actions" },
+        { "id": "data-scope-safety", "title": "Give AI the minimum data and capabilities, and decide when AI adds value" },
+        { "id": "evaluation-debugging", "title": "Use evaluations, traces and execution history, and review AI-generated code" }
+      ]
+    },
+    {
+      "id": "security",
+      "number": 8,
+      "title": "Application Security, Governance, and Operations",
+      "inOutline": true,
+      "objectives": [
+        { "id": "access-controls", "title": "Apply roles, organizations, markings, restricted views and branch protection" },
+        { "id": "app-vs-data-access", "title": "Separate application and resource access from data access" },
+        { "id": "execution-identity", "title": "Understand user-scoped and project-scoped execution and service identities" },
+        { "id": "monitoring-health", "title": "Monitor application, Ontology, pipeline and automation health" }
+      ]
+    },
+    {
+      "id": "extended",
+      "number": null,
+      "title": "Earlier-guide topics (not in the current outline)",
+      "inOutline": false,
+      "objectives": [
+        { "id": "tool-selection", "title": "Choose between Workshop, Quiver, Slate, Object Views and other tools" },
+        { "id": "quiver", "title": "Build Quiver analyses and dashboards" },
+        { "id": "cross-application", "title": "Redirect between and embed applications (Object Explorer, Object Views, Carbon, Notepad)" },
+        { "id": "scenarios", "title": "Use Scenarios for what-if analysis" },
+        { "id": "foundry-rules", "title": "Use Foundry Rules for user-managed logic" }
       ]
     }
   ],
+  "guide2026": {
+    "sections": [
+      { "id": "design", "title": "Application Design", "weightPercent": 30, "questions": 18, "objectives": ["tool-selection", "ontology-pipeline-design", "operational-workflows", "ux-design"] },
+      { "id": "implementation", "title": "Application Implementation", "weightPercent": 30, "questions": 18, "objectives": ["object-types", "link-types", "actions", "typescript-functions", "quiver", "workshop"] },
+      { "id": "ux", "title": "UX and Cross-Application Workflows", "weightPercent": 20, "questions": 12, "objectives": ["redirects", "embedding", "scenarios", "foundry-rules"] },
+      { "id": "maintenance", "title": "Application Maintenance", "weightPercent": 20, "questions": 12, "objectives": ["release-management", "data-freshness", "ontology-changes", "migration", "debugging"] }
+    ]
+  },
   "formats": [
-    { "id": "single", "label": "Single-select", "inGuide": true },
-    { "id": "multi", "label": "Multi-select", "inGuide": true },
-    { "id": "discrete", "label": "Discrete options", "inGuide": true },
-    { "id": "hotspot", "label": "Hotspot", "inGuide": true },
-    { "id": "matching", "label": "Matching", "inGuide": true },
-    { "id": "truefalse", "label": "True/False", "inGuide": false }
+    { "id": "single", "label": "Single-select" },
+    { "id": "multi", "label": "Multi-select" },
+    { "id": "discrete", "label": "Discrete options" },
+    { "id": "hotspot", "label": "Hotspot" },
+    { "id": "matching", "label": "Matching" },
+    { "id": "truefalse", "label": "True/False" }
   ],
   "difficulties": ["easy", "medium", "hard"]
 }

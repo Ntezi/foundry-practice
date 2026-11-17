@@ -1,60 +1,144 @@
 [
   {
     "id": "mnt-001",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Harrowgate Rail runs a Workshop module that 200 station controllers use all day. A builder needs to rework the incident page over the next week, saving often, but controllers must keep seeing the current behaviour until the rework has been tested. How should the builder handle the module's versions?",
     "options": [
-      { "id": "a", "text": "Switch off automatic publishing, save as often as needed, and publish a version once it is tested", "why": "Correct. With automatic publishing off, each save only adds to the version history; viewers stay on the published version until the builder publishes a newer one." },
-      { "id": "b", "text": "Keep automatic publishing on and add a version description to every save so controllers know what changed", "why": "Descriptions document the history but do not hide anything: with automatic publishing on, every save becomes the version controllers see." },
-      { "id": "c", "text": "Leave the module open in Edit mode all week without saving, then save everything in one go at the end", "why": "A week of unsaved work is fragile and cannot be reviewed or reverted step by step; saved-but-unpublished versions give the same isolation safely." },
-      { "id": "d", "text": "Set the object types the page reads to the experimental status until the rework is ready to be released", "why": "Ontology statuses describe how stable an ontology resource is; they do not control which version of a Workshop module viewers receive." }
+      {
+        "id": "a",
+        "text": "Switch off automatic publishing, save as often as needed, and publish a version once it is tested",
+        "why": "Correct. With automatic publishing off, each save only adds to the version history; viewers stay on the published version until the builder publishes a newer one."
+      },
+      {
+        "id": "b",
+        "text": "Keep automatic publishing on and add a version description to every save so controllers know what changed",
+        "why": "Descriptions document the history but do not hide anything: with automatic publishing on, every save becomes the version controllers see."
+      },
+      {
+        "id": "c",
+        "text": "Leave the module open in Edit mode all week without saving, then save everything in one go at the end",
+        "why": "A week of unsaved work is fragile and cannot be reviewed or reverted step by step; saved-but-unpublished versions give the same isolation safely."
+      },
+      {
+        "id": "d",
+        "text": "Set the object types the page reads to the experimental status until the rework is ready to be released",
+        "why": "Ontology statuses describe how stable an ontology resource is; they do not control which version of a Workshop module viewers receive."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Workshop separates saving from publishing. Saving creates a new entry in the version history, while the published version is what viewers get; the two only coincide when the module is set to publish automatically on save. Turning that setting off lets a builder iterate on a live module and release a tested version deliberately.",
-    "source": { "title": "Workshop: Publishing and versioning", "url": "https://www.palantir.com/docs/foundry/workshop/versions/" }
+    "source": {
+      "title": "Workshop: Publishing and versioning",
+      "url": "https://www.palantir.com/docs/foundry/workshop/versions/"
+    }
   },
   {
     "id": "mnt-002",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Calder Freight's customs-clearance Action is backed by a Function owned by another team. The clearance desk works around the clock and the business has said that an unplanned failure is unacceptable, even if that means bug fixes arrive later. How should the Action depend on the Function?",
     "options": [
-      { "id": "a", "text": "Pin the Action to a specific tested version and upgrade deliberately after testing", "why": "Correct. A pinned dependency never changes at runtime, which is the documented choice when an application cannot tolerate breaks; the cost is that upgrades are manual." },
-      { "id": "b", "text": "Enable auto upgrade so the Action resolves the newest backward-compatible version each time it runs", "why": "A version range picks up new minor and patch releases automatically, so a release that accidentally breaks compatibility would reach the clearance desk unannounced." },
-      { "id": "c", "text": "Reference a prerelease version so that the other team's fixes can be trialled as early as possible", "why": "A prerelease identifier signals an unstable version that may not meet compatibility expectations, the opposite of what an always-on desk needs." },
-      { "id": "d", "text": "Rely on the other team restricting stable version tags to protected branches in their repository", "why": "That publisher-side control forces code review before stable releases and lowers the risk, but it cannot rule out a bad release reaching a consumer on a version range." }
+      {
+        "id": "a",
+        "text": "Pin the Action to a specific tested version and upgrade deliberately after testing",
+        "why": "Correct. A pinned dependency never changes at runtime, which is the documented choice when an application cannot tolerate breaks; the cost is that upgrades are manual."
+      },
+      {
+        "id": "b",
+        "text": "Enable auto upgrade so the Action resolves the newest backward-compatible version each time it runs",
+        "why": "A version range picks up new minor and patch releases automatically, so a release that accidentally breaks compatibility would reach the clearance desk unannounced."
+      },
+      {
+        "id": "c",
+        "text": "Reference a prerelease version so that the other team's fixes can be trialled as early as possible",
+        "why": "A prerelease identifier signals an unstable version that may not meet compatibility expectations, the opposite of what an always-on desk needs."
+      },
+      {
+        "id": "d",
+        "text": "Rely on the other team restricting stable version tags to protected branches in their repository",
+        "why": "That publisher-side control forces code review before stable releases and lowers the risk, but it cannot rule out a bad release reaching a consumer on a version range."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Consumers such as Workshop, Actions and Automate can reference a Function at a pinned version or at a version range. A range gives automatic runtime upgrades to backward-compatible releases, but a mislabelled breaking release would be picked up too. Where uptime matters more than receiving fixes quickly, the guidance is to pin and upgrade on purpose.",
-    "source": { "title": "Version range dependencies for functions", "url": "https://www.palantir.com/docs/foundry/functions/version-range-dependencies-for-functions/" }
+    "source": {
+      "title": "Version range dependencies for functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/version-range-dependencies-for-functions/"
+    }
   },
   {
     "id": "mnt-003",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "At Brightwater Utilities the `Asset` object type has been made a protected resource. An engineer opens it in Ontology Manager on main, adds a property, and goes to save. Meanwhile a colleague has saved a different change to `Asset` on main. Which statements describe what the engineer should expect? Select TWO.",
     "options": [
-      { "id": "a", "text": "The change has to be saved to a new branch and reach main through a proposal", "why": "Correct. For a protected ontology resource the normal save is replaced by saving to a new branch, and the change is merged by creating and merging a proposal." },
-      { "id": "b", "text": "If the colleague's change conflicts, the branch must be rebased and the conflict resolved before merging", "why": "Correct. Merge checks on the proposal detect conflicts with main; rebasing brings main's changes onto the branch so each conflict can be resolved." },
-      { "id": "c", "text": "Only the people explicitly invited as reviewers are able to approve the change", "why": "The reviewers list tracks who should look at the change; any user holding approval rights on the resource can approve, whether invited or not." },
-      { "id": "d", "text": "The engineer can start the new branch from the colleague's unmerged ontology branch", "why": "Ontology branches are created from the main ontology only, so one branch cannot be stacked on top of another unmerged branch." },
-      { "id": "e", "text": "The proposal can be merged before approval provided that its merge checks have passed", "why": "Passing merge checks is necessary but not sufficient: a protected resource also needs the approvals its policy requires before the proposal can merge." }
+      {
+        "id": "a",
+        "text": "The change has to be saved to a new branch and reach main through a proposal",
+        "why": "Correct. For a protected ontology resource the normal save is replaced by saving to a new branch, and the change is merged by creating and merging a proposal."
+      },
+      {
+        "id": "b",
+        "text": "If the colleague's change conflicts, the branch must be rebased and the conflict resolved before merging",
+        "why": "Correct. Merge checks on the proposal detect conflicts with main; rebasing brings main's changes onto the branch so each conflict can be resolved."
+      },
+      {
+        "id": "c",
+        "text": "Only the people explicitly invited as reviewers are able to approve the change",
+        "why": "The reviewers list tracks who should look at the change; any user holding approval rights on the resource can approve, whether invited or not."
+      },
+      {
+        "id": "d",
+        "text": "The engineer can start the new branch from the colleague's unmerged ontology branch",
+        "why": "Ontology branches are created from the main ontology only, so one branch cannot be stacked on top of another unmerged branch."
+      },
+      {
+        "id": "e",
+        "text": "The proposal can be merged before approval provided that its merge checks have passed",
+        "why": "Passing merge checks is necessary but not sufficient: a protected resource also needs the approvals its policy requires before the proposal can merge."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Protecting an ontology resource forces changes through a branch and a proposal instead of a direct save to main. The proposal runs merge checks, collects the approvals required by the resource's policy, and needs a rebase when main has moved in a conflicting way. This gives ontology changes the same review-before-release discipline as a pull request.",
-    "source": { "title": "Branching the ontology", "url": "https://www.palantir.com/docs/foundry/ontologies/branching-ontology/" }
+    "source": {
+      "title": "Branching the ontology",
+      "url": "https://www.palantir.com/docs/foundry/ontologies/branching-ontology/"
+    }
   },
   {
     "id": "mnt-004",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "medium",
     "format": "hotspot",
     "stem": "Dispatchers at Northmoor Logistics report that their Workshop module shows order data from three days ago. In Data Lineage you find: both raw datasets received new transactions this morning; the clean orders dataset built successfully this morning; the enriched dataset last built successfully three days ago and its job has failed every night since; the backing dataset and the object type were also last updated three days ago. Select the region where the staleness originates.",
@@ -63,250 +147,674 @@
       "height": 360,
       "alt": "A lineage graph: raw orders feeds clean orders, which together with raw depots feeds orders enriched, then the orders backing dataset, the Order object type and the dispatch Workshop module.",
       "regions": [
-        { "id": "raw_orders", "label": "Raw orders dataset", "x": 30, "y": 50, "w": 140, "h": 56, "why": "This dataset received a new transaction this morning, so fresh source data is arriving; the problem starts further downstream." },
-        { "id": "clean_orders", "label": "Clean orders dataset", "x": 250, "y": 50, "w": 140, "h": 56, "why": "It built successfully this morning from fresh raw data, so it is up to date and not the origin of the problem." },
-        { "id": "enriched", "label": "Orders enriched dataset", "x": 470, "y": 50, "w": 140, "h": 56, "why": "Correct. Its inputs are fresh but its own job has failed for three nights, so this is the first node that stopped updating; everything after it is stale as a consequence." },
-        { "id": "raw_depots", "label": "Raw depots dataset", "x": 250, "y": 160, "w": 140, "h": 56, "why": "This input also received a new transaction this morning, so it is not holding back the enriched dataset." },
-        { "id": "backing", "label": "Orders backing dataset", "x": 470, "y": 160, "w": 140, "h": 56, "why": "It is three days old, but only because its parent has not produced new data; fixing this node alone would change nothing." },
-        { "id": "object_type", "label": "Order object type", "x": 470, "y": 270, "w": 140, "h": 56, "why": "The object type reflects whatever is in its backing dataset; it is stale because that dataset has had nothing new to index." },
-        { "id": "module", "label": "Dispatch Workshop module", "x": 250, "y": 270, "w": 140, "h": 56, "why": "The module is where the symptom is noticed, but it simply displays the objects it is given." }
+        {
+          "id": "raw_orders",
+          "label": "Raw orders dataset",
+          "x": 30,
+          "y": 50,
+          "w": 140,
+          "h": 56,
+          "why": "This dataset received a new transaction this morning, so fresh source data is arriving; the problem starts further downstream."
+        },
+        {
+          "id": "clean_orders",
+          "label": "Clean orders dataset",
+          "x": 250,
+          "y": 50,
+          "w": 140,
+          "h": 56,
+          "why": "It built successfully this morning from fresh raw data, so it is up to date and not the origin of the problem."
+        },
+        {
+          "id": "enriched",
+          "label": "Orders enriched dataset",
+          "x": 470,
+          "y": 50,
+          "w": 140,
+          "h": 56,
+          "why": "Correct. Its inputs are fresh but its own job has failed for three nights, so this is the first node that stopped updating; everything after it is stale as a consequence."
+        },
+        {
+          "id": "raw_depots",
+          "label": "Raw depots dataset",
+          "x": 250,
+          "y": 160,
+          "w": 140,
+          "h": 56,
+          "why": "This input also received a new transaction this morning, so it is not holding back the enriched dataset."
+        },
+        {
+          "id": "backing",
+          "label": "Orders backing dataset",
+          "x": 470,
+          "y": 160,
+          "w": 140,
+          "h": 56,
+          "why": "It is three days old, but only because its parent has not produced new data; fixing this node alone would change nothing."
+        },
+        {
+          "id": "object_type",
+          "label": "Order object type",
+          "x": 470,
+          "y": 270,
+          "w": 140,
+          "h": 56,
+          "why": "The object type reflects whatever is in its backing dataset; it is stale because that dataset has had nothing new to index."
+        },
+        {
+          "id": "module",
+          "label": "Dispatch Workshop module",
+          "x": 250,
+          "y": 270,
+          "w": 140,
+          "h": 56,
+          "why": "The module is where the symptom is noticed, but it simply displays the objects it is given."
+        }
       ],
       "edges": [
-        { "from": "raw_orders", "to": "clean_orders" },
-        { "from": "clean_orders", "to": "enriched" },
-        { "from": "raw_depots", "to": "enriched" },
-        { "from": "enriched", "to": "backing" },
-        { "from": "backing", "to": "object_type" },
-        { "from": "object_type", "to": "module" }
+        {
+          "from": "raw_orders",
+          "to": "clean_orders"
+        },
+        {
+          "from": "clean_orders",
+          "to": "enriched"
+        },
+        {
+          "from": "raw_depots",
+          "to": "enriched"
+        },
+        {
+          "from": "enriched",
+          "to": "backing"
+        },
+        {
+          "from": "backing",
+          "to": "object_type"
+        },
+        {
+          "from": "object_type",
+          "to": "module"
+        }
       ]
     },
-    "answer": ["enriched"],
+    "answer": [
+      "enriched"
+    ],
     "explanation": "Stale data in an application is diagnosed by walking the lineage upstream and asking, at each node, whether its build is failing, whether a parent has not updated, or whether the source stopped delivering. The origin is the most upstream node that is behind its own inputs. Here the inputs to the enriched dataset are fresh and its job is failing, so every downstream node is stale only as a knock-on effect.",
-    "source": { "title": "Data Lineage: Understand out-of-date datasets", "url": "https://www.palantir.com/docs/foundry/data-lineage/stale-datasets/" }
+    "source": {
+      "title": "Data Lineage: Understand out-of-date datasets",
+      "url": "https://www.palantir.com/docs/foundry/data-lineage/stale-datasets/"
+    }
   },
   {
     "id": "mnt-005",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Ostrava Grocers has a schedule that rebuilds `stock_levels` every night; the dataset backs the objects shown in a replenishment app. The team wants to be notified whenever `stock_levels` has gone more than 26 hours without updating, whatever the reason. Which check should they add to the dataset?",
     "options": [
-      { "id": "a", "text": "A time since last updated check with a 26-hour threshold", "why": "Correct. This check measures the time elapsed since the dataset's last transaction, so it fires whenever the output misses its cadence, whatever caused the delay." },
-      { "id": "b", "text": "A schema check that requires an exact match of the columns", "why": "A schema check reports added, removed or retyped columns; a dataset that simply stops updating keeps the same schema and would pass." },
-      { "id": "c", "text": "A row count check that compares against the previous build", "why": "A row count check evaluates the size of the dataset; it says nothing about how long ago the dataset last received a transaction." },
-      { "id": "d", "text": "Colouring the lineage graph by the time each node was last built", "why": "Node colouring is useful when someone is looking at the graph, but it is a view rather than a check and notifies nobody." }
+      {
+        "id": "a",
+        "text": "A time since last updated check with a 26-hour threshold",
+        "why": "Correct. This check measures the time elapsed since the dataset's last transaction, so it fires whenever the output misses its cadence, whatever caused the delay."
+      },
+      {
+        "id": "b",
+        "text": "A schema check that requires an exact match of the columns",
+        "why": "A schema check reports added, removed or retyped columns; a dataset that simply stops updating keeps the same schema and would pass."
+      },
+      {
+        "id": "c",
+        "text": "A row count check that compares against the previous build",
+        "why": "A row count check evaluates the size of the dataset; it says nothing about how long ago the dataset last received a transaction."
+      },
+      {
+        "id": "d",
+        "text": "Colouring the lineage graph by the time each node was last built",
+        "why": "Node colouring is useful when someone is looking at the graph, but it is a view rather than a check and notifies nobody."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Data Health checks fall into status, time, size, content and schema categories. The time since last updated check is the recommended check for the outputs of a schedule because it confirms the pipeline is updating at the required cadence regardless of why a run was missed. The threshold is normally the expected interval plus build time and a little leeway.",
-    "source": { "title": "Recommended health checks", "url": "https://www.palantir.com/docs/foundry/maintaining-pipelines/recommended-health-checks/" }
+    "source": {
+      "title": "Recommended health checks",
+      "url": "https://www.palantir.com/docs/foundry/maintaining-pipelines/recommended-health-checks/"
+    }
   },
   {
     "id": "mnt-006",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "Vale Housing's `inspections_clean` dataset is rebuilt every night and each build succeeds and commits a transaction. Its time since last updated check is green. Even so, inspectors complain that the newest inspection in their app is five days old: the source system silently stopped exporting new records, so the latest `inspected_at` value has not moved. Which check on `inspections_clean` would have caught this?",
     "options": [
-      { "id": "a", "text": "A data freshness check on the `inspected_at` column", "why": "Correct. Data freshness compares the latest transaction time with the maximum value of a timestamp column, so it fails when builds keep running but the newest row keeps getting older." },
-      { "id": "b", "text": "A build status check on the dataset", "why": "The nightly build is succeeding, so a build status check would stay green; the pipeline is healthy and only its content is old." },
-      { "id": "c", "text": "The same time since last updated check with a tighter threshold", "why": "The dataset receives a transaction every night, so the time since its last update is always under a day however old the rows inside it are." },
-      { "id": "d", "text": "A schema check set to require an exact match", "why": "No columns were added, removed or retyped; a schema check cannot see that the values in a column have stopped advancing." }
+      {
+        "id": "a",
+        "text": "A data freshness check on the `inspected_at` column",
+        "why": "Correct. Data freshness compares the latest transaction time with the maximum value of a timestamp column, so it fails when builds keep running but the newest row keeps getting older."
+      },
+      {
+        "id": "b",
+        "text": "A build status check on the dataset",
+        "why": "The nightly build is succeeding, so a build status check would stay green; the pipeline is healthy and only its content is old."
+      },
+      {
+        "id": "c",
+        "text": "The same time since last updated check with a tighter threshold",
+        "why": "The dataset receives a transaction every night, so the time since its last update is always under a day however old the rows inside it are."
+      },
+      {
+        "id": "d",
+        "text": "A schema check set to require an exact match",
+        "why": "No columns were added, removed or retyped; a schema check cannot see that the values in a column have stopped advancing."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Time since last updated and data freshness answer different questions. The first asks how long ago the dataset last received a transaction; the second asks how old the newest data inside it is, by comparing the last transaction with the maximum of a timestamp column. A pipeline can run perfectly on a source that has stopped delivering, and only a content-based freshness check exposes that.",
-    "source": { "title": "Health checks: Types of checks", "url": "https://www.palantir.com/docs/foundry/health-checks/check-types/" }
+    "source": {
+      "title": "Health checks: Types of checks",
+      "url": "https://www.palantir.com/docs/foundry/health-checks/check-types/"
+    }
   },
   {
     "id": "mnt-007",
-    "domain": "maintenance",
-    "objective": "ontology-changes",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "ontology-changes"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Kestrel Aviation wants to retire the `tailCode` property on its `Aircraft` object type. Before touching it, the ontology owner needs a list of the Actions, Functions and Workshop applications that reference that specific property. Where is the most direct place to get this?",
     "options": [
-      { "id": "a", "text": "Workflow Lineage, selecting the `Aircraft` node and reading its per-property usage", "why": "Correct. Workflow Lineage tracks where each property of an object type is used across the workflow, including dependent functions, actions and Workshop applications." },
-      { "id": "b", "text": "The Usage tab of the `Aircraft` object type in Ontology Manager, filtered to the last 30 days", "why": "Usage metrics show who read or wrote the object type, when, and from which applications; they are recorded per object type and do not break usage down by property." },
-      { "id": "c", "text": "Data Lineage, expanding every descendant of the dataset that backs the `Aircraft` object type", "why": "Data Lineage is built for tracing how data flows between datasets and when it was built; it is not the tool for listing which actions and modules read one property." },
-      { "id": "d", "text": "The Metrics tab of each Workshop module, checking which pages and actions are used most", "why": "Workshop usage metrics count action submissions and layout views for one module; they do not reveal which ontology properties the module depends on." }
+      {
+        "id": "a",
+        "text": "Workflow Lineage, selecting the `Aircraft` node and reading its per-property usage",
+        "why": "Correct. Workflow Lineage tracks where each property of an object type is used across the workflow, including dependent functions, actions and Workshop applications."
+      },
+      {
+        "id": "b",
+        "text": "The Usage tab of the `Aircraft` object type in Ontology Manager, filtered to the last 30 days",
+        "why": "Usage metrics show who read or wrote the object type, when, and from which applications; they are recorded per object type and do not break usage down by property."
+      },
+      {
+        "id": "c",
+        "text": "Data Lineage, expanding every descendant of the dataset that backs the `Aircraft` object type",
+        "why": "Data Lineage is built for tracing how data flows between datasets and when it was built; it is not the tool for listing which actions and modules read one property."
+      },
+      {
+        "id": "d",
+        "text": "The Metrics tab of each Workshop module, checking which pages and actions are used most",
+        "why": "Workshop usage metrics count action submissions and layout views for one module; they do not reveal which ontology properties the module depends on."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Impact analysis for an ontology change needs dependency information rather than activity counts. Workflow Lineage graphs the objects, actions, functions and applications behind a workflow and, for a selected object type, shows where each property is used downstream. Usage metrics in Ontology Manager complement this by showing how heavily and by whom the object type is used.",
-    "source": { "title": "Workflow Lineage: Perform refactors and understand your workflows", "url": "https://www.palantir.com/docs/foundry/workflow-lineage/refactor-and-understand-workflows/" }
+    "source": {
+      "title": "Workflow Lineage: Perform refactors and understand your workflows",
+      "url": "https://www.palantir.com/docs/foundry/workflow-lineage/refactor-and-understand-workflows/"
+    }
   },
   {
     "id": "mnt-008",
-    "domain": "maintenance",
-    "objective": "ontology-changes",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "ontology-changes"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "Tidewell Ports is planning a change to its `Berth` object type and has four questions to answer first. Match each question to the place that answers it most directly.",
     "left": [
-      { "id": "l1", "text": "Which users and applications have read or edited `Berth` objects over the last 30 days?", "why": "Ontology metrics on the Usage tab show who used an object type, when, and in which Foundry applications over the last 30 days." },
-      { "id": "l2", "text": "Which Actions and Workshop applications depend on the `berthLength` property?", "why": "Workflow Lineage shows, per property of a selected object type, the functions, actions and Workshop applications that use it." },
-      { "id": "l3", "text": "Which upstream datasets feed the dataset backing `Berth`, and are they building?", "why": "Data Lineage expands the ancestors of a dataset and can colour them by build status or by whether they are out of date." },
-      { "id": "l4", "text": "Who saved the last change to `Berth`, and what exactly did they change?", "why": "The History tab of an ontology resource lists its saved changes with the time and the user, and allows restoring an earlier state." }
+      {
+        "id": "l1",
+        "text": "Which users and applications have read or edited `Berth` objects over the last 30 days?",
+        "why": "Ontology metrics on the Usage tab show who used an object type, when, and in which Foundry applications over the last 30 days."
+      },
+      {
+        "id": "l2",
+        "text": "Which Actions and Workshop applications depend on the `berthLength` property?",
+        "why": "Workflow Lineage shows, per property of a selected object type, the functions, actions and Workshop applications that use it."
+      },
+      {
+        "id": "l3",
+        "text": "Which upstream datasets feed the dataset backing `Berth`, and are they building?",
+        "why": "Data Lineage expands the ancestors of a dataset and can colour them by build status or by whether they are out of date."
+      },
+      {
+        "id": "l4",
+        "text": "Who saved the last change to `Berth`, and what exactly did they change?",
+        "why": "The History tab of an ontology resource lists its saved changes with the time and the user, and allows restoring an earlier state."
+      }
     ],
     "right": [
-      { "id": "r1", "text": "Usage tab of the object type in Ontology Manager" },
-      { "id": "r2", "text": "Workflow Lineage graph with the object type selected" },
-      { "id": "r3", "text": "Data Lineage graph expanded upstream" },
-      { "id": "r4", "text": "History tab of the object type in Ontology Manager" },
-      { "id": "r5", "text": "Performance Profiler in the Workshop editor" }
+      {
+        "id": "r1",
+        "text": "Usage tab of the object type in Ontology Manager"
+      },
+      {
+        "id": "r2",
+        "text": "Workflow Lineage graph with the object type selected"
+      },
+      {
+        "id": "r3",
+        "text": "Data Lineage graph expanded upstream"
+      },
+      {
+        "id": "r4",
+        "text": "History tab of the object type in Ontology Manager"
+      },
+      {
+        "id": "r5",
+        "text": "Performance Profiler in the Workshop editor"
+      }
     ],
-    "answer": { "l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4" },
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
     "explanation": "Several tools answer different parts of the question of what an ontology change will touch. Ontology metrics describe real usage by people and applications, Workflow Lineage describes dependencies between ontology resources and applications, Data Lineage describes the pipeline behind the backing data, and the History tab records who changed the resource. The Performance Profiler measures module load time and plays no part in impact analysis.",
-    "source": { "title": "Ontology Manager: Ontology metrics", "url": "https://www.palantir.com/docs/foundry/ontology-manager/view-usage/" }
+    "source": {
+      "title": "Ontology Manager: Ontology metrics",
+      "url": "https://www.palantir.com/docs/foundry/ontology-manager/view-usage/"
+    }
   },
   {
     "id": "mnt-009",
-    "domain": "maintenance",
-    "objective": "migration",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "migration"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "Marlow Clinics stores `WorkOrder` objects in Object Storage v2. Coordinators have edited the `priority` property through Actions for a year. The team now wants to replace `priority` with a new property, `urgencyBand`, mapped to a new column, and the coordinators' existing edits must carry over to the new property. Which approach achieves this?",
     "options": [
-      { "id": "a", "text": "When saving the change, define a Move edits migration from `priority` to `urgencyBand`", "why": "Correct. Move edits transfers the existing user edits on a property to its replacement, which is the documented migration when a property is deleted or renamed and a new one takes its place." },
-      { "id": "b", "text": "When saving the change, define a Drop all property edits migration for `priority`", "why": "This migration discards the existing user edits on that property; it suits a deletion with no replacement, not a case where the edits must survive." },
-      { "id": "c", "text": "Delete `priority` and save; no migration is involved because deleting a property is never a breaking schema change", "why": "Deleting a property that has received user edits is a breaking schema change, and Ontology Manager blocks the save until a migration is chosen." },
-      { "id": "d", "text": "When saving the change, define a Cast property to new type migration on `priority`", "why": "A cast converts the edits of one property when its data type changes; it does not carry edits across to a different property." }
+      {
+        "id": "a",
+        "text": "When saving the change, define a Move edits migration from `priority` to `urgencyBand`",
+        "why": "Correct. Move edits transfers the existing user edits on a property to its replacement, which is the documented migration when a property is deleted or renamed and a new one takes its place."
+      },
+      {
+        "id": "b",
+        "text": "When saving the change, define a Drop all property edits migration for `priority`",
+        "why": "This migration discards the existing user edits on that property; it suits a deletion with no replacement, not a case where the edits must survive."
+      },
+      {
+        "id": "c",
+        "text": "Delete `priority` and save; no migration is involved because deleting a property is never a breaking schema change",
+        "why": "Deleting a property that has received user edits is a breaking schema change, and Ontology Manager blocks the save until a migration is chosen."
+      },
+      {
+        "id": "d",
+        "text": "When saving the change, define a Cast property to new type migration on `priority`",
+        "why": "A cast converts the edits of one property when its data type changes; it does not carry edits across to a different property."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "In Object Storage v2, Ontology Manager detects breaking schema changes on object types that hold user edits and requires a migration from a predefined list before the change can be saved. Each migration states what should happen to the existing edits: drop them, move them to a replacement property or datasource, cast them to a new type, or backfill a value. Choosing the instruction that matches the intent is what keeps user edits through a schema change.",
-    "source": { "title": "Object edits: Manage schema changes", "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/" }
+    "source": {
+      "title": "Object edits: Manage schema changes",
+      "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/"
+    }
   },
   {
     "id": "mnt-010",
-    "domain": "maintenance",
-    "objective": "migration",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "migration"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "At Greyfell Insurance the active property `regionCode` on `Policy` is being superseded by a new `territory` property. Several teams own Workshop modules and Functions that still read `regionCode`. What is the best first step for the ontology owner who wants to remove `regionCode` without surprising those teams?",
     "options": [
-      { "id": "a", "text": "Set `regionCode` to deprecated with a reason, a deadline and `territory` as replacement", "why": "Correct. The deprecated status tells builders the property will be deleted, and its metadata records why, by when, and what to use instead, giving teams time to move." },
-      { "id": "b", "text": "Delete `regionCode` now and let the owning teams repair their modules as errors appear", "why": "A property with the active status cannot be deleted, and deleting a property breaks the views and applications that reference it." },
-      { "id": "c", "text": "Change the API name of `regionCode` to `territory` so existing consumers are redirected", "why": "The API name of an active property cannot be changed, and consumers that reference the old API name would break rather than follow the rename." },
-      { "id": "d", "text": "Set the visibility of `regionCode` to hidden so that it disappears from user applications", "why": "Hiding a property changes how prominently applications show it; it does not tell builders that it is going away or what replaces it." }
+      {
+        "id": "a",
+        "text": "Set `regionCode` to deprecated with a reason, a deadline and `territory` as replacement",
+        "why": "Correct. The deprecated status tells builders the property will be deleted, and its metadata records why, by when, and what to use instead, giving teams time to move."
+      },
+      {
+        "id": "b",
+        "text": "Delete `regionCode` now and let the owning teams repair their modules as errors appear",
+        "why": "A property with the active status cannot be deleted, and deleting a property breaks the views and applications that reference it."
+      },
+      {
+        "id": "c",
+        "text": "Change the API name of `regionCode` to `territory` so existing consumers are redirected",
+        "why": "The API name of an active property cannot be changed, and consumers that reference the old API name would break rather than follow the rename."
+      },
+      {
+        "id": "d",
+        "text": "Set the visibility of `regionCode` to hidden so that it disappears from user applications",
+        "why": "Hiding a property changes how prominently applications show it; it does not tell builders that it is going away or what replaces it."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Ontology statuses communicate lifecycle to builders: experimental resources may still change, active resources are relied on and protected from deletion and API-name changes, and deprecated resources are due for removal. Deprecating first, with a description, a deadline and a named replacement, lets consumers migrate before the property is deleted. This deprecate-then-remove sequence is the standard way to retire something other teams depend on.",
-    "source": { "title": "Object and link types: Statuses", "url": "https://www.palantir.com/docs/foundry/object-link-types/metadata-statuses/" }
+    "source": {
+      "title": "Object and link types: Statuses",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/metadata-statuses/"
+    }
   },
   {
     "id": "mnt-011",
-    "domain": "maintenance",
-    "objective": "debugging",
+    "domain": "functions",
+    "objective": "testing-debugging",
+    "guide": {
+      "section": "maintenance",
+      "objective": "debugging"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A developer at Quillon Energy has a TypeScript Function that returns the wrong total for some meters. She wants to see the intermediate values the Function computes for one specific input without publishing anything. What is the most direct way to do this in the code repository?",
     "options": [
-      { "id": "a", "text": "Add `console.log` statements, run the Function in live preview and read the logs", "why": "Correct. Functions support console logging, and running a Function from the functions helper in the repository displays the captured logs with the result." },
-      { "id": "b", "text": "Open the consuming Workshop module in Profiler mode and inspect the variable load timeline", "why": "The Performance Profiler reports how long widgets and variables take to load; it does not expose values computed inside a Function." },
-      { "id": "c", "text": "Check the Function's success and failure counts and P95 duration in Ontology Manager", "why": "Function metrics summarise reliability and speed across executions; they cannot show the intermediate values of a single run." },
-      { "id": "d", "text": "Tag a new prerelease version and wire it to a test button in a copy of the module", "why": "This publishes and adds moving parts to obtain what live preview and logging already show directly in the repository." }
+      {
+        "id": "a",
+        "text": "Add `console.log` statements, run the Function in live preview and read the logs",
+        "why": "Correct. Functions support console logging, and running a Function from the functions helper in the repository displays the captured logs with the result."
+      },
+      {
+        "id": "b",
+        "text": "Open the consuming Workshop module in Profiler mode and inspect the variable load timeline",
+        "why": "The Performance Profiler reports how long widgets and variables take to load; it does not expose values computed inside a Function."
+      },
+      {
+        "id": "c",
+        "text": "Check the Function's success and failure counts and P95 duration in Ontology Manager",
+        "why": "Function metrics summarise reliability and speed across executions; they cannot show the intermediate values of a single run."
+      },
+      {
+        "id": "d",
+        "text": "Tag a new prerelease version and wire it to a test button in a copy of the module",
+        "why": "This publishes and adds moving parts to obtain what live preview and logging already show directly in the repository."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Correctness problems in a Function are debugged where the code lives. Live preview runs the Function with chosen inputs, `console.log` output is captured and shown for both live preview and unit tests, and breakpoints can pause execution to inspect variables. Metrics and profilers answer how often and how fast, not why a value is wrong.",
-    "source": { "title": "Functions: Debug functions", "url": "https://www.palantir.com/docs/foundry/functions/debug/" }
+    "source": {
+      "title": "Functions: Debug functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/debug/"
+    }
   },
   {
     "id": "mnt-012",
-    "domain": "maintenance",
-    "objective": "debugging",
+    "domain": "functions",
+    "objective": "testing-debugging",
+    "guide": {
+      "section": "maintenance",
+      "objective": "debugging"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "A Function at Pellham Mining receives a list of 400 `Truck` primary keys, loads each truck in a `for` loop with its own Ontology query, and then adds up `payloadTonnes`. It has become slow enough to time out in Workshop. Which changes reduce BOTH the execution time and the number of requests made to the Ontology? Select TWO.",
     "options": [
-      { "id": "a", "text": "Load all 400 trucks with a single query filtered on the list of keys, then iterate over the result", "why": "Correct. One bulk query replaces 400 round trips, which cuts both the waiting time and the number of Ontology requests." },
-      { "id": "b", "text": "Filter the object set by the keys and ask the Ontology to return the sum of `payloadTonnes`", "why": "Correct. Letting the backend aggregate means one request returns a single number and no truck objects are loaded into the Function at all." },
-      { "id": "c", "text": "Keep one query per truck but start them together and await them with `Promise.all`", "why": "Running the loads in parallel shortens the wall-clock time, but the Function still issues 400 separate requests, so the request count is unchanged." },
-      { "id": "d", "text": "Change the input from primary keys to an array of `Truck` objects passed in by Workshop", "why": "An object array is loaded up front before the Function body runs, so the loading cost is moved rather than removed, and the sum is still computed in memory." },
-      { "id": "e", "text": "Pin the Workshop variable to the previous Function version that used fewer trucks", "why": "Pinning changes which code runs, not how efficiently it loads objects; the same loop on the same input would be just as slow." }
+      {
+        "id": "a",
+        "text": "Load all 400 trucks with a single query filtered on the list of keys, then iterate over the result",
+        "why": "Correct. One bulk query replaces 400 round trips, which cuts both the waiting time and the number of Ontology requests."
+      },
+      {
+        "id": "b",
+        "text": "Filter the object set by the keys and ask the Ontology to return the sum of `payloadTonnes`",
+        "why": "Correct. Letting the backend aggregate means one request returns a single number and no truck objects are loaded into the Function at all."
+      },
+      {
+        "id": "c",
+        "text": "Keep one query per truck but start them together and await them with `Promise.all`",
+        "why": "Running the loads in parallel shortens the wall-clock time, but the Function still issues 400 separate requests, so the request count is unchanged."
+      },
+      {
+        "id": "d",
+        "text": "Change the input from primary keys to an array of `Truck` objects passed in by Workshop",
+        "why": "An object array is loaded up front before the Function body runs, so the loading cost is moved rather than removed, and the sum is still computed in memory."
+      },
+      {
+        "id": "e",
+        "text": "Pin the Workshop variable to the previous Function version that used fewer trucks",
+        "why": "Pinning changes which code runs, not how efficiently it loads objects; the same loop on the same input would be just as slow."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "The most common cause of slow Functions is loading objects one at a time, because every iteration is a round trip to the Ontology. Bulk loading in one query is better, and pushing the aggregation to the backend is best because nothing needs to be loaded into memory. Parallelising with `Promise.all` improves speed only: the same number of operations still run.",
-    "source": { "title": "Functions: Optimize performance", "url": "https://www.palantir.com/docs/foundry/functions/optimize-performance/" }
+    "source": {
+      "title": "Functions: Optimize performance",
+      "url": "https://www.palantir.com/docs/foundry/functions/optimize-performance/"
+    }
   },
   {
     "id": "mnt-013",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Ten minutes after Fenwick Couriers published a new version of its sorting-floor Workshop module, supervisors report that the scan button no longer works. Yesterday's published version was fine. What is the fastest way to restore the working behaviour for supervisors?",
     "options": [
-      { "id": "a", "text": "Open the module's Versions dialog and publish yesterday's known-good saved version", "why": "Correct. Any saved version in the history can be published, which immediately makes that version the one viewers receive." },
-      { "id": "b", "text": "Open the History tab of the scanned object type in Ontology Manager and restore it", "why": "That restores an ontology resource to an earlier definition; the fault was introduced by a module version, so the ontology is not what needs rolling back." },
-      { "id": "c", "text": "Duplicate the module from yesterday's version and send supervisors the new link", "why": "A duplicate is a separate resource with a different address, so every supervisor would need redirecting; republishing fixes the module they already use." },
-      { "id": "d", "text": "Switch on automatic publishing so that the next save reaches supervisors at once", "why": "Automatic publishing only speeds up delivery of future saves; the version supervisors see would remain the broken one until a fix is built." }
+      {
+        "id": "a",
+        "text": "Open the module's Versions dialog and publish yesterday's known-good saved version",
+        "why": "Correct. Any saved version in the history can be published, which immediately makes that version the one viewers receive."
+      },
+      {
+        "id": "b",
+        "text": "Open the History tab of the scanned object type in Ontology Manager and restore it",
+        "why": "That restores an ontology resource to an earlier definition; the fault was introduced by a module version, so the ontology is not what needs rolling back."
+      },
+      {
+        "id": "c",
+        "text": "Duplicate the module from yesterday's version and send supervisors the new link",
+        "why": "A duplicate is a separate resource with a different address, so every supervisor would need redirecting; republishing fixes the module they already use."
+      },
+      {
+        "id": "d",
+        "text": "Switch on automatic publishing so that the next save reaches supervisors at once",
+        "why": "Automatic publishing only speeds up delivery of future saves; the version supervisors see would remain the broken one until a fix is built."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Workshop keeps every saved version with its timestamp, editor and description, and lets a builder view, publish or revert to any of them. Publishing an earlier version is therefore the rollback mechanism for a bad release. The broken version stays in the history so it can be investigated and fixed without pressure.",
-    "source": { "title": "Workshop: Publishing and versioning", "url": "https://www.palantir.com/docs/foundry/workshop/versions/" }
+    "source": {
+      "title": "Workshop: Publishing and versioning",
+      "url": "https://www.palantir.com/docs/foundry/workshop/versions/"
+    }
   },
   {
     "id": "mnt-014",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "A team at Sunderby Water published `estimateLeakRate` at version 1.0.0 with one string input. Yesterday they added a second, required input and released it as 1.1.0 by mistake. Workshop modules that depend on the Function through a version range started failing. As the publisher, what is the recommended remedy?",
     "options": [
-      { "id": "a", "text": "Remove the required input again and release the restored signature as version 1.2.0", "why": "Correct. The guidance is to restore backward compatibility in a new minor version; consumers on a range then resolve to 1.2.0 and work again." },
-      { "id": "b", "text": "Edit the published 1.1.0 release in place so that it carries the original signature", "why": "A Function version is immutable once created, so the contents of 1.1.0 cannot be changed after the fact." },
-      { "id": "c", "text": "Release the two-input signature again as 2.0.0 and leave the 1.x line as it is", "why": "Consumers on a 1.x range would still resolve to 1.1.0, the highest matching version, and would keep failing." },
-      { "id": "d", "text": "Ask every consuming team to enable auto upgrade so they pick up the newest release", "why": "The failing consumers are already on a version range; resolving to the newest compatible release is what delivered the broken 1.1.0 to them." }
+      {
+        "id": "a",
+        "text": "Remove the required input again and release the restored signature as version 1.2.0",
+        "why": "Correct. The guidance is to restore backward compatibility in a new minor version; consumers on a range then resolve to 1.2.0 and work again."
+      },
+      {
+        "id": "b",
+        "text": "Edit the published 1.1.0 release in place so that it carries the original signature",
+        "why": "A Function version is immutable once created, so the contents of 1.1.0 cannot be changed after the fact."
+      },
+      {
+        "id": "c",
+        "text": "Release the two-input signature again as 2.0.0 and leave the 1.x line as it is",
+        "why": "Consumers on a 1.x range would still resolve to 1.1.0, the highest matching version, and would keep failing."
+      },
+      {
+        "id": "d",
+        "text": "Ask every consuming team to enable auto upgrade so they pick up the newest release",
+        "why": "The failing consumers are already on a version range; resolving to the newest compatible release is what delivered the broken 1.1.0 to them."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Function versions follow Semantic Versioning: breaking changes belong in a major version, and consumers on a version range automatically receive the highest matching minor or patch release. Versions cannot be altered after release, so a breaking change shipped under a minor number is corrected by publishing a further minor version that restores compatibility. Consumers can protect themselves in the meantime by pinning to the last working version.",
-    "source": { "title": "Functions: Function versioning", "url": "https://www.palantir.com/docs/foundry/functions/functions-versioning/" }
+    "source": {
+      "title": "Functions: Function versioning",
+      "url": "https://www.palantir.com/docs/foundry/functions/functions-versioning/"
+    }
   },
   {
     "id": "mnt-015",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "A release lead at Corriemoor Council is writing a one-page guide to how versions work in the applications her team maintains. Match each application to the versioning behaviour that is specific to it.",
     "left": [
-      { "id": "l1", "text": "Slate application", "why": "Slate lets editors tag versions; viewers can open a tagged version through a URL parameter, and the published version is identified by a reserved tag." },
-      { "id": "l2", "text": "Notepad document", "why": "Notepad captures autosave versions while a document is edited and also lets users save named versions that can be marked as endorsed." },
-      { "id": "l3", "text": "Quiver dashboard", "why": "Publishing a Quiver dashboard creates a separate resource backed by the analysis, and every re-publish saves a new version of it." },
-      { "id": "l4", "text": "Object View", "why": "An Object View has its own version plus a version for each Workshop module it contains, and publishing releases the tab and module changes together." }
+      {
+        "id": "l1",
+        "text": "Slate application",
+        "why": "Slate lets editors tag versions; viewers can open a tagged version through a URL parameter, and the published version is identified by a reserved tag."
+      },
+      {
+        "id": "l2",
+        "text": "Notepad document",
+        "why": "Notepad captures autosave versions while a document is edited and also lets users save named versions that can be marked as endorsed."
+      },
+      {
+        "id": "l3",
+        "text": "Quiver dashboard",
+        "why": "Publishing a Quiver dashboard creates a separate resource backed by the analysis, and every re-publish saves a new version of it."
+      },
+      {
+        "id": "l4",
+        "text": "Object View",
+        "why": "An Object View has its own version plus a version for each Workshop module it contains, and publishing releases the tab and module changes together."
+      }
     ],
     "right": [
-      { "id": "r1", "text": "Versions can carry tags, and viewers can open a tagged version by adding the tag to the URL" },
-      { "id": "r2", "text": "Autosaved versions accumulate during editing, and manually saved versions can be marked as endorsed" },
-      { "id": "r3", "text": "Publishing creates a separate resource backed by an analysis, and each re-publish saves a new version" },
-      { "id": "r4", "text": "Tab configuration and each included Workshop module are versioned separately but published together" },
-      { "id": "r5", "text": "Each release gets an immutable semantic version number chosen by the publisher" }
+      {
+        "id": "r1",
+        "text": "Versions can carry tags, and viewers can open a tagged version by adding the tag to the URL"
+      },
+      {
+        "id": "r2",
+        "text": "Autosaved versions accumulate during editing, and manually saved versions can be marked as endorsed"
+      },
+      {
+        "id": "r3",
+        "text": "Publishing creates a separate resource backed by an analysis, and each re-publish saves a new version"
+      },
+      {
+        "id": "r4",
+        "text": "Tab configuration and each included Workshop module are versioned separately but published together"
+      },
+      {
+        "id": "r5",
+        "text": "Each release gets an immutable semantic version number chosen by the publisher"
+      }
     ],
-    "answer": { "l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4" },
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
     "explanation": "Foundry's application builders all keep a version history, but the release mechanics differ. Slate adds tags on top of a published version, Notepad distinguishes autosaved from user-created and endorsed versions, Quiver publishes dashboards as separate resources backed by an analysis, and Object Views version their tabs alongside their embedded Workshop modules. Immutable semantic version numbers belong to Functions, not to these applications.",
-    "source": { "title": "Slate: Manage application versions", "url": "https://www.palantir.com/docs/foundry/slate/applications-versioning/" }
+    "source": {
+      "title": "Slate: Manage application versions",
+      "url": "https://www.palantir.com/docs/foundry/slate/applications-versioning/"
+    }
   },
   {
     "id": "mnt-016",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "Aldergrove Metering backs its `Meter` object type (Object Storage v2) with a dataset that rebuilds hourly. Last week the dataset stayed fresh and all of its health checks were green, yet the Workshop app showed readings that were hours old because indexing into the object type had fallen behind. The team wants to be alerted the next time indexed objects lag behind the backing data. What should they set up?",
     "options": [
-      { "id": "a", "text": "A monitoring view for the object type with a sync propagation delay rule", "why": "Correct. For Object Storage v2, object type health is monitored through monitoring views, and a sync propagation delay rule alerts when the freshness of indexed data passes a threshold." },
-      { "id": "b", "text": "A time since last updated check on the backing dataset with a one-hour threshold", "why": "The dataset was updating on time during the incident, so this check would have stayed green; the delay was after the dataset, in indexing." },
-      { "id": "c", "text": "A data freshness check on the reading timestamp column of the backing dataset", "why": "This measures how recent the rows in the dataset are, and they were recent; it cannot see whether those rows have reached the object type yet." },
-      { "id": "d", "text": "Auto-refresh on the Workshop module with the `Meter` object set registered", "why": "Auto-refresh reloads the module when watched object data changes; it does not make indexing faster and it alerts nobody when indexing is behind." }
+      {
+        "id": "a",
+        "text": "A monitoring view for the object type with a sync propagation delay rule",
+        "why": "Correct. For Object Storage v2, object type health is monitored through monitoring views, and a sync propagation delay rule alerts when the freshness of indexed data passes a threshold."
+      },
+      {
+        "id": "b",
+        "text": "A time since last updated check on the backing dataset with a one-hour threshold",
+        "why": "The dataset was updating on time during the incident, so this check would have stayed green; the delay was after the dataset, in indexing."
+      },
+      {
+        "id": "c",
+        "text": "A data freshness check on the reading timestamp column of the backing dataset",
+        "why": "This measures how recent the rows in the dataset are, and they were recent; it cannot see whether those rows have reached the object type yet."
+      },
+      {
+        "id": "d",
+        "text": "Auto-refresh on the Workshop module with the `Meter` object set registered",
+        "why": "Auto-refresh reloads the module when watched object data changes; it does not make indexing faster and it alerts nobody when indexing is behind."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Data reaches an application in two stages: the pipeline builds the backing dataset, and then indexing makes that data available as objects. In Object Storage v2 the indexing stage is a set of build jobs orchestrated per object type, and it is monitored with monitoring views created from the object type, including rules on those jobs and on sync propagation delay. Dataset health checks cover only the first stage.",
-    "source": { "title": "Object indexing: Funnel batch pipelines", "url": "https://www.palantir.com/docs/foundry/object-indexing/funnel-batch-pipelines/" }
+    "source": {
+      "title": "Object indexing: Funnel batch pipelines",
+      "url": "https://www.palantir.com/docs/foundry/object-indexing/funnel-batch-pipelines/"
+    }
   },
   {
     "id": "mnt-017",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "medium",
     "format": "hotspot",
     "stem": "Redcliffe Imports runs one schedule that builds the clean, joined and backing datasets shown below. The supplier feed is delivered by another team that does not monitor it, and twice this year they renamed a column without warning, which broke your builds overnight. You want a schema check that detects such a change at the earliest point, before any of your own builds run against it. Select the region where that check belongs.",
@@ -315,263 +823,598 @@
       "height": 360,
       "alt": "A pipeline diagram: a supplier feed dataset owned by another team feeds clean shipments, shipments joined and the shipments backing dataset built by your schedule, followed by the Shipment object type and a tracking Workshop module.",
       "groups": [
-        { "x": 14, "y": 20, "w": 172, "h": 116, "label": "Owned by supplier team" },
-        { "x": 220, "y": 20, "w": 406, "h": 226, "label": "Built by your schedule" }
+        {
+          "x": 14,
+          "y": 20,
+          "w": 172,
+          "h": 116,
+          "label": "Owned by supplier team"
+        },
+        {
+          "x": 220,
+          "y": 20,
+          "w": 406,
+          "h": 226,
+          "label": "Built by your schedule"
+        }
       ],
       "regions": [
-        { "id": "feed", "label": "Supplier feed dataset", "x": 30, "y": 60, "w": 140, "h": 56, "why": "Correct. This is the input to your schedule: a schema check here reports added, removed or retyped columns as soon as the feed changes, before your builds consume it." },
-        { "id": "clean", "label": "Clean shipments dataset", "x": 250, "y": 60, "w": 140, "h": 56, "why": "This is an intermediate you build yourself; by the time its schema could differ, your own job has already run against the changed feed, or failed." },
-        { "id": "joined", "label": "Shipments joined dataset", "x": 470, "y": 60, "w": 140, "h": 56, "why": "Another intermediate built by your schedule; a check here would be two builds too late to act as an early warning." },
-        { "id": "backing", "label": "Shipments backing dataset", "x": 470, "y": 170, "w": 140, "h": 56, "why": "A schema check on this output protects the applications that consume it, but it is the last dataset to see an upstream change, not the first." },
-        { "id": "object_type", "label": "Shipment object type", "x": 470, "y": 284, "w": 140, "h": 56, "why": "Schema checks are installed on datasets; the object type would only be affected after the backing dataset had already changed." },
-        { "id": "module", "label": "Tracking Workshop module", "x": 250, "y": 284, "w": 140, "h": 56, "why": "The module is the furthest point from the cause and is where users would notice the problem, which is what the check is meant to prevent." }
+        {
+          "id": "feed",
+          "label": "Supplier feed dataset",
+          "x": 30,
+          "y": 60,
+          "w": 140,
+          "h": 56,
+          "why": "Correct. This is the input to your schedule: a schema check here reports added, removed or retyped columns as soon as the feed changes, before your builds consume it."
+        },
+        {
+          "id": "clean",
+          "label": "Clean shipments dataset",
+          "x": 250,
+          "y": 60,
+          "w": 140,
+          "h": 56,
+          "why": "This is an intermediate you build yourself; by the time its schema could differ, your own job has already run against the changed feed, or failed."
+        },
+        {
+          "id": "joined",
+          "label": "Shipments joined dataset",
+          "x": 470,
+          "y": 60,
+          "w": 140,
+          "h": 56,
+          "why": "Another intermediate built by your schedule; a check here would be two builds too late to act as an early warning."
+        },
+        {
+          "id": "backing",
+          "label": "Shipments backing dataset",
+          "x": 470,
+          "y": 170,
+          "w": 140,
+          "h": 56,
+          "why": "A schema check on this output protects the applications that consume it, but it is the last dataset to see an upstream change, not the first."
+        },
+        {
+          "id": "object_type",
+          "label": "Shipment object type",
+          "x": 470,
+          "y": 284,
+          "w": 140,
+          "h": 56,
+          "why": "Schema checks are installed on datasets; the object type would only be affected after the backing dataset had already changed."
+        },
+        {
+          "id": "module",
+          "label": "Tracking Workshop module",
+          "x": 250,
+          "y": 284,
+          "w": 140,
+          "h": 56,
+          "why": "The module is the furthest point from the cause and is where users would notice the problem, which is what the check is meant to prevent."
+        }
       ],
       "edges": [
-        { "from": "feed", "to": "clean" },
-        { "from": "clean", "to": "joined" },
-        { "from": "joined", "to": "backing" },
-        { "from": "backing", "to": "object_type" },
-        { "from": "object_type", "to": "module" }
+        {
+          "from": "feed",
+          "to": "clean"
+        },
+        {
+          "from": "clean",
+          "to": "joined"
+        },
+        {
+          "from": "joined",
+          "to": "backing"
+        },
+        {
+          "from": "backing",
+          "to": "object_type"
+        },
+        {
+          "from": "object_type",
+          "to": "module"
+        }
       ]
     },
-    "answer": ["feed"],
+    "answer": [
+      "feed"
+    ],
     "explanation": "The recommended practice treats the schedule as the unit of monitoring and assigns checks by role. Inputs, which the schedule reads but does not build, get schema checks so that upstream schema breaks are detected and can be traced as a root cause; outputs get time since last updated and, where applications consume them, schema checks. Placing the check on the input is what turns an overnight build failure into an early warning.",
-    "source": { "title": "Recommended health checks", "url": "https://www.palantir.com/docs/foundry/maintaining-pipelines/recommended-health-checks/" }
+    "source": {
+      "title": "Recommended health checks",
+      "url": "https://www.palantir.com/docs/foundry/maintaining-pipelines/recommended-health-checks/"
+    }
   },
   {
     "id": "mnt-018",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "easy",
     "format": "multi",
     "stem": "A regional manager at Thornaby Retail says the sales table in her Workshop app still shows yesterday's numbers. You open the dataset that backs the `Sale` object type in Data Lineage. Which steps help you find where in the pipeline the data stopped flowing? Select TWO.",
     "options": [
-      { "id": "a", "text": "Expand the node's parents all the way back to the raw datasets", "why": "Correct. Showing every ancestor puts the whole upstream pipeline on the graph, so each step between the source and the backing dataset can be inspected." },
-      { "id": "b", "text": "Colour the nodes by build status", "why": "Correct. Build status colouring shows at a glance which upstream datasets are failing or have not built, which is how a stale dataset is traced to its cause." },
-      { "id": "c", "text": "Colour the nodes by permissions", "why": "Permissions colouring shows the level of access a user has to each resource; it says nothing about whether the data is current." },
-      { "id": "d", "text": "Colour the nodes by resource type", "why": "This distinguishes kinds of resources on the graph but carries no information about builds or how recent the data is." },
-      { "id": "e", "text": "Compare the module's two latest versions in the Workshop Changelog", "why": "The Changelog shows configuration differences between module versions; yesterday's numbers come from the data, not from a module edit." }
+      {
+        "id": "a",
+        "text": "Expand the node's parents all the way back to the raw datasets",
+        "why": "Correct. Showing every ancestor puts the whole upstream pipeline on the graph, so each step between the source and the backing dataset can be inspected."
+      },
+      {
+        "id": "b",
+        "text": "Colour the nodes by build status",
+        "why": "Correct. Build status colouring shows at a glance which upstream datasets are failing or have not built, which is how a stale dataset is traced to its cause."
+      },
+      {
+        "id": "c",
+        "text": "Colour the nodes by permissions",
+        "why": "Permissions colouring shows the level of access a user has to each resource; it says nothing about whether the data is current."
+      },
+      {
+        "id": "d",
+        "text": "Colour the nodes by resource type",
+        "why": "This distinguishes kinds of resources on the graph but carries no information about builds or how recent the data is."
+      },
+      {
+        "id": "e",
+        "text": "Compare the module's two latest versions in the Workshop Changelog",
+        "why": "The Changelog shows configuration differences between module versions; yesterday's numbers come from the data, not from a module edit."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Data Lineage is the starting point for a stale-data report. Expanding the ancestors of the affected dataset reveals the pipeline, and colouring the nodes by build status (or by whether they are out of date) shows which dataset is failing, has not built, or is waiting on a source that did not deliver. The other colouring modes answer governance questions rather than freshness questions.",
-    "source": { "title": "Data Lineage: Understand out-of-date datasets", "url": "https://www.palantir.com/docs/foundry/data-lineage/stale-datasets/" }
+    "source": {
+      "title": "Data Lineage: Understand out-of-date datasets",
+      "url": "https://www.palantir.com/docs/foundry/data-lineage/stale-datasets/"
+    }
   },
   {
     "id": "mnt-019",
-    "domain": "maintenance",
-    "objective": "ontology-changes",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "ontology-changes"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "The platform team at Halvorsen Shipping has released a new version of a repository of pricing Functions. Around thirty Actions and a dozen Workshop applications reference these Functions at assorted older versions. The team needs to see which consumers are behind and whether moving each one forward would break it, and then upgrade the safe ones together. Which tool is designed for this?",
     "options": [
-      { "id": "a", "text": "Workflow Lineage, highlighting out-of-date functions and using its bulk upgrade panels", "why": "Correct. Workflow Lineage can colour resources whose backing functions are out of date, shows whether each upgrade is safe or breaking, and upgrades selected actions and Workshop applications in bulk." },
-      { "id": "b", "text": "The backward compatibility checks that run in the Functions repository before a release is published", "why": "Those checks compare the new signatures with the previous release to warn the publisher; they do not list or upgrade the resources that consume the Functions." },
-      { "id": "c", "text": "Data Lineage with the out-of-date colouring applied, filtered to logic changes rather than data changes", "why": "That colouring concerns datasets whose data or transform logic is behind their ancestors; it does not track which Function version an Action or module references." },
-      { "id": "d", "text": "The function metrics shown in Ontology Manager, sorted by failure count over the most recent period", "why": "Metrics report executions, failures and duration; a consumer on an old but working version produces no failures and would not stand out." }
+      {
+        "id": "a",
+        "text": "Workflow Lineage, highlighting out-of-date functions and using its bulk upgrade panels",
+        "why": "Correct. Workflow Lineage can colour resources whose backing functions are out of date, shows whether each upgrade is safe or breaking, and upgrades selected actions and Workshop applications in bulk."
+      },
+      {
+        "id": "b",
+        "text": "The backward compatibility checks that run in the Functions repository before a release is published",
+        "why": "Those checks compare the new signatures with the previous release to warn the publisher; they do not list or upgrade the resources that consume the Functions."
+      },
+      {
+        "id": "c",
+        "text": "Data Lineage with the out-of-date colouring applied, filtered to logic changes rather than data changes",
+        "why": "That colouring concerns datasets whose data or transform logic is behind their ancestors; it does not track which Function version an Action or module references."
+      },
+      {
+        "id": "d",
+        "text": "The function metrics shown in Ontology Manager, sorted by failure count over the most recent period",
+        "why": "Metrics report executions, failures and duration; a consumer on an old but working version produces no failures and would not stand out."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "A Function release affects every Action, automation and Workshop application that references it, and each of those holds its own version reference. Workflow Lineage puts these function-backed resources on one graph, flags the ones that are out of date, indicates whether an upgrade would be a breaking change, and applies upgrades in bulk. It is the impact-analysis and refactoring tool for changes that ripple through a workflow.",
-    "source": { "title": "Workflow Lineage: Perform refactors and understand your workflows", "url": "https://www.palantir.com/docs/foundry/workflow-lineage/refactor-and-understand-workflows/" }
+    "source": {
+      "title": "Workflow Lineage: Perform refactors and understand your workflows",
+      "url": "https://www.palantir.com/docs/foundry/workflow-lineage/refactor-and-understand-workflows/"
+    }
   },
   {
     "id": "mnt-020",
-    "domain": "maintenance",
-    "objective": "ontology-changes",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "ontology-changes"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "Wexcombe Foods has a `Shipment` object type in Object Storage v2 that planners edit through Actions. The ontology owner has a list of tidy-up changes. Which change will Ontology Manager treat as a breaking schema change?",
     "options": [
-      { "id": "a", "text": "Changing the data type of the `palletCount` property from string to integer", "why": "Correct. Changing the data type of a property is on the list of breaking schema changes, so existing edits need a migration such as a cast." },
-      { "id": "b", "text": "Changing the display name of `carrierRef`, a property that planners have edited", "why": "Changing the display name of a property is explicitly non-breaking, even when the property has received user edits." },
-      { "id": "c", "text": "Deleting `legacyNote`, a property that has never received a user edit", "why": "Deleting a property that has never received user edits is listed as non-breaking for the schema, because there are no edits to migrate." },
-      { "id": "d", "text": "Changing the render hints and visibility of `status`, a property planners have edited", "why": "Render hints and visibility are metadata; changing them is listed as non-breaking even for properties that have received edits." }
+      {
+        "id": "a",
+        "text": "Changing the data type of the `palletCount` property from string to integer",
+        "why": "Correct. Changing the data type of a property is on the list of breaking schema changes, so existing edits need a migration such as a cast."
+      },
+      {
+        "id": "b",
+        "text": "Changing the display name of `carrierRef`, a property that planners have edited",
+        "why": "Changing the display name of a property is explicitly non-breaking, even when the property has received user edits."
+      },
+      {
+        "id": "c",
+        "text": "Deleting `legacyNote`, a property that has never received a user edit",
+        "why": "Deleting a property that has never received user edits is listed as non-breaking for the schema, because there are no edits to migrate."
+      },
+      {
+        "id": "d",
+        "text": "Changing the render hints and visibility of `status`, a property planners have edited",
+        "why": "Render hints and visibility are metadata; changing them is listed as non-breaking even for properties that have received edits."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Breaking schema changes are those that alter how stored data and user edits map onto the object type: changing its input datasources or primary key, changing a property's data type, and changing the ID of or deleting a property that has received edits. Presentation metadata such as display names, render hints, type classes and visibility can change freely. Knowing which side of the line a change falls on tells you whether a migration and consumer updates are needed.",
-    "source": { "title": "Object edits: Manage schema changes", "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/" }
+    "source": {
+      "title": "Object edits: Manage schema changes",
+      "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/"
+    }
   },
   {
     "id": "mnt-021",
-    "domain": "maintenance",
-    "objective": "migration",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "migration"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Lindqvist Labs keeps `Sample` objects in Object Storage v2. Technicians have edited the `batchNumber` property, an integer, through Actions. New batches will have identifiers such as `B-0412`, so the property must become a string, and the technicians' existing edits must be kept. Which migration should be chosen when saving the type change?",
     "options": [
-      { "id": "a", "text": "Cast property to new type", "why": "Correct. This migration converts the existing user edits on the property to its new data type, and integer to string is a supported cast." },
-      { "id": "b", "text": "Drop all property edits", "why": "This removes the technicians' edits on `batchNumber`, which the requirement explicitly rules out." },
-      { "id": "c", "text": "Backfill a value", "why": "Backfill sets a default on objects created by edits where a property is unset, typically after adding a property; it does not convert existing values." },
-      { "id": "d", "text": "Drop all edits", "why": "This resets every object of the type to the data in its datasources, discarding edits on all properties rather than preserving them." }
+      {
+        "id": "a",
+        "text": "Cast property to new type",
+        "why": "Correct. This migration converts the existing user edits on the property to its new data type, and integer to string is a supported cast."
+      },
+      {
+        "id": "b",
+        "text": "Drop all property edits",
+        "why": "This removes the technicians' edits on `batchNumber`, which the requirement explicitly rules out."
+      },
+      {
+        "id": "c",
+        "text": "Backfill a value",
+        "why": "Backfill sets a default on objects created by edits where a property is unset, typically after adding a property; it does not convert existing values."
+      },
+      {
+        "id": "d",
+        "text": "Drop all edits",
+        "why": "This resets every object of the type to the data in its datasources, discarding edits on all properties rather than preserving them."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Changing a property's data type is a breaking schema change, so Ontology Manager asks for a migration that says what to do with the edits already made. A cast migration converts those edits to the new type where the conversion is supported; the drop instructions discard them and backfill assigns defaults. Picking the instruction that fits the requirement is how a type change is made without losing user input.",
-    "source": { "title": "Object edits: Manage schema changes", "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/" }
+    "source": {
+      "title": "Object edits: Manage schema changes",
+      "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/"
+    }
   },
   {
     "id": "mnt-022",
-    "domain": "maintenance",
-    "objective": "migration",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "migration"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "A new regulation means Osric Bank's `scoreApplication` Function, currently at 1.4.2, must take an additional required input. It is used by four Actions with auto upgrade enabled and by two Workshop modules pinned to 1.4.2. Which plan migrates the consumers without an outage?",
     "options": [
-      { "id": "a", "text": "Release the change as 2.0.0; each consumer stays on 1.x until someone upgrades it", "why": "Correct. A new required input is a breaking change and belongs in a major version; version ranges cover only backward-compatible releases, so no consumer moves until someone upgrades it." },
-      { "id": "b", "text": "Release the change as 1.5.0, because an added input extends the Function rather than breaking it", "why": "Only an optional input is backward compatible. A required input released as a minor version would be picked up by the auto-upgrading Actions, which would fail without a value for it." },
-      { "id": "c", "text": "Release the change as 2.0.0; the Actions with auto upgrade move to it automatically within minutes", "why": "Auto upgrade resolves within the backward-compatible range of the selected minimum version, so it never crosses to a new major version by itself." },
-      { "id": "d", "text": "Release the change as 1.4.3 and ask the Workshop owners to re-pin once they have tested it", "why": "A patch number signals a compatible bug fix; the auto-upgrading Actions would resolve to it immediately and break, whatever the pinned modules do." }
+      {
+        "id": "a",
+        "text": "Release the change as 2.0.0; each consumer stays on 1.x until someone upgrades it",
+        "why": "Correct. A new required input is a breaking change and belongs in a major version; version ranges cover only backward-compatible releases, so no consumer moves until someone upgrades it."
+      },
+      {
+        "id": "b",
+        "text": "Release the change as 1.5.0, because an added input extends the Function rather than breaking it",
+        "why": "Only an optional input is backward compatible. A required input released as a minor version would be picked up by the auto-upgrading Actions, which would fail without a value for it."
+      },
+      {
+        "id": "c",
+        "text": "Release the change as 2.0.0; the Actions with auto upgrade move to it automatically within minutes",
+        "why": "Auto upgrade resolves within the backward-compatible range of the selected minimum version, so it never crosses to a new major version by itself."
+      },
+      {
+        "id": "d",
+        "text": "Release the change as 1.4.3 and ask the Workshop owners to re-pin once they have tested it",
+        "why": "A patch number signals a compatible bug fix; the auto-upgrading Actions would resolve to it immediately and break, whatever the pinned modules do."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Adding a required input is one of the breaking changes the versioning rules call out, so the release must increment the major version. Consumers on a version range keep resolving the highest release within the old major, and pinned consumers do not move at all, which gives the team time to upgrade each Action and module and supply the new input. Mislabelling the change as minor or patch would push it straight into the auto-upgrading consumers.",
-    "source": { "title": "Functions: Function versioning", "url": "https://www.palantir.com/docs/foundry/functions/functions-versioning/" }
+    "source": {
+      "title": "Functions: Function versioning",
+      "url": "https://www.palantir.com/docs/foundry/functions/functions-versioning/"
+    }
   },
   {
     "id": "mnt-023",
-    "domain": "maintenance",
-    "objective": "debugging",
+    "domain": "actions",
+    "objective": "security-troubleshooting",
+    "guide": {
+      "section": "maintenance",
+      "objective": "debugging"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "At Dunmore Transit a new scheduler can open the Reassign Driver form in a Workshop module and select a trip, but when she tries to submit, the form shows \"Only depot leads may reassign drivers on a live trip\" and blocks her. Colleagues who are depot leads submit the same Action without trouble. What is the most likely explanation?",
     "options": [
-      { "id": "a", "text": "A submission criterion on the Action is not met for her; this is its message", "why": "Correct. Submission criteria combine user and parameter conditions, and when one fails the Action cannot be submitted and its configured failure message is shown to the user." },
-      { "id": "b", "text": "She lacks view access to the trip object type, so the Action cannot load the trip", "why": "She can see and select the trip, and a missing view permission would not produce a business-rule message written by the Action's builder." },
-      { "id": "c", "text": "The module is being viewed at an unpublished version that depot leads do not receive", "why": "All viewers receive the same published version, and a version problem would not single out users who are not depot leads." },
-      { "id": "d", "text": "The Function behind the Action exceeded its time limit while processing her request", "why": "A timeout is a runtime error that would affect depot leads too and would not surface as this role-specific message." }
+      {
+        "id": "a",
+        "text": "A submission criterion on the Action is not met for her; this is its message",
+        "why": "Correct. Submission criteria combine user and parameter conditions, and when one fails the Action cannot be submitted and its configured failure message is shown to the user."
+      },
+      {
+        "id": "b",
+        "text": "She lacks view access to the trip object type, so the Action cannot load the trip",
+        "why": "She can see and select the trip, and a missing view permission would not produce a business-rule message written by the Action's builder."
+      },
+      {
+        "id": "c",
+        "text": "The module is being viewed at an unpublished version that depot leads do not receive",
+        "why": "All viewers receive the same published version, and a version problem would not single out users who are not depot leads."
+      },
+      {
+        "id": "d",
+        "text": "The Function behind the Action exceeded its time limit while processing her request",
+        "why": "A timeout is a runtime error that would affect depot leads too and would not surface as this role-specific message."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "An Action can be refused for two different reasons: the user lacks the permissions needed on the edited object types, or the submission criteria, which encode business rules about the user and the parameters, evaluate to false. Each top-level criterion carries a failure message that is displayed wherever the Action is used. A message phrased as a business rule and affecting only one group of users points to submission criteria.",
-    "source": { "title": "Action types: Submission criteria", "url": "https://www.palantir.com/docs/foundry/action-types/submission-criteria/" }
+    "source": {
+      "title": "Action types: Submission criteria",
+      "url": "https://www.palantir.com/docs/foundry/action-types/submission-criteria/"
+    }
   },
   {
     "id": "mnt-024",
-    "domain": "maintenance",
-    "objective": "debugging",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "guide": {
+      "section": "maintenance",
+      "objective": "debugging"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "Planners at Everholt Timber say their Workshop module is slow to open, and that a cost estimate backed by a Function recalculates after every keystroke in each of five input fields. The builder wants to find what is slow and stop the unnecessary recalculation. Which steps address this? Select TWO.",
     "options": [
-      { "id": "a", "text": "Reload the module in Profiler mode and review load time by widget and variable", "why": "Correct. The Performance Profiler records total load time and breaks it down by widget and variable, showing where the time goes." },
-      { "id": "b", "text": "Set the estimate variable to recompute only when triggered by an event, and add a Calculate button", "why": "Correct. With event-based recompute, input changes no longer rerun the Function; it runs when the user triggers the recompute event." },
-      { "id": "c", "text": "Enable auto-refresh on the module so that the estimate is always current", "why": "Auto-refresh reloads module data when watched objects change and can itself cause automatic variables to recompute, adding load rather than removing it." },
-      { "id": "d", "text": "Switch on automatic publishing so that planners always run the latest version", "why": "Publishing settings decide which version viewers receive; they have no effect on how a given version loads or recomputes." },
-      { "id": "e", "text": "Change the Function dependency from a pinned version to a version range", "why": "This alters which Function version is resolved at runtime; it does not change how often Workshop asks for the value." }
+      {
+        "id": "a",
+        "text": "Reload the module in Profiler mode and review load time by widget and variable",
+        "why": "Correct. The Performance Profiler records total load time and breaks it down by widget and variable, showing where the time goes."
+      },
+      {
+        "id": "b",
+        "text": "Set the estimate variable to recompute only when triggered by an event, and add a Calculate button",
+        "why": "Correct. With event-based recompute, input changes no longer rerun the Function; it runs when the user triggers the recompute event."
+      },
+      {
+        "id": "c",
+        "text": "Enable auto-refresh on the module so that the estimate is always current",
+        "why": "Auto-refresh reloads module data when watched objects change and can itself cause automatic variables to recompute, adding load rather than removing it."
+      },
+      {
+        "id": "d",
+        "text": "Switch on automatic publishing so that planners always run the latest version",
+        "why": "Publishing settings decide which version viewers receive; they have no effect on how a given version loads or recomputes."
+      },
+      {
+        "id": "e",
+        "text": "Change the Function dependency from a pinned version to a version range",
+        "why": "This alters which Function version is resolved at runtime; it does not change how often Workshop asks for the value."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Workshop variables recompute automatically by default whenever their inputs change. For an expensive Function fed by several inputs, switching the variable to recompute only on an explicit event lets users finish entering values before the calculation runs. The Performance Profiler is the tool for measuring where a module's load time is actually spent, so that optimisation targets the slow widgets and variables.",
-    "source": { "title": "Workshop: Variable recompute behavior", "url": "https://www.palantir.com/docs/foundry/workshop/variable-recompute/" }
+    "source": {
+      "title": "Workshop: Variable recompute behavior",
+      "url": "https://www.palantir.com/docs/foundry/workshop/variable-recompute/"
+    }
   },
   {
     "id": "mnt-tf-01",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "In Workshop, when automatic publishing on save is switched off, saving a module adds a new version to its history without changing the version that viewers receive.",
     "answer": true,
     "explanation": "Saving and publishing are separate steps in Workshop. With automatic publishing off, saved versions accumulate in the Versions dialog and viewers stay on the published version until a builder publishes another one.",
-    "source": { "title": "Workshop: Publishing and versioning", "url": "https://www.palantir.com/docs/foundry/workshop/versions/" }
+    "source": {
+      "title": "Workshop: Publishing and versioning",
+      "url": "https://www.palantir.com/docs/foundry/workshop/versions/"
+    }
   },
   {
     "id": "mnt-tf-02",
-    "domain": "maintenance",
-    "objective": "release-management",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "guide": {
+      "section": "maintenance",
+      "objective": "release-management"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "When a Workshop variable or an Action depends on a Function through a version range, a newly published major version of that Function is picked up automatically at runtime.",
     "answer": false,
     "correction": "A version range in Workshop or Actions covers only backward-compatible releases (minor and patch versions); moving to a new major version requires upgrading the consumer manually.",
     "explanation": "Version ranges exist to deliver compatible fixes and additions without manual work. Because a major version signals a breaking change, Workshop and Actions only allow ranges made up of minor and patch upgrades, and the highest matching version is resolved at runtime.",
-    "source": { "title": "Version range dependencies for functions", "url": "https://www.palantir.com/docs/foundry/functions/version-range-dependencies-for-functions/" }
+    "source": {
+      "title": "Version range dependencies for functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/version-range-dependencies-for-functions/"
+    }
   },
   {
     "id": "mnt-tf-03",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "A time since last updated health check can pass even though the contents of the dataset have not changed, because an empty transaction counts as an update unless the check is configured to ignore empty transactions.",
     "answer": true,
     "explanation": "This check measures the time since the last committed transaction, and an empty transaction is still a transaction even though it leaves the data unchanged. The check has an option to ignore empty transactions, which the recommended practice suggests enabling.",
-    "source": { "title": "Health checks: Types of checks", "url": "https://www.palantir.com/docs/foundry/health-checks/check-types/" }
+    "source": {
+      "title": "Health checks: Types of checks",
+      "url": "https://www.palantir.com/docs/foundry/health-checks/check-types/"
+    }
   },
   {
     "id": "mnt-tf-04",
-    "domain": "maintenance",
-    "objective": "data-freshness",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "guide": {
+      "section": "maintenance",
+      "objective": "data-freshness"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "In a schedule's run history, a run marked Succeeded guarantees that the build it started finished successfully and that the target datasets were updated.",
     "answer": false,
     "correction": "A schedule run marked Succeeded only means that the run successfully started a build; the build itself may still be running or may have failed.",
     "explanation": "A schedule run and the build it launches are different things. A Succeeded run records that the build was initiated, an Ignored run usually means everything was already up to date, and the outcome of the build has to be read from the build itself or from status checks.",
-    "source": { "title": "Data integration: Schedules", "url": "https://www.palantir.com/docs/foundry/data-integration/schedules/" }
+    "source": {
+      "title": "Data integration: Schedules",
+      "url": "https://www.palantir.com/docs/foundry/data-integration/schedules/"
+    }
   },
   {
     "id": "mnt-tf-05",
-    "domain": "maintenance",
-    "objective": "ontology-changes",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "ontology-changes"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "In Ontology Manager's usage metrics, a Workshop table that loads 500 objects of one object type in a single request is recorded as 500 reads of that object type.",
     "answer": false,
     "correction": "A single request that loads 500 objects of one object type is recorded as one read; a read represents one load request, however many objects it returns.",
     "explanation": "Ontology metrics count requests, not objects: many objects loaded or aggregated together are one read, and a bulk edit is one write. This matters when judging the impact of a change, because a low interaction count can still represent heavy use.",
-    "source": { "title": "Ontology Manager: Ontology metrics", "url": "https://www.palantir.com/docs/foundry/ontology-manager/view-usage/" }
+    "source": {
+      "title": "Ontology Manager: Ontology metrics",
+      "url": "https://www.palantir.com/docs/foundry/ontology-manager/view-usage/"
+    }
   },
   {
     "id": "mnt-tf-06",
-    "domain": "maintenance",
-    "objective": "ontology-changes",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "ontology-changes"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "For an object type selected on its graph, Workflow Lineage can show where each of the object type's properties is used, including dependent Actions and Workshop applications.",
     "answer": true,
     "explanation": "Workflow Lineage tracks property usage across a workflow. Selecting an object type lists its properties with the functions, actions, Workshop applications and other resources that use each one, which is what makes it suitable for assessing the impact of a property change.",
-    "source": { "title": "Workflow Lineage: Perform refactors and understand your workflows", "url": "https://www.palantir.com/docs/foundry/workflow-lineage/refactor-and-understand-workflows/" }
+    "source": {
+      "title": "Workflow Lineage: Perform refactors and understand your workflows",
+      "url": "https://www.palantir.com/docs/foundry/workflow-lineage/refactor-and-understand-workflows/"
+    }
   },
   {
     "id": "mnt-tf-07",
-    "domain": "maintenance",
-    "objective": "migration",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "migration"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "For an object type in Object Storage v2, when a user deletes a property that has received user edits, Ontology Manager blocks the save until a migration has been defined for that change.",
     "answer": true,
     "explanation": "Ontology Manager detects breaking schema changes automatically, shows a warning, and adds a migrations step to the review of changes. The save stays blocked until the user chooses what should happen to the existing edits, which stops the change from silently breaking other workflows.",
-    "source": { "title": "Object edits: Manage schema changes", "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/" }
+    "source": {
+      "title": "Object edits: Manage schema changes",
+      "url": "https://www.palantir.com/docs/foundry/object-edits/schema-migrations/"
+    }
   },
   {
     "id": "mnt-tf-08",
-    "domain": "maintenance",
-    "objective": "migration",
+    "domain": "ontology",
+    "objective": "change-impact",
+    "guide": {
+      "section": "maintenance",
+      "objective": "migration"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Setting a property's status to deprecated in Ontology Manager deletes the property automatically once the deprecation deadline has passed.",
     "answer": false,
     "correction": "The deprecated status only signals that a property will soon be deleted and records a reason, an expected deadline and an optional replacement; the property stays until someone deletes it.",
     "explanation": "Statuses are metadata that communicate lifecycle to builders. Deprecation tells consumers to stop relying on a resource and by when, and it makes the resource eligible for deletion, but removal is a separate change that an ontology editor makes and saves.",
-    "source": { "title": "Object and link types: Statuses", "url": "https://www.palantir.com/docs/foundry/object-link-types/metadata-statuses/" }
+    "source": {
+      "title": "Object and link types: Statuses",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/metadata-statuses/"
+    }
   },
   {
     "id": "mnt-tf-09",
-    "domain": "maintenance",
-    "objective": "debugging",
+    "domain": "actions",
+    "objective": "security-troubleshooting",
+    "guide": {
+      "section": "maintenance",
+      "objective": "debugging"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "A test run of an Action type in Ontology Manager applies the resulting edits to the Ontology so that they can be inspected on the affected objects afterwards.",
     "answer": false,
     "correction": "A test run of an Action type shows the edits the Action would make and how it would execute, but it does not apply those edits to the Ontology.",
     "explanation": "A test run simulates the Action with the supplied parameter values and the tester's own permissions. It returns the proposed changes and an execution log covering submission criteria, parameter validation and edit calculation, which makes it a safe way to find out why an Action fails.",
-    "source": { "title": "Action types: Test run", "url": "https://www.palantir.com/docs/foundry/action-types/test-run/" }
+    "source": {
+      "title": "Action types: Test run",
+      "url": "https://www.palantir.com/docs/foundry/action-types/test-run/"
+    }
   },
   {
     "id": "mnt-tf-10",
-    "domain": "maintenance",
-    "objective": "debugging",
+    "domain": "extended",
+    "objective": "quiver",
+    "guide": {
+      "section": "maintenance",
+      "objective": "debugging"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "In Quiver's graph mode, a dependency view narrows the graph to one selected card together with its upstream and downstream dependencies.",
     "answer": true,
     "explanation": "Large Quiver analyses are hard to trace card by card. The dependency view hides everything except the selected card and the cards it depends on or feeds, which makes it practical to find where an unexpected value or an errored card comes from.",
-    "source": { "title": "Quiver: Graph mode", "url": "https://www.palantir.com/docs/foundry/quiver/analysis-graph/" }
+    "source": {
+      "title": "Quiver: Graph mode",
+      "url": "https://www.palantir.com/docs/foundry/quiver/analysis-graph/"
+    }
   }
 ]

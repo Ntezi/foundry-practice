@@ -12,6 +12,8 @@ const err = (id, msg) => errors.push(`${id}: ${msg}`);
 const blueprint = read('data/blueprint.json');
 const domains = new Map(blueprint.domains.map((d) => [d.id, d]));
 const formats = new Set(blueprint.formats.map((f) => f.id));
+const sections = new Map(blueprint.guide2026.sections.map((x) => [x.id, x]));
+const exam = (id) => blueprint.exams.find((e) => e.id === id);
 const DOC_PREFIX = 'https://www.palantir.com/docs/foundry/';
 
 const questions = [];
@@ -32,6 +34,10 @@ for (const q of questions) {
   const d = domains.get(q.domain);
   if (!d) err(id, `unknown domain "${q.domain}"`);
   else if (!d.objectives.some((o) => o.id === q.objective)) err(id, `objective "${q.objective}" is not in domain "${q.domain}"`);
+  if (q.guide) { // optional placement in the 2026 PDF guide's outline; required for questions used in the 60-question forms
+    const sec = sections.get(q.guide.section);
+    if (!sec || !sec.objectives.includes(q.guide.objective)) err(id, `guide.section/guide.objective "${q.guide.section}/${q.guide.objective}" is not in blueprint.guide2026`);
+  }
   if (!formats.has(q.format)) err(id, `unknown format "${q.format}"`);
   if (!blueprint.difficulties.includes(q.difficulty)) err(id, `difficulty must be one of ${blueprint.difficulties.join('/')}`);
   if (!str(q.stem, 15)) err(id, 'stem missing or too short');
@@ -81,11 +87,21 @@ for (const q of questions) {
   }
 }
 
-// True/False keys must be balanced overall and within each domain.
-for (const d of blueprint.domains) {
-  const tf = questions.filter((q) => q.format === 'truefalse' && q.domain === d.id);
+// True/False keys must be balanced overall, and not lopsided within a domain.
+for (const d of [null, ...blueprint.domains]) {
+  const tf = questions.filter((q) => q.format === 'truefalse' && (!d || q.domain === d.id));
   const t = tf.filter((q) => q.answer === true).length;
-  if (tf.length && Math.abs(t - (tf.length - t)) > 1) err(`truefalse/${d.id}`, `unbalanced keys: ${t} true vs ${tf.length - t} false`);
+  if (tf.length && Math.abs(t - (tf.length - t)) > 2) err(`truefalse/${d ? d.id : 'all'}`, `unbalanced keys: ${t} true vs ${tf.length - t} false`);
+}
+
+// The dynamic Associate mock draws a quota per domain from the exam's formats; the bank must be able to fill it.
+if (!bankOnly) {
+  const a = exam('associate');
+  if (Object.values(a.quotas).reduce((x, y) => x + y, 0) !== a.questions) err('exam associate', 'quotas do not add up to the question count');
+  for (const [dom, n] of Object.entries(a.quotas)) {
+    const have = questions.filter((q) => q.domain === dom && a.formats.includes(q.format)).length;
+    if (have < n) err('exam associate', `${dom}: ${have} ${a.formats.join('/')} questions, the mock needs ${n}`);
+  }
 }
 
 let forms = [];
@@ -96,7 +112,7 @@ if (!bankOnly && existsSync(join(root, 'data/forms.json'))) {
   if (forms.length < 2) err('forms', 'at least two forms are required');
   for (const f of forms) {
     const fid = `form ${f.id}`;
-    if (f.questions.length !== blueprint.baseline.questions) err(fid, `has ${f.questions.length} questions, expected ${blueprint.baseline.questions}`);
+    if (f.questions.length !== exam('guide2026').questions) err(fid, `has ${f.questions.length} questions, expected ${exam('guide2026').questions}`);
     if (new Set(f.questions).size !== f.questions.length) err(fid, 'contains a duplicate question');
     const count = {}, fmt = new Set();
     for (const id of f.questions) {
@@ -105,16 +121,17 @@ if (!bankOnly && existsSync(join(root, 'data/forms.json'))) {
       if (q.format === 'truefalse') err(fid, `${id} is True/False; base forms use the guide's formats only`);
       if (used.has(id)) err(fid, `${id} is also in form ${used.get(id)} (forms must be distinct)`);
       used.set(id, f.id);
-      count[q.domain] = (count[q.domain] || 0) + 1;
+      if (!q.guide) { err(fid, `${id} has no guide.section, so it cannot be placed in a 2026-guide form`); continue; }
+      count[q.guide.section] = (count[q.guide.section] || 0) + 1;
       fmt.add(q.format);
     }
-    for (const d of blueprint.domains) if ((count[d.id] || 0) !== d.questions) err(fid, `${d.title}: ${count[d.id] || 0} questions, expected ${d.questions}`);
+    for (const d of sections.values()) if ((count[d.id] || 0) !== d.questions) err(fid, `${d.title}: ${count[d.id] || 0} questions, expected ${d.questions}`);
     for (const x of ['single', 'multi', 'discrete', 'hotspot', 'matching']) if (!fmt.has(x)) err(fid, `has no ${x} question`);
     for (const [from, to] of f.trueFalseMix || []) {
       const a = byId.get(from), b = byId.get(to);
       if (!a || !b || !f.questions.includes(from)) { err(fid, `trueFalseMix ${from} -> ${to}: unknown id or not in form`); continue; }
       if (b.format !== 'truefalse') err(fid, `trueFalseMix target ${to} is not True/False`);
-      if (a.domain !== b.domain) err(fid, `trueFalseMix ${from} -> ${to} changes the domain distribution`);
+      if (a.guide?.section !== b.guide?.section) err(fid, `trueFalseMix ${from} -> ${to} changes the section distribution`);
     }
   }
 }

@@ -1,5 +1,6 @@
 // Browser persistence. Everything lives in localStorage under the "fp:" prefix; nothing leaves the device.
-const KEY = { active: 'fp:active', attempts: 'fp:attempts', setup: 'fp:setup', theme: 'fp:theme' };
+// v2: sessions report against the official eight-domain outline; earlier saved data is not carried over.
+const KEY = { active: 'fp:active:v2', attempts: 'fp:attempts:v2', setup: 'fp:setup:v2', theme: 'fp:theme' };
 const MAX_ATTEMPTS = 40;
 
 function read(key, fallback) {

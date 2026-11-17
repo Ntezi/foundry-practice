@@ -1,0 +1,1224 @@
+[
+  {
+    "id": "aip-001",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "At Calder Freight a builder has written an AIP Logic function that reads a delay report and uses an action tool to set the `status` of a `Shipment`. When she runs it in the Logic editor, the Debugger lists the expected edit, but the `Shipment` object never changes. What has to happen before the edit is written to the Ontology?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Publish the function and call it from an Action type that is backed by it",
+        "why": "Correct. A run in the Logic editor only shows proposed edits. They are applied when the published function is executed from an Action (or from an automation)."
+      },
+      {
+        "id": "b",
+        "text": "Give every user of the function the Editor role on the `Shipment` object type",
+        "why": "Roles on the object type do not make an editor run write anything: test runs in Logic never apply their edits, whoever runs them."
+      },
+      {
+        "id": "c",
+        "text": "Switch the function from user-scoped to project-scoped execution",
+        "why": "The execution mode decides whose permissions the function runs with and who sees the logs; it does not turn a test run into a write."
+      },
+      {
+        "id": "d",
+        "text": "Run the function a second time from the Run panel to confirm the edit",
+        "why": "Every run from the Run panel behaves the same way: the edits are shown in the Debugger and are not executed."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "A Logic function that edits the Ontology returns or stages its edits; running it in the Logic editor only previews them in the Debugger. To change real objects the function must be published and executed through an Action backed by it, which can then be used in Workshop or in an automation. This keeps write-back behind the Action layer with its parameters, permissions and history.",
+    "source": {
+      "title": "AIP Logic: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/logic/getting-started/"
+    }
+  },
+  {
+    "id": "aip-002",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Logic function at Northmere Insurance has one Use LLM block that reads a claim description. Later blocks need three separate values from it: a category, an urgency level and a one-line rationale. How should the builder shape the output of the LLM block?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Return one long string and ask a second LLM block to pick the three values out of it",
+        "why": "This spends another model call on re-reading text and leaves the three values untyped, when the first block can return them as named fields directly."
+      },
+      {
+        "id": "b",
+        "text": "Set the block's output type to a struct with one named field for each value",
+        "why": "Correct. A struct output lets a single LLM block return several named, typed values that later blocks can reference individually."
+      },
+      {
+        "id": "c",
+        "text": "Copy the block three times with the same prompt and return one value from each copy",
+        "why": "Three model calls triple the cost and can disagree with each other, because each call reasons about the claim independently."
+      },
+      {
+        "id": "d",
+        "text": "Give the block an action tool so it can store the three values on a scratch object",
+        "why": "Writing temporary objects to pass values between blocks adds Ontology edits and an Action for something a block output already does."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Block outputs in AIP Logic are typed, and the output of one block can be used by the blocks after it. When one LLM block has to produce several values, a struct output returns them as named fields in a single call. Typed outputs also make the function easier to evaluate, because each field can be compared with an expected value.",
+    "source": {
+      "title": "AIP Logic: FAQ",
+      "url": "https://www.palantir.com/docs/foundry/logic/faq/"
+    }
+  },
+  {
+    "id": "aip-003",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A Logic function at Pellham Water classifies an incoming `Incident` with a Use LLM block and must then always call the `Set incident priority` Action for that same incident with the classified priority. Today the LLM block is given the Action as a tool, and in some runs it fills in the wrong incident or does not call the Action at all. Which change fixes this with the least added uncertainty?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Rewrite the prompt to say in capital letters that the Action must always be called once",
+        "why": "Stronger wording may reduce the misses but the model still decides whether and how to call the tool, so the behaviour stays probabilistic."
+      },
+      {
+        "id": "b",
+        "text": "Keep the tool and switch the block to a model that supports native tool calling",
+        "why": "Native tool calling improves speed and token efficiency, but the call and its parameters are still chosen by the model."
+      },
+      {
+        "id": "c",
+        "text": "Have the LLM block return only the priority, then add an Apply action block",
+        "why": "Correct. An Apply action block calls the Action deterministically, without going through an LLM, and gives precise control over how each parameter is filled."
+      },
+      {
+        "id": "d",
+        "text": "Add a second LLM block that checks whether the first one called the Action correctly",
+        "why": "A second model call adds cost and latency and is itself non-deterministic; it reviews the problem instead of removing it."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "AIP Logic offers two ways to use an Action. As a tool inside a Use LLM block, the model decides when to call it and constructs the parameters. As an Apply action block, the Action is called deterministically with the parameters the builder maps, which is the right choice when the call is not a matter of judgement. In both cases the edits are only written when the function itself is executed from an Action.",
+    "source": {
+      "title": "AIP Logic: Blocks",
+      "url": "https://www.palantir.com/docs/foundry/logic/blocks/"
+    }
+  },
+  {
+    "id": "aip-004",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Aldgrove Hospitals has published a Logic function that takes a `Referral` object and returns a short plain-text summary as a string. It makes no Ontology edits. The team wants to reuse it in several places. Which uses fit this function as it stands? Select THREE.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Back a Markdown widget in a Workshop module with the function",
+        "why": "Correct. A Logic function can back a Markdown widget in Workshop as long as its output type is a string, which is the case here."
+      },
+      {
+        "id": "b",
+        "text": "Call it from a second Logic function that needs the summary as an input",
+        "why": "Correct. Published Logic functions can be called from other Logic functions, in the same way as code-authored functions."
+      },
+      {
+        "id": "c",
+        "text": "Show its response in Workshop with the AIP Generated Content widget",
+        "why": "Correct. The AIP Generated Content widget has a Logic option that displays the response of a selected Logic function."
+      },
+      {
+        "id": "d",
+        "text": "Select it in a Logic effect in Automate so that it runs on each new referral",
+        "why": "The Logic effect only accepts Logic functions whose output is a list of Ontology edits; a function returning a string cannot be selected there."
+      },
+      {
+        "id": "e",
+        "text": "Back an Action type with it so that submitting the Action stores the summary",
+        "why": "The function returns a string and proposes no edits, so an Action backed by it would have nothing to write. It would first need to make edits through an Action."
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "A published Logic function is used like any other function on objects. A string-returning function suits display in Workshop (a Markdown widget or the AIP Generated Content widget) and reuse from other functions. Write-back paths such as a function-backed Action or the Logic effect in Automate need a function that produces Ontology edits.",
+    "source": {
+      "title": "AIP Logic: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/logic/getting-started/"
+    }
+  },
+  {
+    "id": "aip-005",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Vossberg Logistics enabled staged writes on a Logic function because it applies an Action that is backed by another edit-making function, and that nested edit must keep working. The team now wants Automate to run the function whenever a new `Claim` object appears, but the function is shown as disabled in the Logic effect's function selector. What should the team do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Turn staged writes off again so that the function returns a list of Ontology edits",
+        "why": "This would make the Logic effect accept the function, but legacy mode does not support Ontology edits in nested Action calls, which this function depends on."
+      },
+      {
+        "id": "b",
+        "text": "Generate an Action type backed by the function and run it from an Action effect",
+        "why": "Correct. A staged-write Logic function does not return Ontology edits, so it must be wrapped in an Action type and called from Automate through an Action effect."
+      },
+      {
+        "id": "c",
+        "text": "Give the automation's owner the Owner role on the Logic function and its project",
+        "why": "The function is disabled because of its output type, not because of missing permissions, so a stronger role changes nothing in the selector."
+      },
+      {
+        "id": "d",
+        "text": "Turn on automatic upgrade to compatible versions in the Logic effect settings",
+        "why": "Automatic upgrade never crosses a major version, and the Logic effect only supports legacy functions whichever version is chosen."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "With staged writes, a Logic function stages its edits and applies them when the execution completes, instead of returning a list of Ontology edits. The Logic effect in Automate can only call functions that return such a list, so a staged-write function is called through an Action type (AIP Logic can generate one) and an Action effect. All Action effect features, including staging as proposals for human review, remain available.",
+    "source": {
+      "title": "AIP Logic: Automate AIP Logic",
+      "url": "https://www.palantir.com/docs/foundry/logic/aip-logic-integration-automate/"
+    }
+  },
+  {
+    "id": "aip-006",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Ferncliff Energy is building a chatbot in AIP Chatbot Studio (formerly AIP Agent Studio) for field engineers. Every answer must be grounded in the `Procedure` objects most relevant to the engineer's question, and the team does not want this to depend on the model deciding to look anything up. `Procedure` has a vector embedding property. What should the team configure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An Object query tool on `Procedure`, with a prompt telling the model to search first",
+        "why": "A tool is called only when the model chooses to call it, so some answers could still be produced without any procedure being read."
+      },
+      {
+        "id": "b",
+        "text": "A Function tool that calls a published search function over `Procedure`",
+        "why": "This is still a tool: the model decides whether to call it and builds its inputs, which is the dependency the team wants to avoid."
+      },
+      {
+        "id": "c",
+        "text": "Ontology context as retrieval context, using semantic search over `Procedure`",
+        "why": "Correct. Retrieval context runs deterministically with every new user message, and Ontology context can return the most relevant objects by semantic search on a vector property."
+      },
+      {
+        "id": "d",
+        "text": "The full text of all procedures pasted into the chatbot's instructions",
+        "why": "This sends everything on every message, wastes the context window, goes stale when procedures change and ignores which ones are relevant."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "In AIP Chatbot Studio, retrieval context is fetched deterministically for each new user message and passed to the LLM, whereas tools are used only when the model asks for them. Ontology context is the retrieval context type for objects: it supplies either a fixed set of objects or the most relevant ones found by semantic search. Choosing retrieval context over a tool removes one non-deterministic step from grounding.",
+    "source": {
+      "title": "AIP Chatbot Studio: Retrieval context",
+      "url": "https://www.palantir.com/docs/foundry/chatbot-studio/retrieval-context/"
+    }
+  },
+  {
+    "id": "aip-007",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "A Workshop module at Skerry Airways shows a filtered table of `Flight` objects. The team embeds a chatbot built in AIP Chatbot Studio that should reason about the flights currently in the table and hand back a set of suggested flights that a second table displays. Which configuration steps achieve this? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add object set application variables and map them to Workshop variables in the AIP Chatbot widget",
+        "why": "Correct. Application variables are the chatbot's application state; in the AIP Chatbot widget each one is mapped to a Workshop variable of the same type, so other widgets can supply and display the values."
+      },
+      {
+        "id": "b",
+        "text": "Use the filtered-flights variable as the starting object set of the Object query tool",
+        "why": "Correct. An object set variable can be the starting point of the Object query tool (or the input of Ontology context), so the chatbot works from the user's current filter."
+      },
+      {
+        "id": "c",
+        "text": "Ask users to copy the flight numbers from the table and paste them into the chat before each question",
+        "why": "This pushes manual work onto users and is error-prone, when the filtered object set can be passed to the chatbot as application state."
+      },
+      {
+        "id": "d",
+        "text": "Hold the suggested flights in a numeric array application variable on the chatbot",
+        "why": "Application variables are string or object set variables. A set of suggested `Flight` objects belongs in an object set variable."
+      },
+      {
+        "id": "e",
+        "text": "Put the suggested flights in the chatbot's instructions so the second table can read them",
+        "why": "Instructions are part of the system prompt sent to the model. They are not a channel that Workshop widgets can read values from."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Application state lets a chatbot exchange values with the application it is embedded in. String and object set application variables are configured in AIP Chatbot Studio, described so the model knows when to use them, and mapped to Workshop variables in the AIP Chatbot widget. They can feed retrieval context and tools, and can be updated by the chatbot so that other widgets show the result.",
+    "source": {
+      "title": "AIP Chatbot Studio: Application state",
+      "url": "https://www.palantir.com/docs/foundry/chatbot-studio/application-state/"
+    }
+  },
+  {
+    "id": "aip-008",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A Logic function at Garrowby Bank ends with a conditional block. When an `Invoice` is judged high risk, the first branch runs the `Flag invoice` Action; otherwise nothing should change. The builder made the else branch return the text `no change`, and the function can no longer be saved without errors. What is the correct way to configure the else branch?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set the else branch to take no action, so every branch is consistent with returning edits",
+        "why": "Correct. All branches of a conditional must return consistent output; when one branch returns Ontology edits through an Action, the others must run an Action or explicitly take no action."
+      },
+      {
+        "id": "b",
+        "text": "Delete the else branch, so that the block returns edits in one case and a string otherwise",
+        "why": "The mismatch is the problem: branches cannot return different kinds of output, so mixing edits and a string is not allowed."
+      },
+      {
+        "id": "c",
+        "text": "Change the first branch to return the text `flagged` and let the caller run the Action",
+        "why": "This makes the branches consistent but removes the write-back from the function, pushing the decision logic into every caller."
+      },
+      {
+        "id": "d",
+        "text": "Make the else branch run `Flag invoice` too, with a parameter that marks it low risk",
+        "why": "This invents an edit that the requirement says should not happen, only to satisfy the type rule that a no-action branch already satisfies."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "A conditional block in AIP Logic works like if-then-else, and every branch has to produce the same kind of output. If one branch outputs a string, all must; if branches return Ontology edits through Actions, each branch must either run an Action or be set to take no action. The explicit no-action option exists for exactly this case.",
+    "source": {
+      "title": "AIP Logic: Blocks",
+      "url": "https://www.palantir.com/docs/foundry/logic/blocks/"
+    }
+  },
+  {
+    "id": "aip-009",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Use LLM block at Tolland Estates reads three contractor quotes written as free text and has to state the percentage difference between the cheapest and the most expensive. The reasoning in the Debugger is sound, but the arithmetic is sometimes wrong. Which tool should the builder add to the block?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The Query objects tool, so that the model can look up earlier quotes",
+        "why": "Query objects gives the model access to Ontology data. It does not make the model's arithmetic on the numbers it already has any more accurate."
+      },
+      {
+        "id": "b",
+        "text": "The Apply actions tool, so that the model can store each figure on an object",
+        "why": "Apply actions lets the model propose Ontology edits; storing figures does not compute the percentage correctly."
+      },
+      {
+        "id": "c",
+        "text": "The Calculator tool, so that the model can request exact calculations",
+        "why": "Correct. The Calculator tool lets an LLM block perform accurate mathematical calculations instead of estimating the result in text."
+      },
+      {
+        "id": "d",
+        "text": "The Call function tool pointed at this same Logic function",
+        "why": "Calling the same function again repeats the same weakness and adds cost; the missing piece is exact arithmetic."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "An LLM block is given tools for the things a language model does not do reliably by itself. The tools available in a Use LLM block are Apply actions, Call function, Query objects and the Calculator; the Calculator covers exact mathematics. The model asks to use a tool and AIP Logic executes the call.",
+    "source": {
+      "title": "AIP Logic: Blocks",
+      "url": "https://www.palantir.com/docs/foundry/logic/blocks/"
+    }
+  },
+  {
+    "id": "aip-010",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Brindle Rail is adding a Use LLM block that drafts a maintenance note for a `WorkOrder`. To do so the model needs the work order's `description`, `assetId` and `lastInspectionDate`. The ontology also holds `Employee`, `Payroll` and `Supplier` object types. How should the builder configure the Query objects tool?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add all four object types, so the model can explore whatever it finds useful",
+        "why": "This exposes personal and financial data the task does not need, and extra data in the context makes wrong or unsupported answers more likely."
+      },
+      {
+        "id": "b",
+        "text": "Add `WorkOrder` with every property, in case a later prompt change needs more",
+        "why": "Unneeded properties cost tokens on every run and widen what the model can read; properties can be added later when a real need appears."
+      },
+      {
+        "id": "c",
+        "text": "Add only `WorkOrder` and select only the three properties the note depends on",
+        "why": "Correct. The Query objects tool lists the object types the model may access and lets the builder choose the properties, which limits exposure and keeps queries token-efficient."
+      },
+      {
+        "id": "d",
+        "text": "Add no tool and paste an export of all work orders into the prompt text",
+        "why": "A pasted export is static, large and not filtered by the reader's permissions at run time; it also sends far more data than one note needs."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "A model in AIP Logic only has access to what the builder provides. The Query objects tool names the object types the LLM can query and, for each, the properties it can see. Giving the minimum set reduces token use, removes distracting context and limits the data an AI workflow can touch.",
+    "source": {
+      "title": "AIP Logic: Blocks",
+      "url": "https://www.palantir.com/docs/foundry/logic/blocks/"
+    }
+  },
+  {
+    "id": "aip-011",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Regional managers at Hollin Retail run a Logic function from Workshop. The function is in the default, user-scoped execution mode and its LLM block has a Query objects tool on `Store`, which is secured so that each manager can read only the stores in their own region. Which statements describe what happens? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tool calls requested by the model are executed within the permissions of the manager who invoked the function",
+        "why": "Correct. The LLM can only ask to use tools; AIP Logic executes those calls within the invoking user's permissions, so the model reads only that manager's stores."
+      },
+      {
+        "id": "b",
+        "text": "Each manager can see their own execution logs but not those of other managers",
+        "why": "Correct. In user-scoped mode each user sees only their own execution logs for the function."
+      },
+      {
+        "id": "c",
+        "text": "The model reads every `Store`, because the function runs as the builder who published it",
+        "why": "A user-scoped function does not run as its author. It runs with the permissions of whoever runs it."
+      },
+      {
+        "id": "d",
+        "text": "The model has direct access to the tool, so row-level security has to be restated in the prompt",
+        "why": "The model never has direct access to tools. The platform executes the calls and enforces security, so the prompt is not the control."
+      },
+      {
+        "id": "e",
+        "text": "Execution logs of all runs are visible to everyone who has access to the project",
+        "why": "That describes project-scoped execution. In user-scoped mode, logs are visible only to the user who ran the function."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "User-scoped execution is the default for a Logic function: it runs with the permissions of the user running it. Tools are not handed to the model; the model requests a tool call and AIP Logic carries it out within the invoking user's permissions. The execution mode also decides log visibility, which in user-scoped mode is limited to the user's own runs.",
+    "source": {
+      "title": "AIP Logic: Execution mode settings",
+      "url": "https://www.palantir.com/docs/foundry/logic/execution-mode-settings/"
+    }
+  },
+  {
+    "id": "aip-012",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "A support team at Marlow Telecom wants its triage Logic function to behave the same whoever triggers it, and wants every team member with project access to be able to read the execution logs. The lead switches the function to project-scoped execution. What else does this mode require?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Each caller needs the Editor role on the datasets that back the queried object types",
+        "why": "Project-scoped execution uses the project's permissions for the function's resources; raising every caller's role on backing datasets is over-permissioning and is not the requirement."
+      },
+      {
+        "id": "b",
+        "text": "Nothing more: project scope lets callers bypass Markings on the resources used",
+        "why": "Project scope does not remove Marking checks. Users still need access to the Markings on the resources the function uses."
+      },
+      {
+        "id": "c",
+        "text": "All resources it uses are imported into its project, and callers can access their Markings",
+        "why": "Correct. In project-scoped mode the function runs with the permissions of its project, so all resources it uses must be imported there, and users additionally need access to the Markings on those resources."
+      },
+      {
+        "id": "d",
+        "text": "The function is republished by a project Owner, whose permissions are then used for every run",
+        "why": "Project-scoped execution uses the permissions of the project that contains the function, not those of whoever published it."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "A Logic function runs in one of two modes. User-scoped (the default) uses the permissions of the person running it and shows each user only their own logs. Project-scoped uses the permissions of the project containing the function and makes logs visible to everyone with project access; it requires the function's resources to be imported into that project, and Markings on those resources still apply to users.",
+    "source": {
+      "title": "AIP Logic: Execution mode settings",
+      "url": "https://www.palantir.com/docs/foundry/logic/execution-mode-settings/"
+    }
+  },
+  {
+    "id": "aip-013",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Eastwick Procurement has a Logic function that reads a new `SupplierAlert` and may propose putting the supplier on credit hold, which stops all open orders. The team wants Automate to run it for every new alert. A wrong hold would be costly and the alerts are often ambiguous. How should the automation be configured?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Apply the edits automatically, since the function passed its evaluation suite",
+        "why": "A passing suite raises confidence but does not make an LLM-backed decision certain; an incorrect hold would change operational data with nobody checking it first."
+      },
+      {
+        "id": "b",
+        "text": "Stage the resulting Action as a proposal for a reviewer to accept",
+        "why": "Correct. Automate can stage the Action as a proposal for human review, so nothing changes until a reviewer inspects and accepts it."
+      },
+      {
+        "id": "c",
+        "text": "Apply the edits automatically and add a retry strategy with exponential backoff",
+        "why": "Retries handle failed executions. They do not catch a successful run that reached the wrong conclusion."
+      },
+      {
+        "id": "d",
+        "text": "Apply the edits automatically but lower the number of functions run in parallel",
+        "why": "Lower parallelization can reduce conflicts between edits; it adds no human judgement to a consequential decision."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "When Automate runs a Logic function, its edits can be applied automatically or staged for human review. Automatic execution is appropriate only when the action's purpose, impact and recovery path justify it; consequential or ambiguous actions should be staged as proposals. A reviewer can open the proposal, see the proposed action and the model's decision log, and accept it, at which point the action is executed.",
+    "source": {
+      "title": "AIP Logic: Automate AIP Logic",
+      "url": "https://www.palantir.com/docs/foundry/logic/aip-logic-integration-automate/"
+    }
+  },
+  {
+    "id": "aip-014",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A dispatch chatbot at Wrenfield Couriers, built in AIP Chatbot Studio, has the `Cancel delivery` Action as a tool. Dispatchers like the speed, but operations requires that no delivery is cancelled unless the dispatcher has seen and approved that specific cancellation. Which configuration meets the requirement?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add a sentence to the instructions telling the chatbot to ask before it cancels",
+        "why": "Instructions guide the model but do not enforce anything; the model could still call the Action without asking."
+      },
+      {
+        "id": "b",
+        "text": "Set the Action tool to run only after confirmation from the user",
+        "why": "Correct. An Action tool can be configured to run automatically or to run after the user confirms, which puts the approval step in the platform instead of the prompt."
+      },
+      {
+        "id": "c",
+        "text": "Remove the Action tool and have the chatbot explain how to cancel by hand",
+        "why": "This is safe but gives up the capability the dispatchers value, when a confirmation step already satisfies the requirement."
+      },
+      {
+        "id": "d",
+        "text": "Change the tool mode from prompted tool calling to native tool calling",
+        "why": "Tool mode changes how tools are offered to the model and how fast it can call them; it does not add an approval step."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "The Action tool gives a chatbot the ability to make an Ontology edit, and it can be set to run automatically or only after confirmation from the user. For consequential edits, confirmation keeps a person in control of each write. A control configured on the tool is enforced on every call, which a request written in the prompt is not.",
+    "source": {
+      "title": "AIP Chatbot Studio: Tools",
+      "url": "https://www.palantir.com/docs/foundry/chatbot-studio/tools/"
+    }
+  },
+  {
+    "id": "aip-015",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "A Logic function at Quillon Media handles an `ExpenseClaim` in a single large Use LLM block. The block reads the free-text justification to choose a category, and is also told to set `requiresAudit` when `amount` is above a fixed company limit. Runs are slow and costly, and the model occasionally gets the comparison wrong. Which changes address this? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Limit the LLM block to choosing the category from the free-text justification",
+        "why": "Correct. Interpreting free text is where a model adds value; a narrower block has less to get wrong and uses fewer tokens."
+      },
+      {
+        "id": "b",
+        "text": "Do the limit check and the update with a conditional and an Apply action block",
+        "why": "Correct. An exact comparison is deterministic logic. Deterministic blocks give predictable results and use no tokens."
+      },
+      {
+        "id": "c",
+        "text": "Add several worked examples of amount comparisons to the prompt",
+        "why": "Few-shot examples can help a model, but they add tokens to every run and still leave an exact rule to a probabilistic step."
+      },
+      {
+        "id": "d",
+        "text": "Give the model a Query objects tool over all past claims to compare against",
+        "why": "More data and another tool raise cost and latency, and past claims are not needed to compare one amount with a fixed limit."
+      },
+      {
+        "id": "e",
+        "text": "Raise the temperature so that the model reconsiders the comparison",
+        "why": "A higher temperature makes output more random, which is the opposite of what an exact rule needs."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Use an LLM where judgement over unstructured input is needed, and deterministic logic where the rule is exact. In AIP Logic, deterministic blocks such as conditionals, function execution and Apply action produce predictable outcomes and do not consume tokens. Splitting a large block also gives each step only the context it needs, which tends to improve consistency and speed.",
+    "source": {
+      "title": "AIP Logic: FAQ",
+      "url": "https://www.palantir.com/docs/foundry/logic/faq/"
+    }
+  },
+  {
+    "id": "aip-016",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "At Lindqvist Care, `PatientNote` objects are protected by a restricted view so that only the treating team can read them. A Logic function run by a treating nurse summarises the notes and, through an Action, writes the summary to `Ward.handoverSummary`, which all ward staff can read. A reviewer asks whether the restricted view also protects the summary. What is the accurate answer?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes. Anything a model derives from restricted rows inherits the row-level policy of those rows",
+        "why": "Row and column controls are enforced when data is read. They do not attach themselves to the model's output or to the edits it composes."
+      },
+      {
+        "id": "b",
+        "text": "Yes, provided that the function is switched to project-scoped execution before it is published",
+        "why": "The execution mode changes whose permissions are used for reading. It does not make a derived property carry the source's row-level policy."
+      },
+      {
+        "id": "c",
+        "text": "No. The view limits what is read; protecting the output needs a Marking or similar control",
+        "why": "Correct. Restricted views and object or property security policies filter reads on the user's behalf but do not extend to model output or Ontology edits; a Marking or classification-based access control keeps data protected downstream."
+      },
+      {
+        "id": "d",
+        "text": "No, but hiding the `handoverSummary` column in the Workshop table closes the gap",
+        "why": "Hiding a column is a display choice. The property stays readable through other applications and APIs for anyone with access to `Ward`."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "In AIP Logic, row and column access controls are read-time enforcement only: the model can never see data the invoking user cannot read, but nothing stops the user's function from writing what it read into a less protected place. To keep sensitive content protected as it flows into outputs and edits, pair these controls with a Marking or classification-based access control. Reviewing where an AI workflow writes is as important as reviewing what it reads.",
+    "source": {
+      "title": "AIP Logic: Overview",
+      "url": "https://www.palantir.com/docs/foundry/logic/overview/"
+    }
+  },
+  {
+    "id": "aip-017",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "An administrator at Ostrava Aerospace has set the AIP data access policy to allow only the mandatory Marking `Internal` for requests to language models. A planner whose session holds both `Internal` and `Export Controlled` runs a Logic function over objects that carry no Markings at all, and the model request is rejected. Which statements are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The rejection is expected: the check looks at all mandatory Markings available to the request token",
+        "why": "Correct. With an allowlist, a request is allowed only when every mandatory Marking available to the request token is in the list, even if the data sent carries none of them."
+      },
+      {
+        "id": "b",
+        "text": "The planner can select a scoped session limited to Markings in the allowlist and run the function again",
+        "why": "Correct. A scoped session limits the Markings available in the session, and the request passes when none of them falls outside the model's allowlist."
+      },
+      {
+        "id": "c",
+        "text": "The rejection shows that some object in the prompt carried the `Export Controlled` Marking",
+        "why": "The policy does not inspect Markings on the data in the request. It evaluates the Markings the session can access."
+      },
+      {
+        "id": "d",
+        "text": "The same function would succeed for this planner if it were triggered by an automation",
+        "why": "The same token-level check applies to automated workflows, so running it through an automation does not avoid the policy."
+      },
+      {
+        "id": "e",
+        "text": "A colleague whose session holds no mandatory Markings would be rejected as well",
+        "why": "A token with no mandatory Markings has nothing outside the allowlist and passes the check."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "The allowed-Markings policy is evaluated against the request token, not against the data in the prompt: if the session can access any mandatory Marking outside the allowlist, the model request is rejected. It applies to interactive use and to automated workflows. A user with broader access works within the policy by choosing a scoped session, which is preferable to widening the allowlist or removing the user's access.",
+    "source": {
+      "title": "Control LLM data access with Markings",
+      "url": "https://www.palantir.com/docs/foundry/aip/control-llm-data-access-with-markings/"
+    }
+  },
+  {
+    "id": "aip-018",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Dunmore Housing published a chatbot from AIP Chatbot Studio whose retrieval context is a set of `TenancyPolicy` objects. The builder shared the chatbot with a group of supervisors. They can open it, but their questions end in errors, while the builder's own questions work. The supervisors are meant to be able to read these policies. What is the appropriate fix?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Give the supervisors the Owner role on the chatbot resource itself",
+        "why": "A stronger role on the chatbot changes what they can do to the chatbot. It grants no access to the objects it retrieves."
+      },
+      {
+        "id": "b",
+        "text": "Copy the policy text into the chatbot's instructions and remove the retrieval context",
+        "why": "This bypasses the Ontology's access controls for everyone who can use the chatbot and leaves a static copy that goes stale."
+      },
+      {
+        "id": "c",
+        "text": "Grant the supervisors access to `TenancyPolicy` through the normal permissions",
+        "why": "Correct. Sharing a chatbot does not share its data: users also need access to the data sources (and the model) it uses, or retrieval fails at run time."
+      },
+      {
+        "id": "d",
+        "text": "Replace the retrieval context with an Object query tool on `TenancyPolicy`",
+        "why": "A tool call is also executed for the user, so supervisors without access to the object type would still get nothing back."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "An AIP Chatbot is a resource with its own access controls, separate from the data it uses. Users of a chatbot need access to the chatbot, to its model and to its data sources; if they lack access to the configured retrieval context, errors occur at run time. The fix is to grant the intended data access deliberately, not to route the data around the permission model.",
+    "source": {
+      "title": "AIP Chatbot Studio: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/chatbot-studio/getting-started/"
+    }
+  },
+  {
+    "id": "aip-019",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A builder at Ashby Foods has a Logic function that labels customer reviews as positive or negative. It gave the right label on the handful of reviews she tried in the Run panel. Before release, her lead wants evidence that it performs well across many inputs and a way to tell whether later prompt changes make it better or worse. What should she set up?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An AIP Evals suite with test cases and an evaluator for the expected label",
+        "why": "Correct. An evaluation suite runs the function over many test cases, an evaluator turns the outputs into metrics, and runs can be compared between versions."
+      },
+      {
+        "id": "b",
+        "text": "A longer prompt that lists every review she has tried so far with its correct label",
+        "why": "Examples in the prompt may help the model but give no measurement of how the function performs on other inputs."
+      },
+      {
+        "id": "c",
+        "text": "A Workshop page where colleagues can try the function and report anything odd",
+        "why": "Ad hoc trials are not repeatable and produce no metric that can be compared from one version to the next."
+      },
+      {
+        "id": "d",
+        "text": "A saved copy of the current Debugger output to compare with future runs by eye",
+        "why": "One saved trace covers one input and one run; it cannot show performance across many cases."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "One-off runs are useful while building, but confidence in an LLM-backed function comes from testing it against many inputs. AIP Evals groups test cases, target functions and evaluators into an evaluation suite; evaluators produce metrics per test case that can be aggregated and compared between runs. This is the basis for deciding whether a change is an improvement.",
+    "source": {
+      "title": "AIP Evals: Overview",
+      "url": "https://www.palantir.com/docs/foundry/aip-evals/overview/"
+    }
+  },
+  {
+    "id": "aip-020",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "An evaluation suite for a Logic function at Corvane Shipping runs each test case once. Two engineers ran it on the same function version an hour apart and got different pass counts, and now disagree about whether the function is ready. What should they change about how the suite is run?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Remove the test cases whose results differ, so that the two runs agree",
+        "why": "The unstable cases are the most informative ones. Removing them hides the variance instead of measuring it."
+      },
+      {
+        "id": "b",
+        "text": "Lower each evaluator's pass threshold until both runs report full passes",
+        "why": "Loosening the criteria makes the numbers look better without making the function any more reliable."
+      },
+      {
+        "id": "c",
+        "text": "Run each test case several times and judge the aggregated results",
+        "why": "Correct. LLM output is non-deterministic, so each test case should be run more than once; the iterations are aggregated and show how much the results vary."
+      },
+      {
+        "id": "d",
+        "text": "Reduce the number of test cases executed in parallel during the run",
+        "why": "Lower parallelization helps with rate limits. It does not make a single execution of a test case representative."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "The same prompt can produce different outputs on different runs, so one execution per test case is a weak basis for a decision. The run configuration of an evaluation suite lets you set the number of iterations per test case, and AIP Evals aggregates the iterations. High variance in a metric can also be a sign that a test case or evaluator needs refining.",
+    "source": {
+      "title": "AIP Evals: Run an evaluation suite",
+      "url": "https://www.palantir.com/docs/foundry/aip-evals/run-suite/"
+    }
+  },
+  {
+    "id": "aip-021",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Logic function at Penhallow Clinics recommends a follow-up appointment type. For one test patient it returned a recommendation that ignores the patient's most recent visit. The builder wants to know whether the model ever queried the `Visit` objects and what it did with the result. Where should the builder look first?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The object type's Usage tab in Ontology Manager",
+        "why": "Usage metrics summarise who used an object type and where. They do not show the steps of one function run."
+      },
+      {
+        "id": "b",
+        "text": "The Debugger for that run in AIP Logic",
+        "why": "Correct. The Debugger shows each block's chain of thought, including the prompts generated and the tool calls the model made."
+      },
+      {
+        "id": "c",
+        "text": "The version history sidebar of the Logic function",
+        "why": "Version history shows what changed between saved versions of the function, not what happened inside a particular execution."
+      },
+      {
+        "id": "d",
+        "text": "The Data Lineage graph of the dataset backing `Visit`",
+        "why": "Data Lineage explains where the backing data comes from. It says nothing about which tools the model called in a run."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Running a Logic function opens the Debugger, which shows the LLM's chain of thought for each block: the individual reasoning steps and the supporting tools it used. Reading it reveals whether the model lacked the data, did not call the tool, or called it and misread the result. Recent runs can be reopened from the Run panel to inspect their output and debug log.",
+    "source": {
+      "title": "AIP Logic: Core concepts",
+      "url": "https://www.palantir.com/docs/foundry/logic/core-concepts/"
+    }
+  },
+  {
+    "id": "aip-022",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Thornbury Services has a Logic function that reads a support email and creates a `SupportTicket` object with a classification. The team wants an AIP Evals suite that checks the created ticket, and a colleague worries that every run will fill the production Ontology with test tickets. Which statements are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Each test case runs in its own Ontology simulation, so real objects are untouched",
+        "why": "Correct. Ontology edits made during a test case apply only to that test case's simulation and leave the actual Ontology unchanged."
+      },
+      {
+        "id": "b",
+        "text": "A custom evaluation function can search for the created ticket and check its values",
+        "why": "Correct. Functions that produce Ontology edits are evaluated with custom evaluation functions (or intermediate parameters); a created object is found by searching in the simulated Ontology."
+      },
+      {
+        "id": "c",
+        "text": "The created ticket should be passed to the evaluator as a test case parameter",
+        "why": "A created object exists only in the simulation, so it cannot be configured as a test case parameter in advance."
+      },
+      {
+        "id": "d",
+        "text": "The suite has to be run against a separate copy of the Ontology to keep production clean",
+        "why": "No separate Ontology is needed, because each test case's edits stay inside its simulation."
+      },
+      {
+        "id": "e",
+        "text": "The built-in Exact string match evaluator is enough to verify the properties of the created ticket",
+        "why": "Exact string match compares two strings. Verifying an object created by edits needs a custom evaluation function or an intermediate output."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "AIP Evals executes each test case in its own Ontology simulation, so edit-making functions can be tested safely. Because the output is a set of edits, the check is done by a custom evaluation function that returns Boolean or numeric metrics, or by evaluating intermediate block outputs. A created object must be looked up inside the simulation, since it did not exist when the test case was written.",
+    "source": {
+      "title": "AIP Evals: Evaluate Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/aip-evals/ontology-edits/"
+    }
+  },
+  {
+    "id": "aip-023",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "A Logic function at Kesteven Legal has three top-level blocks: the first classifies a contract clause, the second retrieves precedent objects for that class, and the third drafts advice. The suite's evaluator on the final advice fails often, and the team suspects the classification step but cannot tell from the final text. What is the most direct way to measure that step across the whole suite?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add an LLM-as-a-judge evaluator that reads the final advice and guesses which class was used",
+        "why": "This infers the intermediate value indirectly through another model call, when the block's actual output can be evaluated."
+      },
+      {
+        "id": "b",
+        "text": "Expose the classification block's output as an intermediate parameter and evaluate it",
+        "why": "Correct. A block's output can be exposed as an intermediate parameter and used in an evaluator like a final output, which measures that step on every test case."
+      },
+      {
+        "id": "c",
+        "text": "Open the Debugger for each failing test case and write down the class by hand",
+        "why": "The Debugger shows the class for one execution at a time; it gives no aggregated metric and has to be repeated after every change."
+      },
+      {
+        "id": "d",
+        "text": "Add custom run metadata naming the suspected block to each evaluation run",
+        "why": "Run metadata labels runs so they can be told apart in the history. It does not evaluate any output."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Evaluating only the end result is often not enough to locate a fault in a multi-step LLM function. AIP Logic and AIP Evals let you expose a block's output as an intermediate parameter and attach automated evaluators to it, so each step gets its own metric. The debug view remains useful for single cases; intermediate parameters give the measurement across the suite.",
+    "source": {
+      "title": "AIP Evals: Use intermediate parameters to evaluate block output",
+      "url": "https://www.palantir.com/docs/foundry/aip-evals/intermediate-parameters/"
+    }
+  },
+  {
+    "id": "aip-024",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Halewood Press has a Logic function that summarises articles and an evaluation suite for it. The team wants to find which of two models and three prompt phrasings gives the best balance of quality and cost, using the same test cases for every combination. Which steps set this up? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Make the model and the extra prompt wording inputs that the Use LLM block uses",
+        "why": "Correct. An experiment varies function parameters, so the model and the prompt variation must first be inputs that the LLM block actually uses."
+      },
+      {
+        "id": "b",
+        "text": "Enable an experiment in the run configuration and list the values to try",
+        "why": "Correct. AIP Evals then runs every combination of the listed values as separate evaluation runs, which can be grouped and compared afterwards."
+      },
+      {
+        "id": "c",
+        "text": "Switch the run to multi-target mode and define the experiment parameters there",
+        "why": "Multi-target mode compares different target functions, and experiment configuration is not available in that mode."
+      },
+      {
+        "id": "d",
+        "text": "Read all six results from the most recent run card in the AIP Logic sidebar",
+        "why": "That card shows only the last evaluation run of the set. The full experiment is analysed in the AIP Evals application."
+      },
+      {
+        "id": "e",
+        "text": "Try each combination once in the Logic Run panel and compare the summaries by eye",
+        "why": "Single manual runs give no metrics, ignore run-to-run variance and do not use the suite's test cases."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Experiments in AIP Evals test combinations of parameter values with a grid search, each combination being its own evaluation suite run. The function must be parameterised first, for example with a model input and a prompt-context input. The results are compared in AIP Evals, where runs can be grouped by a parameter such as the model to see aggregate metrics.",
+    "source": {
+      "title": "AIP Evals: Run experiments",
+      "url": "https://www.palantir.com/docs/foundry/aip-evals/experiments/"
+    }
+  },
+  {
+    "id": "aip-025",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "An engineer at Rookhope Mining asked AI FDE to write a function that reschedules `Shift` objects, and it has produced the code on a branch. The function will back an Action used by site supervisors. Which practices should the engineer follow before the function is released? Select THREE.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Review the generated code in the pull request or branch proposal for correctness before merging it",
+        "why": "Correct. Generated resources should always be verified before production use; AI FDE works on a branch and proposes its changes for review."
+      },
+      {
+        "id": "b",
+        "text": "Read what each tool call will do before approving it, instead of approving by reflex",
+        "why": "Correct. Mutating operations ask for approval, and the engineer is expected to understand the action and the tool before approving."
+      },
+      {
+        "id": "c",
+        "text": "Create an evaluation suite for the function and use it to track the effect of later changes",
+        "why": "Correct. AIP Evals is the recommended way to measure functions created or modified by AI FDE and to see whether changes improve or degrade them."
+      },
+      {
+        "id": "d",
+        "text": "Add every project folder and enable every tool, so that the agent has the fullest possible picture",
+        "why": "Unnecessary context and tools make incorrect actions more likely and widen access to sensitive operations; the guidance is to provide only what the task needs."
+      },
+      {
+        "id": "e",
+        "text": "Skip the review, because AI FDE runs under a service account with its own permission checks",
+        "why": "AI FDE has no service account. It acts with the engineer's own identity and permissions, so the engineer remains accountable for what is merged."
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "AI FDE operates Foundry on the user's behalf, under the user's identity and permissions, and by default makes changes on a branch for review. Its output is a starting point: the generated code is reviewed and tested, tool approvals are given knowingly, and the model is given only the tools and context the task needs. Evaluation suites then provide quantitative feedback as the function evolves.",
+    "source": {
+      "title": "AI FDE: Best practices",
+      "url": "https://www.palantir.com/docs/foundry/ai-fde/best-practices/"
+    }
+  },
+  {
+    "id": "aip-026",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "A reviewer at Stannick Haulage is reading an AI-generated TypeScript v1 function that will back an Action. The method is decorated with `@OntologyEditFunction()` and `@Edits(Shipment)`, but its body changes a property on a `Shipment` and also a property on the linked `Carrier` object. The function runs without error in preview. What should the reviewer require before it is published?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Nothing: a successful preview shows that the edits and their declaration are correct",
+        "why": "A preview shows that the code runs. It does not show that the declared edited types match what the function changes."
+      },
+      {
+        "id": "b",
+        "text": "Remove the `@Edits` decorator, so that the platform infers the edited types unaided",
+        "why": "Static analysis can fail to detect a referenced type, which is why the decorator is strongly recommended in every edit function."
+      },
+      {
+        "id": "c",
+        "text": "Declare `Carrier` as well, so that `@Edits` lists every object type the function edits",
+        "why": "Correct. `@Edits` gives the Action provenance information about the edited object types, which the Action may use to enforce permissions, so each edited type should be declared."
+      },
+      {
+        "id": "d",
+        "text": "Change the return type from `void` to a string that describes the edits made",
+        "why": "A TypeScript v1 edit function must have an explicit `void` return type; returning a string would stop it being an edit function."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "An Ontology edit function tells the Action layer which object types it edits; in TypeScript v1 this is the `@Edits` decorator. Actions may rely on that provenance to enforce their permissions, so a declaration that omits an edited type is a defect even when the code runs. Checking that declared edits match the real side effects is a standard part of reviewing generated function code.",
+    "source": {
+      "title": "Functions: TypeScript v1 Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/functions/api-ontology-edits/"
+    }
+  },
+  {
+    "id": "aip-m-01",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Merrow Utilities is designing a Logic function that processes customer complaints. Match each step of the design to the AIP Logic block that suits it best.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "Read the free-text complaint and decide which of five fault categories it describes",
+        "why": "Interpreting unstructured text is a task for a Use LLM block, which combines a prompt, optional tools and a typed output."
+      },
+      {
+        "id": "l2",
+        "text": "Call the `Open work order` Action with exactly the customer and category already held in variables",
+        "why": "An Apply action block calls an Action deterministically with mapped parameters, without going through a model."
+      },
+      {
+        "id": "l3",
+        "text": "Reuse a published TypeScript function that returns similar past complaints",
+        "why": "An Execute function block calls an existing function, so the search does not have to be rebuilt inside the Logic function."
+      },
+      {
+        "id": "l4",
+        "text": "Carry out the same check on every meter in a list of affected meters",
+        "why": "A loop block iterates over a collection and runs a transformation or an Action for each element."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Use LLM block"
+      },
+      {
+        "id": "r2",
+        "text": "Apply action block"
+      },
+      {
+        "id": "r3",
+        "text": "Execute function block"
+      },
+      {
+        "id": "r4",
+        "text": "Loop block"
+      },
+      {
+        "id": "r5",
+        "text": "Create variable block"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "A Logic function is a chain of blocks, and only some of them need a model. The Use LLM block handles judgement over unstructured input, while Apply action, Execute function, loops and conditionals are deterministic and predictable. A Create variable block only holds a value for later blocks and performs none of these four steps.",
+    "source": {
+      "title": "AIP Logic: Blocks",
+      "url": "https://www.palantir.com/docs/foundry/logic/blocks/"
+    }
+  },
+  {
+    "id": "aip-m-02",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "A team at Ivel Pharma maintains a Logic function in production and has four questions about it. Match each question to the capability that answers it most directly.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "In this one run, why did the model call the Action tool before it queried any objects?",
+        "why": "The Logic Debugger shows the chain of thought and tool calls of each block for a single execution."
+      },
+      {
+        "id": "l2",
+        "text": "Does the new prompt version score better than the previous one on our forty test cases?",
+        "why": "Two runs of the same evaluation suite can be opened side by side, with differences in outputs and metrics highlighted."
+      },
+      {
+        "id": "l3",
+        "text": "Which combination of model and prompt wording gives the best quality for the cost?",
+        "why": "An experiment runs every combination of the chosen parameter values as separate evaluation runs for comparison."
+      },
+      {
+        "id": "l4",
+        "text": "How often has the function failed recently, and how long do its executions take?",
+        "why": "AIP Logic metrics show success and failure counts and the execution duration of the underlying function."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "The Debugger in AIP Logic"
+      },
+      {
+        "id": "r2",
+        "text": "Comparing two evaluation suite runs in AIP Evals"
+      },
+      {
+        "id": "r3",
+        "text": "An AIP Evals experiment over function parameters"
+      },
+      {
+        "id": "r4",
+        "text": "AIP Logic metrics in Ontology Manager or Workflow Lineage"
+      },
+      {
+        "id": "r5",
+        "text": "The Performance Profiler in the Workshop editor"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Different tools answer questions at different scales. The Debugger explains one execution, evaluation suite runs measure a version against many test cases, experiments search over parameter values, and Logic metrics describe health and duration of real executions. The Workshop Performance Profiler measures how a module loads and does not look inside a Logic function.",
+    "source": {
+      "title": "AIP Logic: AIP Logic metrics",
+      "url": "https://www.palantir.com/docs/foundry/logic/logic-metrics/"
+    }
+  },
+  {
+    "id": "aip-tf-01",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "When a Logic function that makes Ontology edits is run from the Run panel in AIP Logic, the Debugger shows the proposed edits but they are not applied to the Ontology.",
+    "answer": true,
+    "explanation": "Test runs in AIP Logic are safe to repeat: the proposed Ontology edits appear in the Debugger and are not executed. To apply them, the function is called from an Action or from an automation.",
+    "source": {
+      "title": "AIP Logic: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/logic/getting-started/"
+    }
+  },
+  {
+    "id": "aip-tf-02",
+    "domain": "aip",
+    "objective": "data-scope-safety",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "By default, an AIP Logic function runs with the permissions of the project that contains it, not with the permissions of the user who runs it.",
+    "answer": false,
+    "correction": "By default, an AIP Logic function is user-scoped: it runs with the permissions of the user who runs it. Project-scoped execution, which uses the permissions of the containing project, has to be selected.",
+    "explanation": "Logic functions have two execution modes, and user-scoped execution is the default. Project-scoped execution is an explicit choice that also requires the function's resources to be imported into its project and changes who can see execution logs.",
+    "source": {
+      "title": "AIP Logic: Execution mode settings",
+      "url": "https://www.palantir.com/docs/foundry/logic/execution-mode-settings/"
+    }
+  },
+  {
+    "id": "aip-tf-03",
+    "domain": "aip",
+    "objective": "evaluation-debugging",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "When an AIP Evals evaluation suite runs, the Ontology edits made by a test case apply only to a simulation, so the real Ontology is left unchanged.",
+    "answer": true,
+    "explanation": "Each test case is executed in its own Ontology simulation. Objects that a test case creates, edits or deletes change only that simulation, which makes it safe to evaluate functions that write to the Ontology.",
+    "source": {
+      "title": "AIP Evals: Evaluate Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/aip-evals/ontology-edits/"
+    }
+  },
+  {
+    "id": "aip-tf-04",
+    "domain": "aip",
+    "objective": "logic-building",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Retrieval context configured on a chatbot in AIP Chatbot Studio is fetched only when the LLM decides to request it, in the same way as a tool.",
+    "answer": false,
+    "correction": "Retrieval context configured on a chatbot in AIP Chatbot Studio is run deterministically with every new user message, and what it retrieves is passed to the LLM; only tools are used at the LLM's request.",
+    "explanation": "Retrieval context and tools differ in who decides. Retrieval context (Ontology, document or function-backed) runs for every new user message, while a tool is called only when the model chooses to use it. This is why retrieval context is the simpler and more predictable way to ground answers.",
+    "source": {
+      "title": "AIP Chatbot Studio: Retrieval context",
+      "url": "https://www.palantir.com/docs/foundry/chatbot-studio/retrieval-context/"
+    }
+  }
+]

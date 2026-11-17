@@ -1,0 +1,1068 @@
+[
+ {
+  "id": "act-001",
+  "domain": "actions",
+  "objective": "rules-design",
+  "difficulty": "easy",
+  "format": "single",
+  "stem": "Inspectors at Calloway Estates need to record a `Site Visit` from a Workshop module: they pick the building, type a note, and the visit must store who logged it and when. There is no calculation and no other object changes. Which design is the smallest one that meets this?",
+  "options": [
+   {
+    "id": "a",
+    "text": "A function-backed action whose function creates the visit and returns its key",
+    "why": "A function would work, but nothing here needs code: there is no computation, branching or cascading change, so it adds a repository to maintain for no benefit."
+   },
+   {
+    "id": "b",
+    "text": "An action type with a Create object rule, using current user and time values",
+    "why": "Correct. A Create object rule maps parameters to the new object's properties, and string and timestamp properties can take the action's current user and the time of execution."
+   },
+   {
+    "id": "c",
+    "text": "A spreadsheet upload that a scheduled pipeline appends to the backing dataset",
+    "why": "This bypasses actions entirely, so there is no form, no submission criteria and no immediate write; the visit appears only after the next build."
+   },
+   {
+    "id": "d",
+    "text": "A Modify object rule on `Building` that appends the note to a text property",
+    "why": "This edits the building rather than recording a visit as its own object, so individual visits, their authors and their times cannot be queried."
+   }
+  ],
+  "answer": [
+   "b"
+  ],
+  "explanation": "Declarative Ontology rules cover direct edits: creating, modifying and deleting objects and links. Property values in a rule can come from parameters, from a property of an object parameter, from static values, or from the current user and time. A function-backed action is only needed when the logic goes beyond what these rules can express.",
+  "source": {
+   "title": "Action types: Rules",
+   "url": "https://www.palantir.com/docs/foundry/action-types/rules/"
+  }
+ },
+ {
+  "id": "act-002",
+  "domain": "actions",
+  "objective": "rules-design",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "Buyers at Penmoor Supply keep one `Supplier Rating` object per supplier. From a single form they want to update the rating when they select an existing one, and to have a new rating created when they leave the selection empty. The team wants to avoid writing code. Which rule fits?",
+  "options": [
+   {
+    "id": "a",
+    "text": "A Modify object(s) rule, with the object reference parameter set to optional",
+    "why": "A Modify rule only changes an existing object identified by the object reference parameter; with nothing selected it has nothing to edit and cannot create one."
+   },
+   {
+    "id": "b",
+    "text": "A Create object rule followed by a Modify object(s) rule on the same rating",
+    "why": "A Modify rule cannot reference an object created in the same action, and this pair would always try to create a rating even when one was selected."
+   },
+   {
+    "id": "c",
+    "text": "A Function rule that looks the rating up and decides whether to create or edit",
+    "why": "This works but adds code for a case that a built-in declarative rule already handles, which the team wants to avoid."
+   },
+   {
+    "id": "d",
+    "text": "A Create or modify object(s) rule driven by the object reference parameter",
+    "why": "Correct. This rule modifies the selected object and, when no object is selected, creates a new one with a generated ID or a user-supplied primary key."
+   }
+  ],
+  "answer": [
+   "d"
+  ],
+  "explanation": "The Create or modify object(s) rule gives upsert behaviour without code: it edits the object passed in the object reference parameter, and creates a new object when none is selected. Plain Modify and Delete rules need an existing object and cannot reference one created earlier in the same action.",
+  "source": {
+   "title": "Action types: Rules",
+   "url": "https://www.palantir.com/docs/foundry/action-types/rules/"
+  }
+ },
+ {
+  "id": "act-003",
+  "domain": "actions",
+  "objective": "rules-design",
+  "difficulty": "hard",
+  "format": "single",
+  "stem": "A 'Triage ticket' action type at Sandrell Telecom has two Modify object(s) rules on the same `Ticket` parameter. The first sets `status` to `Triaged`. The second, added later by another builder, sets `status` to `Assigned` and fills in `assignee`. A user submits the action for one ticket. What is the result?",
+  "options": [
+   {
+    "id": "a",
+    "text": "One edit to the ticket, with `status` set to `Assigned` by the later rule",
+    "why": "Correct. The rules are compiled into a single edit per object, and when two rules write the same property the order of the rules decides the final value."
+   },
+   {
+    "id": "b",
+    "text": "The submission is rejected because two rules write the same property",
+    "why": "Writing the same property twice is not one of the unsupported combinations; those concern deleting or modifying objects before they are added, or creating one twice."
+   },
+   {
+    "id": "c",
+    "text": "Two edits in sequence, so edit history shows `Triaged` and then `Assigned`",
+    "why": "The backend does not apply each rule as its own edit; it produces one edit per object, so the intermediate value is never written."
+   },
+   {
+    "id": "d",
+    "text": "One edit to the ticket, with `status` kept as `Triaged` from the first rule",
+    "why": "The first rule does not take precedence; a later rule that sets the same property overrides the value from an earlier rule."
+   }
+  ],
+  "answer": [
+   "a"
+  ],
+  "explanation": "When an action type has several Ontology rules, they are compiled into a single edit per object. If two rules set the same property on the same object, the result is the later value, so rule order matters. A builder who needs both states recorded must use separate submissions rather than two rules in one action.",
+  "source": {
+   "title": "Action types: Rules",
+   "url": "https://www.palantir.com/docs/foundry/action-types/rules/"
+  }
+ },
+ {
+  "id": "act-004",
+  "domain": "actions",
+  "objective": "rules-design",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "Orchard Lane Insurance is designing action types for its `Case` object type and wants to write a function only where one is needed. Which of these requirements can be met with declarative rules alone? Select THREE.",
+  "options": [
+   {
+    "id": "a",
+    "text": "Stamp `closedBy` and `closedAt` with the submitting user and the time",
+    "why": "Correct. String and timestamp properties in a rule can take the action's current user and the time at the start of execution."
+   },
+   {
+    "id": "b",
+    "text": "Create a `Note` and a many-to-many link from it to the chosen case",
+    "why": "Correct. A Create object rule can also add a many-to-many link for the new object, so both are created in one declarative action."
+   },
+   {
+    "id": "c",
+    "text": "Set `riskScore` from the total of every linked `Transaction` amount",
+    "why": "This reads and aggregates a variable set of linked objects; a rule can only take values from parameters, parameter object properties, static values or user and time."
+   },
+   {
+    "id": "d",
+    "text": "Copy `region` from the selected `Office` parameter onto the case",
+    "why": "Correct. A property in a rule can be mapped to a property of an object reference parameter, provided the types match."
+   },
+   {
+    "id": "e",
+    "text": "Set every `Task` currently linked to the case to `Cancelled`",
+    "why": "Changing all objects linked to the parameter object is a cascading edit, which is the documented case for an Ontology edit function behind the action."
+   }
+  ],
+  "answer": [
+   "a",
+   "b",
+   "d"
+  ],
+  "explanation": "Declarative rules handle direct, governed edits whose values come from parameters, properties of object parameters, static values, or the current user and time, and a Create object rule can add a many-to-many link at the same time. Logic that reads several objects to compute a value, or that edits whatever objects happen to be linked, needs a function-backed action.",
+  "source": {
+   "title": "Action types: Rules",
+   "url": "https://www.palantir.com/docs/foundry/action-types/rules/"
+  }
+ },
+ {
+  "id": "act-005",
+  "domain": "actions",
+  "objective": "rules-design",
+  "difficulty": "hard",
+  "format": "single",
+  "stem": "At Hollin Software the `Bug`, `Feature Request` and `Support Query` object types all implement a `Ticket` interface that has a `priority` property. Leads work in Object Explorer and want one 'Set priority' action that applies to any ticket, including ticket types added to the interface later. Which design meets this with the least to maintain?",
+  "options": [
+   {
+    "id": "a",
+    "text": "Three action types, one Modify object(s) rule each, with identical forms",
+    "why": "This works today, but the logic and submission criteria are maintained three times and a new ticket type needs a fourth action type."
+   },
+   {
+    "id": "b",
+    "text": "One action type with a Modify object(s) rule on `Bug`, reused for the others",
+    "why": "A Modify object(s) rule targets one concrete object type; it does not accept objects of other types that happen to share a property."
+   },
+   {
+    "id": "c",
+    "text": "One action type with a Modify object(s) of interface rule on `Ticket`",
+    "why": "Correct. The rule generates an interface reference parameter that accepts an object of any implementing type and edits the interface property, so new implementers are covered."
+   },
+   {
+    "id": "d",
+    "text": "One function-backed action taking an optional parameter per ticket type",
+    "why": "This needs code and a new parameter each time a ticket type is added, when a declarative interface rule already covers every implementer."
+   }
+  ],
+  "answer": [
+   "c"
+  ],
+  "explanation": "Interface action rules create, modify, delete or link objects of any type that implements an interface. A modify rule uses an interface reference parameter and can only edit properties defined on the interface, which is exactly the shared `priority` here. Its submission criteria apply uniformly to every implementing object type, so the builder should check who may edit each of them.",
+  "source": {
+   "title": "Action types: Actions on interfaces",
+   "url": "https://www.palantir.com/docs/foundry/action-types/actions-on-interfaces/"
+  }
+ },
+ {
+  "id": "act-006",
+  "domain": "actions",
+  "objective": "parameters-validation",
+  "difficulty": "easy",
+  "format": "single",
+  "stem": "The 'Edit vessel details' action at Marrow Bay Shipping has parameters for `name`, `flag` and `capacity`. Users usually change one of them, but the form opens blank, so they retype the other two. The action is used from Workshop, Object Explorer and an Object View. What should the builder configure?",
+  "options": [
+   {
+    "id": "a",
+    "text": "Map a Workshop variable to each parameter on the module's button",
+    "why": "This prefills the form in that one module only; Object Explorer and the Object View would still open blank."
+   },
+   {
+    "id": "b",
+    "text": "Make the three parameters optional so that blank values are accepted",
+    "why": "Optional parameters remove the retyping, but users still cannot see the current values, and blank inputs risk clearing properties."
+   },
+   {
+    "id": "c",
+    "text": "Give each parameter a static default with a typical value for the fleet",
+    "why": "A static default is the same for every vessel, so it would not show the current values of the vessel being edited."
+   },
+   {
+    "id": "d",
+    "text": "Default each parameter to the matching property of the `Vessel` parameter",
+    "why": "Correct. An object property default prefills the parameter from the selected object, and it applies wherever the action is submitted."
+   }
+  ],
+  "answer": [
+   "d"
+  ],
+  "explanation": "Parameter defaults are configured on the action type, so they standardise the form across Workshop, Object Explorer, Object Views, Quiver and Slate. A default can be a fixed value or a property of an object reference parameter that sits above it in the form, which lets users see current values and change only what they need.",
+  "source": {
+   "title": "Action types: Set parameter default value",
+   "url": "https://www.palantir.com/docs/foundry/action-types/parameters-default-value/"
+  }
+ },
+ {
+  "id": "act-007",
+  "domain": "actions",
+  "objective": "parameters-validation",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "The `approver` parameter of a 'Request purchase' action at Dunholt Labs has two override blocks. The first says: if `amount` is above 10,000, make `approver` required. The second says: if `region` is `EU`, hide `approver`. A user enters an amount of 20,000 with region `EU`. How does the form treat `approver`?",
+  "options": [
+   {
+    "id": "a",
+    "text": "It is hidden and required, because both matching blocks are applied together",
+    "why": "Blocks are not merged; when several blocks on a parameter are true, only one of them is executed."
+   },
+   {
+    "id": "b",
+    "text": "It is visible and required, because only the first matching block is applied",
+    "why": "Correct. When more than one override block on a parameter evaluates to true, only the first one is executed, so the hide override never applies."
+   },
+   {
+    "id": "c",
+    "text": "It is hidden and optional, because the last matching block takes precedence",
+    "why": "Precedence goes to the first true block, not the last, so the second block's hide override is not applied."
+   },
+   {
+    "id": "d",
+    "text": "The form cannot be submitted, because the two blocks conflict with each other",
+    "why": "Two true blocks are not an error; the platform resolves them by executing the first and ignoring the rest."
+   }
+  ],
+  "answer": [
+   "b"
+  ],
+  "explanation": "An override block pairs conditions with changes to a parameter's constraints, visibility, requiredness or default. A parameter can have several blocks, but if more than one is true only the first is executed, so block order is part of the logic. To combine effects, put them in the same block or order the blocks from most to least specific.",
+  "source": {
+   "title": "Action types: Override parameter configurations",
+   "url": "https://www.palantir.com/docs/foundry/action-types/parameters-override/"
+  }
+ },
+ {
+  "id": "act-008",
+  "domain": "actions",
+  "objective": "parameters-validation",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "In the 'Assign technician' action at Ferrow Lifts, the `Technician` dropdown lists every technician in the company. It should offer only technicians whose `depot` equals the depot of the selected `Work Order`, and this must hold in Workshop, in Object Explorer and in an Object View. What should the builder do?",
+  "options": [
+   {
+    "id": "a",
+    "text": "Filter the `Technician` parameter on `depot`, using the work order's property",
+    "why": "Correct. An object dropdown filter on the parameter can compare a property to a property of another object parameter, and the selected value is validated before the action runs."
+   },
+   {
+    "id": "b",
+    "text": "Pass a pre-filtered technician object set from a Workshop variable",
+    "why": "This narrows the choice in one module only; Object Explorer and the Object View would still list every technician."
+   },
+   {
+    "id": "c",
+    "text": "Add a multiple choice parameter that lists the technician names by depot",
+    "why": "A hand-kept list of names goes stale as staff change and does not pass a `Technician` object to the rule."
+   },
+   {
+    "id": "d",
+    "text": "Hide the `Technician` parameter and let the user type an ID into a string",
+    "why": "A typed ID removes the guided choice and is not checked against the work order's depot at all."
+   }
+  ],
+  "answer": [
+   "a"
+  ],
+  "explanation": "Filters on an object reference parameter limit which objects appear in the dropdown across all action interfaces, and the selected value is validated before execution. The comparison value can be static, taken from another parameter, or taken from a property of an object reference parameter. Configuring this on the action type keeps the rule consistent in every consuming application.",
+  "source": {
+   "title": "Action types: Filter results of a parameter dropdown",
+   "url": "https://www.palantir.com/docs/foundry/action-types/parameters-filter/"
+  }
+ },
+ {
+  "id": "act-009",
+  "domain": "actions",
+  "objective": "parameters-validation",
+  "difficulty": "hard",
+  "format": "single",
+  "stem": "At Greaves & Thorn, a 'Tag document' action has a `Document` dropdown filtered with the static value `investigationName = Project Halcyon`. Most staff can view the action type but must not learn that this investigation exists, and they cannot view its documents. A reviewer flags the configuration. What is the concern, and the better design?",
+  "options": [
+   {
+    "id": "a",
+    "text": "The dropdown will list the restricted documents; add submission criteria",
+    "why": "The dropdown only shows objects the user may view, so the documents are not listed; the leak is the filter value, which submission criteria would not hide."
+   },
+   {
+    "id": "b",
+    "text": "Static filters are ignored outside Workshop; rebuild the filter in each app",
+    "why": "Dropdown filters defined on the parameter apply across all action interfaces, so there is nothing to rebuild per application."
+   },
+   {
+    "id": "c",
+    "text": "The filter value is stored in the action log; switch the action log off",
+    "why": "The exposure comes from the filter being turned into an object set when the form is viewed, not from the action log."
+   },
+   {
+    "id": "d",
+    "text": "The static value can be seen by action type viewers; filter by a parameter",
+    "why": "Correct. Static filter values can be exposed to anyone who can view the action type, while filtering by a parameter or an object's property reveals nothing about the data."
+   }
+  ],
+  "answer": [
+   "d"
+  ],
+  "explanation": "When the action form is opened, an object dropdown filter is converted into an object set, and a static filter value can be read from that request by any user who can view the action type, even if they cannot see the matching objects. Filtering by a user-provided parameter or by a property of another object parameter avoids this, because object visibility rules still apply to that input.",
+  "source": {
+   "title": "Action types: Object dropdown security considerations",
+   "url": "https://www.palantir.com/docs/foundry/action-types/dropdown-security/"
+  }
+ },
+ {
+  "id": "act-010",
+  "domain": "actions",
+  "objective": "parameters-validation",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "The 'Register incident' form at Tolland Rail has grown to eighteen parameters, and the six about injuries matter only when `injuryReported` is ticked. The builder plans to reorganise the form with sections. Which statements about action form sections are correct? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "A section can lay out its parameters in one or two columns",
+    "why": "Correct. A section has a column layout setting, which helps place short parameters side by side."
+   },
+   {
+    "id": "b",
+    "text": "A section's description is shown only as a tooltip on its title",
+    "why": "Unlike a parameter description, a section description is always displayed in the section itself."
+   },
+   {
+    "id": "c",
+    "text": "A section can start hidden and be shown by a conditional override",
+    "why": "Correct. Sections support visibility and conditional overrides, which also apply to the parameters inside, so the injury section can appear only when the box is ticked."
+   },
+   {
+    "id": "d",
+    "text": "Each section carries its own submission criteria and failure message",
+    "why": "Submission criteria belong to the action type as a whole; sections organise the form and control layout and visibility."
+   },
+   {
+    "id": "e",
+    "text": "Sections are always displayed in alphabetical order of their titles",
+    "why": "Sections and parameters are displayed in the order in which the builder arranges them in the Form tab."
+   }
+  ],
+  "answer": [
+   "a",
+   "c"
+  ],
+  "explanation": "Sections group parameters in an action form. Each has a title, an optional always-visible description and a one- or two-column layout, and it can be collapsed, hidden or driven by conditional overrides that then apply to the parameters inside it. This lets one form reveal a block of fields only when an earlier answer makes them relevant.",
+  "source": {
+   "title": "Action types: Configure sections",
+   "url": "https://www.palantir.com/docs/foundry/action-types/configure-sections/"
+  }
+ },
+ {
+  "id": "act-011",
+  "domain": "actions",
+  "objective": "side-effects",
+  "difficulty": "easy",
+  "format": "single",
+  "stem": "When an agent at Brindle Energy submits 'Confirm appointment', the customer should receive a confirmation email. Customers are not Foundry users; their email address is a property of the `Appointment` object, and the company already sends mail through an external messaging service. Which side effect should the builder use?",
+  "options": [
+   {
+    "id": "a",
+    "text": "A notification whose recipient is read from the appointment's email property",
+    "why": "Notification recipients must be Foundry users or groups, identified by their IDs; sending directly to an email address is not supported."
+   },
+   {
+    "id": "b",
+    "text": "A webhook that passes the address and details to the messaging service",
+    "why": "Correct. A webhook sends a request to an external system with values from the action's parameters, which is the way to reach people outside the platform."
+   },
+   {
+    "id": "c",
+    "text": "A notification to a static group, with the customer's address in the body",
+    "why": "This informs internal staff only; the customer still receives nothing unless someone forwards the message by hand."
+   },
+   {
+    "id": "d",
+    "text": "A schedule rule that triggers a build to export confirmed appointments",
+    "why": "A schedule rule starts a build; it adds delay and a pipeline to maintain, and does not itself send any message."
+   }
+  ],
+  "answer": [
+   "b"
+  ],
+  "explanation": "Action types have two kinds of side effect. Notifications go to Foundry users and groups, who receive them in the platform, by email, or both according to their preferences. Webhooks call external systems, so they are used to write to other systems or to deliver messages through an outside messaging service.",
+  "source": {
+   "title": "Action types: Notifications",
+   "url": "https://www.palantir.com/docs/foundry/action-types/notifications/"
+  }
+ },
+ {
+  "id": "act-012",
+  "domain": "actions",
+  "objective": "side-effects",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "A 'Raise purchase order' action at Kessock Marine must create the order in the external ERP system, which answers with its own order number. That number has to be stored on the new `Purchase Order` object in Foundry, and nothing may be created in Foundry if the ERP call fails. How should the webhook be configured?",
+  "options": [
+   {
+    "id": "a",
+    "text": "As a side effect, with a later pipeline sync bringing the number back",
+    "why": "A side effect webhook runs after the edits, so a failed ERP call would leave an order in Foundry, and the number would arrive only after a later build."
+   },
+   {
+    "id": "b",
+    "text": "As a side effect, mapping its response to the order number property",
+    "why": "Side effect webhooks run after the rules have been evaluated, so their responses are not available to the rules that write the object."
+   },
+   {
+    "id": "c",
+    "text": "As a writeback, mapping its output parameter in the Create object rule",
+    "why": "Correct. A writeback webhook runs before the other rules, stops the action if it fails, and exposes its output parameters to the rules that follow."
+   },
+   {
+    "id": "d",
+    "text": "As a writeback, with the user typing the ERP number into a parameter",
+    "why": "The timing is right, but asking the user to copy the number adds a manual, error-prone step when the response can be mapped directly."
+   }
+  ],
+  "answer": [
+   "c"
+  ],
+  "explanation": "A webhook configured as a writeback executes before any other rule, and if it fails no Ontology changes are made and the user sees the error. Its output parameters can then be used in subsequent rules through the writeback response, so data returned by the external system can be written straight into a Foundry object.",
+  "source": {
+   "title": "Action types: Webhooks",
+   "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/"
+  }
+ },
+ {
+  "id": "act-013",
+  "domain": "actions",
+  "objective": "side-effects",
+  "difficulty": "hard",
+  "format": "single",
+  "stem": "The 'Escalate case' action at Varley Health sends a templated notification, which shows the case title, to a regional leads group. Since a new lead without access to some `Case` objects joined the group, the action fails with an error for those cases and no edit is made. The notification settings were never changed. What explains this, and what is a proportionate fix?",
+  "options": [
+   {
+    "id": "a",
+    "text": "The submitting user fails the submission criteria; add them to the group",
+    "why": "Nothing about the submitting user changed; the failures began when a recipient who cannot view some cases was added."
+   },
+   {
+    "id": "b",
+    "text": "By default every recipient must be able to view the data; require any instead",
+    "why": "Correct. The default setting fails the whole action when any recipient lacks access to the rendered object data; the alternative setting notifies only those with access."
+   },
+   {
+    "id": "c",
+    "text": "Notifications are sent before the edits; reconfigure it as a writeback",
+    "why": "Notifications are sent after the edits are applied, and writeback is a webhook option, not a notification option."
+   },
+   {
+    "id": "d",
+    "text": "The group is too large for a template notification; send it from a function",
+    "why": "One extra member does not reach a recipient limit, and function-generated content has a lower recipient limit, not a higher one."
+   }
+  ],
+  "answer": [
+   "b"
+  ],
+  "explanation": "Recipients may only receive notifications containing data they are allowed to view. An action type's notification settings offer two behaviours: require all recipients to have permission, which is the default and blocks the action with no edits and no notifications if anyone lacks access, or require any, which lets the action succeed and notifies only the permitted users. Granting the new lead access to every case just to unblock the action would be over-permissioning.",
+  "source": {
+   "title": "Action types: Notifications",
+   "url": "https://www.palantir.com/docs/foundry/action-types/notifications/"
+  }
+ },
+ {
+  "id": "act-014",
+  "domain": "actions",
+  "objective": "side-effects",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "After a 'Publish roster' action at Wickham Transit edits a `Roster` object, two external systems must be informed, and the crew app must receive one request per affected shift. The builder plans to use side effect webhooks. Which statements about side effect webhooks are correct? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "Their responses can be mapped into the rules that edit the roster",
+    "why": "Only a writeback webhook exposes output parameters to later rules; side effect webhooks run after the rules are evaluated."
+   },
+   {
+    "id": "b",
+    "text": "Several can be set on one action, and they run in no particular order",
+    "why": "Correct. An action can have multiple side effect webhooks, and their execution order is not guaranteed."
+   },
+   {
+    "id": "c",
+    "text": "If one fails, the roster edit is rolled back and the user sees an error",
+    "why": "Side effect webhooks run after the object changes and their failures are not shown to the end user; only a writeback webhook blocks the edits."
+   },
+   {
+    "id": "d",
+    "text": "A function returning a list of payloads makes one call per payload",
+    "why": "Correct. When a function supplies the webhook inputs as a list of payloads, the side effect webhook is executed once for each payload."
+   },
+   {
+    "id": "e",
+    "text": "They always finish before the user sees the success message",
+    "why": "The success message appears once the objects are modified; side effects may execute after it is shown."
+   }
+  ],
+  "answer": [
+   "b",
+   "d"
+  ],
+  "explanation": "Side effect webhooks are for best-effort calls and for writing to several external systems. They execute after the Ontology edits, in no guaranteed order, possibly after the user has seen success, and their failures are not surfaced to the user. Returning a list of payloads from a function triggers the webhook once per payload.",
+  "source": {
+   "title": "Action types: Webhooks",
+   "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/"
+  }
+ },
+ {
+  "id": "act-015",
+  "domain": "actions",
+  "objective": "side-effects",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "Before releasing a reworked 'Dispatch engineer' action, a builder at Ashgrove Utilities applies it from a Workshop module on a global branch. The action edits `Job` objects, sends a notification and calls a side effect webhook. Which statements describe what to expect on the branch with default settings? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "The edits made on the branch are carried into main when the branch merges",
+    "why": "Running actions on a branch is a testing mechanism; the resulting edits stay on the branch and are not merged."
+   },
+   {
+    "id": "b",
+    "text": "The webhook and the notification are not executed unless enabled for branches",
+    "why": "Correct. By default webhooks and notifications do not run for actions applied on a branch, to avoid touching external systems and recipients during testing."
+   },
+   {
+    "id": "c",
+    "text": "The `Job` object type must be indexed on the branch for the edits to apply",
+    "why": "Correct. Every object and link type the action edits must be indexed on the branch; otherwise the action is valid but applies no edits."
+   },
+   {
+    "id": "d",
+    "text": "The webhook is redirected to a sandbox copy of the external system",
+    "why": "There is no automatic redirection; if webhooks are enabled on branches they call exactly the same endpoint as on main."
+   },
+   {
+    "id": "e",
+    "text": "Submission criteria are skipped so that builders can test any path",
+    "why": "Nothing in the branch behaviour suspends submission criteria; the branch isolates edits and suppresses side effects by default."
+   }
+  ],
+  "answer": [
+   "b",
+   "c"
+  ],
+  "explanation": "Actions integrate with Global Branching so that a changed action type can be exercised without affecting production data. The edited object and link types must be indexed on the branch, and the edits remain there. Webhooks and notifications are suppressed by default and can be enabled per action type, in which case a webhook calls the same external endpoint as it would on main.",
+  "source": {
+   "title": "Action types: Branching action types",
+   "url": "https://www.palantir.com/docs/foundry/action-types/branching-action-types/"
+  }
+ },
+ {
+  "id": "act-016",
+  "domain": "actions",
+  "objective": "security-troubleshooting",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "A planner at Corran Freight reports that she can open `Shipment` objects but cannot submit 'Approve re-route', while her teammates can. The builder wants to know which requirement she fails before changing anything, and does not want to grant extra access as an experiment. Which approach gives that answer most directly?",
+  "options": [
+   {
+    "id": "a",
+    "text": "Search the action's log objects for her user ID to find the rejected attempts",
+    "why": "The action log records successful submissions only, so her blocked attempts leave no log objects to inspect."
+   },
+   {
+    "id": "b",
+    "text": "Make her an editor of the action type and ask her to try the action again",
+    "why": "Editing the action type's definition is a separate permission from applying it, and granting it as a test is the over-permissioning the builder wants to avoid."
+   },
+   {
+    "id": "c",
+    "text": "Open the object type in Data Lineage and check the backing dataset's builds",
+    "why": "Data Lineage shows how data flows into the object type; it does not evaluate whether a given user may submit an action."
+   },
+   {
+    "id": "d",
+    "text": "In Workflow Lineage, debug permissions on the action and check her submission",
+    "why": "Correct. With the action selected, the action submission check for a chosen user breaks down what is required and which part she does not satisfy."
+   }
+  ],
+  "answer": [
+   "d"
+  ],
+  "explanation": "Workflow Lineage has a permissions colour mode with a Debug permissions panel. For a selected action and a chosen user it shows what is needed to submit the action, for example that the user can view the action type but does not meet the submission criteria. Diagnosing the failing layer first avoids fixing a rejection by widening access.",
+  "source": {
+   "title": "Workflow Lineage: Manage security",
+   "url": "https://www.palantir.com/docs/foundry/workflow-lineage/manage-security/"
+  }
+ },
+ {
+  "id": "act-017",
+  "domain": "actions",
+  "objective": "security-troubleshooting",
+  "difficulty": "hard",
+  "format": "single",
+  "stem": "The 'Close work order' action at Pendrick Water worked for every field supervisor until last week, when a builder enabled the action log on it for an audit. Now supervisors in one contractor group get a failure on submit, while staff supervisors are unaffected. Submission criteria, rules and the `Work Order` permissions are unchanged. What is the most likely cause?",
+  "options": [
+   {
+    "id": "a",
+    "text": "The contractor group lacks permissions on the action log object type",
+    "why": "Correct. With an action log, the submitting user needs the appropriate permissions on the log object type as for any object type the action creates; without them the action fails at submission."
+   },
+   {
+    "id": "b",
+    "text": "The action log only supports actions that are submitted by staff accounts",
+    "why": "The action log has no rule about account type; it records any successful submission by a user who is permitted to apply the action."
+   },
+   {
+    "id": "c",
+    "text": "Enabling the action log resets the submission criteria to their defaults",
+    "why": "Turning on the log does not change submission criteria, and the scenario states they are unchanged."
+   },
+   {
+    "id": "d",
+    "text": "The log has not finished backfilling the earlier contractor submissions",
+    "why": "Enabling an action log does not backfill earlier submissions at all, and missing history would not block new ones."
+   }
+  ],
+  "answer": [
+   "a"
+  ],
+  "explanation": "An action log adds a log object for every successful submission, so the action now creates objects of the log object type as well as editing the work order. The submitting user needs the appropriate permissions for the log object type, as for any other object type the action creates or modifies. Granting the contractor group that access fixes the rejection without loosening the criteria.",
+  "source": {
+   "title": "Action types: Permissions",
+   "url": "https://www.palantir.com/docs/foundry/action-types/permissions/"
+  }
+ },
+ {
+  "id": "act-018",
+  "domain": "actions",
+  "objective": "security-troubleshooting",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "The `Permit` object type at Lowfield Council is backed by one dataset and is set to allow edits only through actions. A new officer must be able to apply the 'Extend permit' action from a Workshop module. Which conditions must hold for the officer's submission to be accepted? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "The officer can view the `Permit` object that is being edited",
+    "why": "Correct. The submitting user must be able to view the edited object type and its datasource, and so load the object."
+   },
+   {
+    "id": "b",
+    "text": "The officer has Edit permission on the permit writeback dataset",
+    "why": "That is required only when the object type also allows edits beyond actions; with action-only edits, view access to the object is enough."
+   },
+   {
+    "id": "c",
+    "text": "The officer has a role that allows editing the action type",
+    "why": "Editing an action type's definition is a different permission from applying it and is not needed to submit."
+   },
+   {
+    "id": "d",
+    "text": "The officer passes the action type's submission criteria",
+    "why": "Correct. The action can be submitted only if all of its submission criteria are met for this user and these parameter values."
+   },
+   {
+    "id": "e",
+    "text": "The officer has edit access to the Workshop module itself",
+    "why": "Viewing the module is enough to reach the button; editing the module is about building it, not about applying actions."
+   }
+  ],
+  "answer": [
+   "a",
+   "d"
+  ],
+  "explanation": "Applying an action is governed by layers that are separate from editing its definition. The user must be able to view the object types and link types being edited and their datasources, and must pass the submission criteria. When an object type only allows edits via actions, no edit permission on the writeback dataset is needed, which avoids exposing more data than the workflow requires.",
+  "source": {
+   "title": "Action types: Permissions",
+   "url": "https://www.palantir.com/docs/foundry/action-types/permissions/"
+  }
+ },
+ {
+  "id": "act-019",
+  "domain": "actions",
+  "objective": "security-troubleshooting",
+  "difficulty": "hard",
+  "format": "multi",
+  "stem": "Users at Eastmere Claims say the function-backed 'Settle claim' action has started failing for some claims but not others. The builder must find out whether the rejections come from invalid parameters, submission criteria, the function or edit conflicts, and then reproduce one failing case without changing data. Which sources of evidence fit? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "Action metrics, which count the action's failures by failure category",
+    "why": "Correct. Action metrics track failures and classify them, for example invalid parameter, failed submission criteria, function failure or conflict."
+   },
+   {
+    "id": "b",
+    "text": "The action log object type, filtered to submissions that were rejected",
+    "why": "The action log models successful submissions only, so rejected submissions are not there to filter."
+   },
+   {
+    "id": "c",
+    "text": "A test run with the failing claim, reading its execution log",
+    "why": "Correct. A test run evaluates the action without applying edits and gives a step-by-step log covering submission criteria, parameter validation and edit calculation."
+   },
+   {
+    "id": "d",
+    "text": "User edit history on `Claim`, compared between the two sets of claims",
+    "why": "Edit history lists edits that were applied to objects; a rejected action applies none, so the failures leave no trace there."
+   },
+   {
+    "id": "e",
+    "text": "The build history of the pipeline that produces the claims dataset",
+    "why": "Pipeline builds show whether data was refreshed, not why a particular action submission was rejected."
+   }
+  ],
+  "answer": [
+   "a",
+   "c"
+  ],
+  "explanation": "Different capabilities answer different questions about actions. Action metrics show success and failure counts with failure categories, so they separate permission-style rejections from invalid parameters, function errors and conflicts. A test run then reproduces one submission safely: it runs with the tester's permissions, shows the proposed edits and logs where the evaluation fails, separating admin-facing from end-user-facing errors.",
+  "source": {
+   "title": "Action types: Action metrics",
+   "url": "https://www.palantir.com/docs/foundry/action-types/action-metrics/"
+  }
+ },
+ {
+  "id": "act-020",
+  "domain": "actions",
+  "objective": "security-troubleshooting",
+  "difficulty": "easy",
+  "format": "single",
+  "stem": "A dispatcher at Northgate Couriers applies 'Cancel delivery' to the wrong `Delivery` and, while the success message is still showing, selects Undo. The revert fails. The action type allows reverts, the object type is in Object Storage v2, and in the few seconds in between a colleague's action changed the delivery's `notes` property. Why did the revert fail?",
+  "options": [
+   {
+    "id": "a",
+    "text": "Reverts are available only to users who can edit the action type",
+    "why": "A revert is available to the user who applied the action; it does not depend on being able to edit the action type's definition."
+   },
+   {
+    "id": "b",
+    "text": "A revert is possible only for actions that create objects, not modify them",
+    "why": "Actions that modify objects in Object Storage v2 can be reverted too, so the kind of edit is not the obstacle."
+   },
+   {
+    "id": "c",
+    "text": "The colleague's edit touched a different property, so the two edits merged",
+    "why": "Touching a different property does not help: any later edit to the object blocks the revert."
+   },
+   {
+    "id": "d",
+    "text": "An action can be reverted only while it is the object's most recent edit",
+    "why": "Correct. Once any later edit has been made to the object, even to another property, the earlier action can no longer be reverted."
+   }
+  ],
+  "answer": [
+   "d"
+  ],
+  "explanation": "A revertible action can be undone from its success message by the user who applied it. The revert fails if any subsequent edit has been made to the object, even on a different property, because an action can only be reverted while it is the most recent edit to that object. Here the mistake has to be corrected with another action instead.",
+  "source": {
+   "title": "Action types: Undo or revert Actions",
+   "url": "https://www.palantir.com/docs/foundry/action-types/action-reverts/"
+  }
+ },
+ {
+  "id": "act-tf-01",
+  "domain": "actions",
+  "objective": "side-effects",
+  "difficulty": "medium",
+  "format": "truefalse",
+  "stem": "Reverting an action restores the edited objects, but it does not undo the notifications or webhook calls that the original action triggered.",
+  "answer": true,
+  "explanation": "An action revert only reverts the edits to the object instances. Side effects such as notifications and webhooks have already left the platform and are neither reversed nor called again by the revert, so an external system updated by a webhook has to be corrected separately.",
+  "source": {
+   "title": "Action types: Undo or revert Actions",
+   "url": "https://www.palantir.com/docs/foundry/action-types/action-reverts/"
+  }
+ },
+ {
+  "id": "act-tf-02",
+  "domain": "actions",
+  "objective": "parameters-validation",
+  "difficulty": "medium",
+  "format": "truefalse",
+  "stem": "The conditions of an override block on an action parameter can reference any other parameter of the action type, including parameters placed below it in the form.",
+  "answer": false,
+  "correction": "The conditions of an override block can reference only parameters that appear above the current parameter in the form hierarchy.",
+  "explanation": "Override conditions are configured like submission criteria conditions, with one difference: only parameters above the current parameter in the form can be referenced. A parameter that should drive another parameter's visibility, requiredness or default therefore has to be placed earlier in the form.",
+  "source": {
+   "title": "Action types: Override parameter configurations",
+   "url": "https://www.palantir.com/docs/foundry/action-types/parameters-override/"
+  }
+ },
+ {
+  "id": "ont-001",
+  "domain": "ontology",
+  "objective": "modeling",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "Halden Airports has `Terminal`, `Cargo Depot` and `Maintenance Hangar` object types. Each has a name and a location plus its own specific properties and its own backing dataset. A new application must search and list all of them together as facilities, and should work with further facility types later without being refactored. Which modelling choice supports this?",
+  "options": [
+   {
+    "id": "a",
+    "text": "A `Facility` interface that each of the three object types implements",
+    "why": "Correct. An interface describes the common shape, searches against it return objects of every implementing type, and new implementers work with the application without refactoring."
+   },
+   {
+    "id": "b",
+    "text": "Shared properties for name and location, used on all three object types",
+    "why": "Shared properties keep the property metadata consistent, but on their own they do not give the application one type to search and build against."
+   },
+   {
+    "id": "c",
+    "text": "One `Facility` object type with a `kind` property and every specific column",
+    "why": "Merging the types piles unrelated type-specific properties onto one object type, and each new kind of facility means reshaping its pipeline and schema."
+   },
+   {
+    "id": "d",
+    "text": "An object type group named Facilities that contains the three object types",
+    "why": "A type group organises object types for discovery in the Ontology; it does not define a common shape that applications can query."
+   }
+  ],
+  "answer": [
+   "a"
+  ],
+  "explanation": "An interface is an abstract Ontology type that describes the shape and capabilities shared by several object types. Object types stay concrete, with their own datasets and extra properties, and declare that they implement the interface by mapping their properties to it. Workflows built against the interface work across all implementers, including ones added later.",
+  "source": {
+   "title": "Interfaces: Overview",
+   "url": "https://www.palantir.com/docs/foundry/interfaces/interface-overview/"
+  }
+ },
+ {
+  "id": "ont-002",
+  "domain": "ontology",
+  "objective": "modeling",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "At Sternwood Bank, IBAN strings appear as properties on `Account`, `Payment` and `Counterparty`, and in several Pipeline Builder pipelines. Each team validates the format differently, and malformed values keep reaching the Ontology. The data office wants one definition of a valid IBAN that is enforced wherever it is used. Which feature is designed for this?",
+  "options": [
+   {
+    "id": "a",
+    "text": "A submission criterion on every action type that takes an IBAN parameter",
+    "why": "This checks values entered through those actions only, has to be repeated on each action type, and does nothing for data arriving through pipelines."
+   },
+   {
+    "id": "b",
+    "text": "A value type with a regular expression constraint, applied to each property",
+    "why": "Correct. A value type wraps a base type with reusable constraints such as a regex, and enforces them on data in Builder pipelines and in the Ontology."
+   },
+   {
+    "id": "c",
+    "text": "Conditional formatting that highlights IBAN values with the wrong pattern",
+    "why": "Formatting changes how a value is displayed to users; it does not prevent invalid values from being stored."
+   },
+   {
+    "id": "d",
+    "text": "A property description on each object type documenting the expected format",
+    "why": "Descriptions inform builders and users but enforce nothing, which is the situation the data office already has."
+   }
+  ],
+  "answer": [
+   "b"
+  ],
+  "explanation": "Value types are semantic wrappers around a field type that carry metadata and validation constraints, for example an enum, a range or a regular expression. They centralise validation so the same rule is reused across object types and pipelines, and every property using the value type is explicitly understood to hold that kind of value.",
+  "source": {
+   "title": "Object and link types: Value types overview",
+   "url": "https://www.palantir.com/docs/foundry/object-link-types/value-types-overview/"
+  }
+ },
+ {
+  "id": "ont-003",
+  "domain": "ontology",
+  "objective": "change-impact",
+  "difficulty": "hard",
+  "format": "single",
+  "stem": "The `Inspectable` interface at Rookhope Energy is implemented by four object types owned by different teams and is used by an OSDK application. The ontology owner wants to add a new required property, `lastInspectedAt`, to the interface. What does this change demand?",
+  "options": [
+   {
+    "id": "a",
+    "text": "Nothing further: implementing object types pick up the property automatically",
+    "why": "An interface has no data of its own; each implementing object type must map one of its own properties to the new interface property."
+   },
+   {
+    "id": "b",
+    "text": "Each team maps the property when convenient, after the interface is saved",
+    "why": "A required addition cannot be left unmapped; the implementations have to be updated in the same change as the interface."
+   },
+   {
+    "id": "c",
+    "text": "All four implementations map the property in the same Ontology update",
+    "why": "Correct. Adding a required property breaks existing implementations, so every implementing object type must be updated in the same update that changes the interface."
+   },
+   {
+    "id": "d",
+    "text": "The interface is deleted and recreated, and the object types implement it anew",
+    "why": "Recreating the interface would break every consumer and implementation at once; the change can be made in place if all implementations are updated with it."
+   }
+  ],
+  "answer": [
+   "c"
+  ],
+  "explanation": "Interfaces expose API names, so changes to their definition can break downstream applications and necessarily affect existing implementations. When a required property, link type constraint or action type constraint is added, all implementing object types must be updated in the same Ontology update. If consumers cannot move at the same time, the alternatives are an optional property or a new interface, for example an extension, to migrate to.",
+  "source": {
+   "title": "Interfaces: Edit an interface definition",
+   "url": "https://www.palantir.com/docs/foundry/interfaces/edit-interface-definition/"
+  }
+ },
+ {
+  "id": "ont-004",
+  "domain": "ontology",
+  "objective": "identity-links",
+  "difficulty": "medium",
+  "format": "single",
+  "stem": "Calverton Ports has a `Facility` interface implemented by `Berth`, `Warehouse` and `Gatehouse`, and an `Alert` interface implemented by `Weather Alert` and `Security Alert`. Applications built against `Facility` must be able to navigate from any facility to its alerts of any kind. How should this relationship be modelled?",
+  "options": [
+   {
+    "id": "a",
+    "text": "A link type constraint on `Facility` whose target is the `Security Alert` type",
+    "why": "A constraint that targets one object type fixes the far end of the link, so weather alerts could not be reached through it."
+   },
+   {
+    "id": "b",
+    "text": "A link type constraint on `Facility` whose target is the `Alert` interface",
+    "why": "Correct. An interface link target models a relationship between two abstract types, and concrete link types on the implementing object types fulfil the constraint."
+   },
+   {
+    "id": "c",
+    "text": "Concrete link types for each facility and alert pair, with no constraint",
+    "why": "The data would be linked, but an application typed against `Facility` would have no interface-level link to traverse and would need to know each pair."
+   },
+   {
+    "id": "d",
+    "text": "An array property on each alert object type that lists facility names",
+    "why": "A list of names is not a link: it cannot be traversed as a relationship and breaks when a facility is renamed."
+   }
+  ],
+  "answer": [
+   "b"
+  ],
+  "explanation": "An interface link type constraint defines a relationship that is common to every object type implementing an interface. Its target can be a specific object type, when the far end is always the same type, or another interface, when both ends are abstract. Implementing object types then satisfy the constraint with concrete link types, which are reachable through the interface's link API name.",
+  "source": {
+   "title": "Interfaces: Interface link types",
+   "url": "https://www.palantir.com/docs/foundry/interfaces/interface-link-types-overview/"
+  }
+ },
+ {
+  "id": "ont-005",
+  "domain": "ontology",
+  "objective": "workflow-assembly",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "At Thackeray Grid, whenever a new high-priority `Outage Alert` object appears, a risk score must be calculated from the alert's linked `Substation` and `Customer` objects and written to the alert. No person is involved, and the write must pass the same submission criteria and logging as manual edits. Which pieces assemble this workflow? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "An automation with an object data condition and an Action effect",
+    "why": "Correct. Automate can watch for new objects that meet a condition and submit an action for them automatically, with no user present."
+   },
+   {
+    "id": "b",
+    "text": "A function-backed action type that computes and writes the score",
+    "why": "Correct. Reading several linked objects to compute a value is function logic, and wrapping it in an action type gives the write its criteria and audit trail."
+   },
+   {
+    "id": "c",
+    "text": "A Workshop button that supervisors press when an alert comes in",
+    "why": "A button needs a person to notice the alert and act, which the requirement rules out."
+   },
+   {
+    "id": "d",
+    "text": "A nightly pipeline build that recalculates a score column for alerts",
+    "why": "A scheduled build reacts hours later rather than when the alert appears, and it writes outside actions, so no submission criteria or action log apply."
+   },
+   {
+    "id": "e",
+    "text": "A side effect webhook on the action type that creates the alerts",
+    "why": "A webhook sends a request to an external system; it does not compute a value from linked objects or write it to the Ontology."
+   }
+  ],
+  "answer": [
+   "a",
+   "b"
+  ],
+  "explanation": "Each piece has a job. Functions hold logic that reads objects and traverses links; an action type is the governed, auditable way to write, and can be backed by a function; Automate checks conditions on object data or time and runs effects such as submitting an action. Workshop is where people take part, so it is not the trigger for an unattended step.",
+  "source": {
+   "title": "Automate: Overview",
+   "url": "https://www.palantir.com/docs/foundry/automate/overview/"
+  }
+ },
+ {
+  "id": "ont-006",
+  "domain": "ontology",
+  "objective": "change-impact",
+  "difficulty": "medium",
+  "format": "multi",
+  "stem": "The ontology owner at Brackley Water plans to change how the `severity` property of `Leak Report` is populated. Several automations and Workshop applications are built on this object type, and she opens them in Workflow Lineage to judge the impact. Which questions can Workflow Lineage answer for her? Select TWO.",
+  "options": [
+   {
+    "id": "a",
+    "text": "Which object properties does each automation's condition depend on?",
+    "why": "Correct. Selecting an automation shows its condition's Ontology dependencies, broken down to the specific object properties."
+   },
+   {
+    "id": "b",
+    "text": "Which pipeline schedules rebuild the dataset behind `Leak Report`?",
+    "why": "Schedules for data flowing into an object type are reviewed in Data Lineage, which can be opened from the object type's node."
+   },
+   {
+    "id": "c",
+    "text": "How many views did the dependent Workshop applications get each week?",
+    "why": "Correct. Workflow Lineage shows weekly usage metrics for selected Workshop applications, including total views and unique users."
+   },
+   {
+    "id": "d",
+    "text": "Which rows of the backing dataset hold a null `severity` value?",
+    "why": "Workflow Lineage maps resources and their dependencies; it does not profile the contents of a dataset."
+   },
+   {
+    "id": "e",
+    "text": "Which tests in the functions repository cover the `severity` logic?",
+    "why": "Workflow Lineage shows function inputs, outputs and dependencies, but unit test coverage lives in the code repository."
+   }
+  ],
+  "answer": [
+   "a",
+   "c"
+  ],
+  "explanation": "Workflow Lineage graphs the resources built on top of the Ontology, such as object types, actions, functions, automations and applications, with their dependencies. For automations it lists the object properties a condition depends on, and for Workshop applications it shows weekly usage, which helps size the impact of a change. Data flowing into the Ontology is the subject of Data Lineage instead.",
+  "source": {
+   "title": "Workflow Lineage: Getting started",
+   "url": "https://www.palantir.com/docs/foundry/workflow-lineage/getting-started/"
+  }
+ }
+]

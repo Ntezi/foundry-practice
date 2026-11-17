@@ -1,0 +1,1064 @@
+[
+  {
+    "id": "sec-001",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Larkfield Housing keeps its repairs pipeline in one project. Forty analysts in the `repairs-analysts` group need to read every dataset and analysis in it, and new resources are added each week. So far an administrator has been granting each analyst a role on individual files. What is the better way to give this access?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Grant the group the Editor role on the project so that nothing they need is ever blocked",
+        "why": "Editor lets the analysts modify the pipeline. They only need to read it, so this grants more than the requirement asks for."
+      },
+      {
+        "id": "b",
+        "text": "Grant the group the Viewer role on the project and let its contents inherit the grant",
+        "why": "Correct. A role granted on a project is inherited by every resource inside it, so one group grant covers current and future resources at exactly the level needed."
+      },
+      {
+        "id": "c",
+        "text": "Apply a marking to the project and add the analysts group as members of that marking",
+        "why": "A marking restricts who is eligible to see data; it is not meant to provision access. Members of a marking still need a role on the project."
+      },
+      {
+        "id": "d",
+        "text": "Keep granting roles file by file, but grant them to the group instead of to each analyst",
+        "why": "This still needs a new grant for every new resource and scatters grants across the project, which is what project-level grants are recommended to avoid."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Roles are discretionary permissions that are normally granted to groups at the project level. Role grants inherit to child resources, so Viewer on a project gives Viewer on everything it contains. Granting the least powerful role that meets the need, once, to a group, keeps access both minimal and easy to read.",
+    "source": {
+      "title": "Security: Projects and roles",
+      "url": "https://www.palantir.com/docs/foundry/security/projects-and-roles/"
+    }
+  },
+  {
+    "id": "sec-002",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Ostrava Transit ingests a raw passenger dataset that contains contact details. Compliance requires that only staff who have completed privacy training can see this data, and that the rule still holds for any dataset another team derives from it in a different project. Which control meets the requirement?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Limit the Viewer role on the raw dataset's project to the group of trained staff",
+        "why": "A role governs access to resources where they live. A dataset derived into another project is governed by that project's roles, so the rule would not follow the data."
+      },
+      {
+        "id": "b",
+        "text": "Build a restricted view on the raw dataset with a policy that checks for the trained-staff group",
+        "why": "A restricted view filters rows at read time and cannot be an input to transforms, so it does not carry the requirement into datasets derived from the raw data."
+      },
+      {
+        "id": "c",
+        "text": "Apply a marking to the raw dataset and make the trained-staff group its only members",
+        "why": "Correct. A marking is a mandatory control that is inherited by everything derived from the marked dataset, so downstream datasets in any project carry the same requirement."
+      },
+      {
+        "id": "d",
+        "text": "Disable role grants on folders and files in the project that holds the raw dataset",
+        "why": "That setting only forces roles to be granted at project level. It does not restrict who is eligible to see the data or what happens downstream."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Markings travel with data: they are inherited along the file hierarchy and along data dependencies, so a dataset built from a marked input is marked too unless the marking is deliberately removed. Roles are tied to where a resource lives and do not extend to data after it has been read. When protection must survive derivation, use a mandatory control.",
+    "source": {
+      "title": "Security: Markings",
+      "url": "https://www.palantir.com/docs/foundry/security/markings/"
+    }
+  },
+  {
+    "id": "sec-003",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "At Quillon Insurance the `claims_raw` dataset carries two markings, `PII` and `Finance`. A pipeline in a second project builds `claims_summary` from it. Which statements about access are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A user must be a member of both markings to access `claims_raw`, whatever role they hold",
+        "why": "Correct. Markings are conjunctive: a user has to satisfy every marking on a resource, and no role overrides a marking they lack."
+      },
+      {
+        "id": "b",
+        "text": "An Editor of the project who is a member of either one of the two markings can read the data",
+        "why": "Membership of one marking is not enough. All markings on the resource must be satisfied, and the role does not change that."
+      },
+      {
+        "id": "c",
+        "text": "`claims_summary` inherits both markings through its data dependency unless they are deliberately removed",
+        "why": "Correct. A dataset that depends on a marked dataset inherits the marking, even when it lives in a different project."
+      },
+      {
+        "id": "d",
+        "text": "Because `claims_summary` sits in another project, only that project's markings apply to it",
+        "why": "Markings follow the data rather than the location. The summary inherits them along the dependency as well as anything from its own project."
+      },
+      {
+        "id": "e",
+        "text": "A member of both markings can open `claims_raw` even without any role on its project",
+        "why": "Markings define eligibility; they do not grant access. The user still needs a role on the project or resource."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Access to a marking is all-or-nothing and multiple markings combine with AND. Markings are inherited along both the file hierarchy and data dependencies, so derived datasets keep them. They restrict access but do not provision it: an eligible user still needs a role granted through the project.",
+    "source": {
+      "title": "Security: Markings",
+      "url": "https://www.palantir.com/docs/foundry/security/markings/"
+    }
+  },
+  {
+    "id": "sec-004",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Pellham Health backs its `CareEvent` object type with the dataset `care_events`. Staff should see only the rows for their own care centre. The same dataset is also read directly by analysts in Code Workspaces, outside the Ontology, and the same row rule must apply to them. Which design enforces the rule in both places?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Configure an object security policy with a granular policy on the `CareEvent` object type",
+        "why": "This gives row-level security for objects, but the policy is scoped to the Ontology and does not control reads of the raw dataset in Code Workspaces."
+      },
+      {
+        "id": "b",
+        "text": "Build a restricted view on `care_events` and use it as the datasource for both consumers",
+        "why": "Correct. A restricted view filters dataset rows by policy wherever it is read, and it can also back the object type, so one policy covers both the Ontology and non-Ontology access."
+      },
+      {
+        "id": "c",
+        "text": "Create one marking per care centre and apply all of them to the `care_events` dataset",
+        "why": "Markings on a dataset are all-or-nothing and conjunctive. A user would need every centre's marking to open it, and would then see every row."
+      },
+      {
+        "id": "d",
+        "text": "Add a property security policy to the `care_center` property of the object type",
+        "why": "A property security policy hides property values (column-level security). It does not filter which object instances or dataset rows a user can see."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Object and property security policies are the recommended way to secure objects in most cases, but they apply only within the Ontology. When the backing dataset is also used outside the Ontology and needs granular access control there, a restricted view remains the appropriate tool, and it can serve as the object type's input datasource too.",
+    "source": {
+      "title": "Object permissioning: Managing object security",
+      "url": "https://www.palantir.com/docs/foundry/object-permissioning/managing-object-security/"
+    }
+  },
+  {
+    "id": "sec-005",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Brackenridge Logistics publishes pricing Functions from a code repository that several Workshop modules consume on a version range. Last week a developer committed straight to the default branch and tagged a stable release that nobody had reviewed. The team wants every change reviewed before it can be released as stable, while developers keep contributing. What should the repository owner configure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Change every developer's role on the repository to Viewer and let only the repository owner commit code",
+        "why": "This blocks the developers from contributing at all. The requirement is review before release, not removing their ability to work."
+      },
+      {
+        "id": "b",
+        "text": "Protect the default branch with required approvals and restrict stable tags to protected branches",
+        "why": "Correct. A protected branch can only change through a pull request that meets its review policy, and the tag restriction stops stable versions being released from unreviewed branches."
+      },
+      {
+        "id": "c",
+        "text": "Ask each Workshop builder to pin their module to a specific version of the Function",
+        "why": "Pinning protects consumers one by one but leaves the repository ungoverned. Unreviewed code could still be released as a stable version."
+      },
+      {
+        "id": "d",
+        "text": "Protect the object types the Functions read so that changes need an ontology proposal",
+        "why": "Ontology resource protection governs changes to object, link and action types. It does not review code committed to a Functions repository."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "A protected branch in Code Repositories can only be modified through a pull request that satisfies the configured requirements, such as approvals or specific reviewers, and all code authors must follow the policy. Functions repositories can additionally restrict stable version tags to protected branches, so anything released as stable has been through review; prerelease versions can still be tagged from feature branches for testing.",
+    "source": {
+      "title": "Code Repositories: Branch settings",
+      "url": "https://www.palantir.com/docs/foundry/code-repositories/branch-settings/"
+    }
+  },
+  {
+    "id": "sec-006",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Marlowe Energy has brought in consultants who belong to a different organization on the same enrollment. An administrator added them to a group that holds the Viewer role on the `Grid Outages` project, yet they cannot open the project. A colleague suggests giving them Owner. Which statements describe the situation correctly? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Organizations are a mandatory control, so no role on the project can make up for a missing organization",
+        "why": "Correct. Mandatory controls always block an ineligible user regardless of role, so Owner would fail in the same way as Viewer."
+      },
+      {
+        "id": "b",
+        "text": "The consultants must be members or guest members of at least one organization applied to the project",
+        "why": "Correct. That is the organization access requirement; guest membership is how users from another organization are admitted."
+      },
+      {
+        "id": "c",
+        "text": "The consultants must belong to every organization applied to the project, as with markings",
+        "why": "Markings are conjunctive, but the organization requirement is met by membership or guest membership of at least one applied organization."
+      },
+      {
+        "id": "d",
+        "text": "The Owner role would work because Owners can grant themselves any access that is missing",
+        "why": "Owners can share roles, which are discretionary. They cannot bypass organization or marking requirements."
+      },
+      {
+        "id": "e",
+        "text": "Their organization can be attached to just the datasets they need, leaving the project as it is",
+        "why": "Organizations apply to projects and spaces; an individual resource cannot be tied to an organization."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "To access a project a user must satisfy its organization and marking requirements and also hold a role. Organizations enforce strict silos between groups of users and resources, and a user meets the requirement by being a member or guest member of at least one organization on the project. The right change is to the mandatory control, managed by administrators, not a broader role.",
+    "source": {
+      "title": "Security: Organizations and spaces",
+      "url": "https://www.palantir.com/docs/foundry/security/orgs-and-spaces/"
+    }
+  },
+  {
+    "id": "sec-007",
+    "domain": "security",
+    "objective": "app-vs-data-access",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A new dispatcher at Fenwick Couriers has the Viewer role on the `Dispatch Board` Workshop module. The module opens for her, but the table of `Delivery` objects stays empty while her colleagues see hundreds of rows. What is the most likely cause, and the right fix?",
+    "options": [
+      {
+        "id": "a",
+        "text": "She needs the Editor role on the module, because Viewer only shows the layout without data",
+        "why": "Viewer is the role needed to open a module. Editor would let her change the application and still would not give her the objects."
+      },
+      {
+        "id": "b",
+        "text": "The module must be published again so that her account receives the latest version",
+        "why": "Publishing decides which version viewers get. It has no bearing on whether one particular user is allowed to read the objects."
+      },
+      {
+        "id": "c",
+        "text": "She lacks access to the `Delivery` data; add her to the group that can view those objects",
+        "why": "Correct. Opening a module and reading the data it shows are permissioned separately, so she needs the data access her colleagues already have."
+      },
+      {
+        "id": "d",
+        "text": "She needs the Owner role on the module's project so that every dependency is unlocked",
+        "why": "A role on the application's project does not grant access to objects whose data is governed elsewhere, and Owner is far more than a viewer needs."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "The ability to open or edit a Workshop module comes from the user's permissions on the module itself. The data, actions and functions the module uses are permissioned separately, and widgets never display data the user is not authorised to read. The fix is to grant the specific data access, not a broader role on the application.",
+    "source": {
+      "title": "Workshop: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-permissions/"
+    }
+  },
+  {
+    "id": "sec-008",
+    "domain": "security",
+    "objective": "app-vs-data-access",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "At Thornbury Procurement a finance reviewer can see `Invoice` objects in a Workshop module, but the `Approve Invoice` action is rejected every time he submits it. The module owner proposes making him an Editor on the ontology project so he is no longer blocked. What should the team do first?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Make him an Editor on the ontology project, since edit rights include the right to apply actions",
+        "why": "A role on the action type governs who can change its definition. Whether a user may apply it depends on data access and the submission criteria, so this over-permissions him without addressing the cause."
+      },
+      {
+        "id": "b",
+        "text": "Remove the submission criteria from the action type until the reviewer is able to approve",
+        "why": "This removes a business rule for every user in order to unblock one, before anyone has found out why he fails it."
+      },
+      {
+        "id": "c",
+        "text": "Allow edits to `Invoice` outside actions and give him Edit on the writeback dataset",
+        "why": "Opening up edits beyond actions is discouraged and would expose the whole writeback dataset to him; it also sidesteps the approval action's own rules."
+      },
+      {
+        "id": "d",
+        "text": "Check which requirement of the action he fails, such as a group-based submission criterion",
+        "why": "Correct. Viewing an object and being allowed to apply an action are separate checks; tools such as the permission debugger in Workflow Lineage show exactly which requirement the user does not meet."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Read access is not write access. Applying an action requires the user to see the edited object types and their datasources and to pass the action's submission criteria, which often encode who may perform a business step. Workflow Lineage can check action submission for a chosen user and break down which requirement fails, so the fix can be the smallest correct change, such as adding him to the approvers group.",
+    "source": {
+      "title": "Workflow Lineage: Manage security",
+      "url": "https://www.palantir.com/docs/foundry/workflow-lineage/manage-security/"
+    }
+  },
+  {
+    "id": "sec-009",
+    "domain": "security",
+    "objective": "app-vs-data-access",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Calloway Freight's `Reassign Driver` action is backed by a Function and edits the `Shipment` object type, which is set to allow edits only through actions. A team lead asks what a dispatcher needs in order to apply the action. Which are required? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The ability to view the `Shipment` object type and its datasources",
+        "why": "Correct. In all cases the submitting user must be able to view the object types the action edits and their datasources."
+      },
+      {
+        "id": "b",
+        "text": "Edit permission on the writeback dataset that stores `Shipment` edits",
+        "why": "That is only needed when an object type allows edits beyond actions. With action-only edits, users can edit the objects they can view."
+      },
+      {
+        "id": "c",
+        "text": "To pass the submission criteria configured on the action type",
+        "why": "Correct. An action can only be submitted when all of its submission criteria are met for the submitting user and parameters."
+      },
+      {
+        "id": "d",
+        "text": "The Editor role on the `Reassign Driver` action type itself",
+        "why": "Editing an action type's definition is a separate permission from applying it, and dispatchers should not be able to change the rules."
+      },
+      {
+        "id": "e",
+        "text": "The Viewer role on the repository that publishes the backing Function",
+        "why": "Function-backed actions are a special case: end users apply them under action-level permissions and do not need read access to the Function."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Action permissions answer three different questions: who can view the action type, who can edit it, and who can apply it. Applying depends on being able to view the edited object and link types with their datasources and on passing the submission criteria. When an object type only allows edits via actions, no edit permission on the writeback dataset is needed, which keeps data exposure to a minimum.",
+    "source": {
+      "title": "Action types: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/action-types/permissions/"
+    }
+  },
+  {
+    "id": "sec-010",
+    "domain": "security",
+    "objective": "app-vs-data-access",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "An analyst at Wexcombe Water holds the Viewer role on the `Leak Reports [Transform]` project. She can find the `leaks_enriched` dataset there and read its schema and description, but the preview shows no data. The project itself has no markings. The project owner offers to make her an Owner. What is the best next step?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Accept the Owner role, because Owners can read every resource inside their own project",
+        "why": "No role overrides a marking. If the data carries a requirement she does not meet, Owner changes nothing except giving her powers she does not need."
+      },
+      {
+        "id": "b",
+        "text": "Check her access on the dataset for an inherited marking, then request that marking",
+        "why": "Correct. Seeing a dataset and its metadata but not its rows is the pattern of an unmet data requirement inherited through lineage, and the access checker lists it under the additional data requirements."
+      },
+      {
+        "id": "c",
+        "text": "Ask for the Viewer role on every upstream project that the dataset is derived from",
+        "why": "Users do not need roles on upstream projects to read a derived dataset. They need to satisfy the organizations and markings that the data carries."
+      },
+      {
+        "id": "d",
+        "text": "Rebuild the dataset on her own branch so that the output belongs to her account",
+        "why": "A rebuild from the same marked inputs produces output with the same inherited markings, so she would still be unable to read it."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "The Check access panel separates access requirements (organizations, markings and a role on the resource) from additional data requirements, such as markings a dataset inherits through lineage. A user who meets the first but not the second can see the dataset and its metadata but not its data. The correct change is membership of the specific marking, granted by whoever administers it, if she is eligible.",
+    "source": {
+      "title": "Security: Checking permissions",
+      "url": "https://www.palantir.com/docs/foundry/security/checking-permissions/"
+    }
+  },
+  {
+    "id": "sec-011",
+    "domain": "security",
+    "objective": "app-vs-data-access",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Ashgrove Clinics saves its `Patient` object type in a project and secures it with an object security policy plus a property security policy that covers the `diagnosis` property. A ward clerk has Viewer on the object type and passes the object security policy but not the property security policy. Which statements are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The clerk sees `Patient` objects with a null value in place of `diagnosis`",
+        "why": "Correct. A user who passes the object policy but not a property policy sees the object, with null shown for the protected property."
+      },
+      {
+        "id": "b",
+        "text": "The clerk sees no `Patient` objects at all until the property policy is also passed",
+        "why": "Failing the object security policy hides the object. Failing only a property policy hides just the properties that policy covers."
+      },
+      {
+        "id": "c",
+        "text": "The clerk does not need the Viewer role on the dataset that backs `Patient`",
+        "why": "Correct. With object and property security policies under project-based permissions, object visibility is decided by the policies, independently of the backing datasource."
+      },
+      {
+        "id": "d",
+        "text": "Any Editor of the object type can adjust the two policies when access needs change",
+        "why": "Creating or editing an object or property security policy requires Owner on the object type, which here means Owner on its project."
+      },
+      {
+        "id": "e",
+        "text": "A `diagnosis` value exported by a permitted user stays protected by the property policy",
+        "why": "These policies filter what is read. They do not travel with exports or other downstream outputs; a marking is needed for that."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Object security policies give row-level control and property security policies give column-level control; together they provide cell-level security configured on the object type rather than on its datasource. A property policy is evaluated in addition to the object policy and replaces values with null when it is not passed. Both are read-time filters and do not propagate to derived outputs.",
+    "source": {
+      "title": "Object permissioning: Object security policies",
+      "url": "https://www.palantir.com/docs/foundry/object-permissioning/object-security-policies/"
+    }
+  },
+  {
+    "id": "sec-012",
+    "domain": "security",
+    "objective": "execution-identity",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Dara owns an automation at Kestrel Telecom that applies the `Escalate Ticket` action whenever a ticket breaches its deadline. The action's submission criteria require membership of the `support-leads` group. Dara is not in that group, and every run of the effect fails, although support leads can apply the action by hand. Why?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Action effects run as the automation owner, so the criteria are evaluated against Dara",
+        "why": "Correct. Action, Logic and Function effects execute as the owner, and the owner must satisfy the action's submission criteria."
+      },
+      {
+        "id": "b",
+        "text": "Action effects run as the user who last edited the ticket that triggered the automation",
+        "why": "The identity of whoever changed the triggering object is not used. The effect executes as the automation's owner."
+      },
+      {
+        "id": "c",
+        "text": "Automations skip submission criteria, so the failures must come from the ticket data",
+        "why": "Submission criteria are not skipped for automations. They are evaluated against the owner."
+      },
+      {
+        "id": "d",
+        "text": "Action effects run with the permissions of each user who is subscribed to the automation",
+        "why": "Recipient permissions apply to notification effects. Action effects use the owner's identity."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "In Automate, conditions are evaluated with the owner's permissions and Action, Logic and Function effects execute as the owner. Submission criteria are therefore checked against the owner, and the edit history and audit logs attribute the edits to the owner. The remedy is an owner who legitimately meets the criteria, not weaker criteria.",
+    "source": {
+      "title": "Automate: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/automate/permissions/"
+    }
+  },
+  {
+    "id": "sec-013",
+    "domain": "security",
+    "objective": "execution-identity",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A stock-replenishment automation at Vantor Retail is owned by an engineer who is leaving the company. The operations manager wants the automation to keep running with a stable set of permissions that does not depend on any individual's account. Which approach fits?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Switch the automation to project-scoped mode so that it no longer relies on its owner",
+        "why": "Project scope shares run history with the team, but a project-scoped automation still executes as its owner."
+      },
+      {
+        "id": "b",
+        "text": "Have a colleague open the automation, save it, and take over ownership from the engineer",
+        "why": "This keeps the automation running for now but ties it to another individual, so the same problem returns when that person moves on."
+      },
+      {
+        "id": "c",
+        "text": "Transfer ownership to a third-party application so it runs as that app's service user",
+        "why": "Correct. An automation owned by a third-party application evaluates conditions and executes effects as the service user, independent of any individual."
+      },
+      {
+        "id": "d",
+        "text": "Give the whole operations team the Owner role on the automation so that any of them can run it",
+        "why": "Roles on the automation control who can manage it. They do not change the single identity that its effects execute as."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Automations can be owned by a third-party application instead of a person. Condition evaluation and Action, Logic and Function effects then use the application's service user, whose permissions are managed centrally and do not change when team members leave. The service user needs to be granted exactly the permissions the automation's actions require.",
+    "source": {
+      "title": "Automate: Third-party application ownership",
+      "url": "https://www.palantir.com/docs/foundry/automate/third-party-app-ownership/"
+    }
+  },
+  {
+    "id": "sec-014",
+    "domain": "security",
+    "objective": "execution-identity",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A nightly schedule at Hollin Foods builds the datasets behind a stock application. It was saved in user mode by an engineer. After she moved teams and lost access to one input project, the schedule's builds began to fail. Which change makes the schedule robust without widening anyone's access?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Restore the engineer's roles on every project that the schedule touches",
+        "why": "This gives a person access she no longer needs for her job and leaves the schedule dependent on her permissions."
+      },
+      {
+        "id": "b",
+        "text": "Add a health check on the schedule so that the team is alerted when it fails",
+        "why": "A check reports the failure sooner but does nothing about the cause, which is the identity the schedule runs with."
+      },
+      {
+        "id": "c",
+        "text": "Ask the team lead to re-save the schedule in user mode under their own account",
+        "why": "The schedule would then run as if the team lead were building, and would break again when that person's permissions change."
+      },
+      {
+        "id": "d",
+        "text": "Save the schedule in project-scoped mode, scoped to the projects it builds in",
+        "why": "Correct. A project-scoped schedule runs independently of any user's permissions and only changes if the set of projects it is scoped to changes."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "What a schedule may build is determined either by the saving user's permissions (user mode) or by the set of projects that contain the datasets being built (project-scoped mode). User mode runs as if that user were running the build, so it is prone to unexpected changes when their permissions change. Project-scoped mode is the more consistent choice for production pipelines.",
+    "source": {
+      "title": "Data integration: Schedules",
+      "url": "https://www.palantir.com/docs/foundry/data-integration/schedules/"
+    }
+  },
+  {
+    "id": "sec-015",
+    "domain": "security",
+    "objective": "execution-identity",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "The claims team at Northmere Mutual is moving an automation with Action effects from user-scoped to project-scoped mode so that more people can debug it. Which statements about the automation after the change are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "It still executes as its owner, who must keep satisfying the actions' submission criteria",
+        "why": "Correct. Regardless of scoping mode, automations execute as the owner, and the owner's access and group memberships are what is checked."
+      },
+      {
+        "id": "b",
+        "text": "It executes under a project-level identity, so the owner's own group memberships stop mattering",
+        "why": "Scope does not change the executing identity in Automate. To stop depending on a person, ownership would have to move to a third-party application."
+      },
+      {
+        "id": "c",
+        "text": "Its run history, including effect executions, is visible to users who satisfy a run's markings",
+        "why": "Correct. Sharing run history with the team is the purpose of project scope; in user-scoped mode only the owner can see it."
+      },
+      {
+        "id": "d",
+        "text": "It can use resources from any project the owner can see, without importing them",
+        "why": "Project scope requires all transitive resources the automation uses to be imported into the project, and the scope must be regenerated when dependencies change."
+      },
+      {
+        "id": "e",
+        "text": "Its notification effects now run with the owner's permissions instead of each recipient's",
+        "why": "Notification effects use each recipient's own permissions, and project-scoped mode does not currently support notification effects at all."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "In Automate, scoping decides who can see run history, not who the automation runs as. Project-scoped automations make run history visible to all users who satisfy the markings on a run and require the automation's transitive resources to be imported into the project. Execution, submission criteria and edit attribution remain tied to the owner in both modes.",
+    "source": {
+      "title": "Automate: History visibility and scope",
+      "url": "https://www.palantir.com/docs/foundry/automate/history-visibility-and-scope/"
+    }
+  },
+  {
+    "id": "sec-016",
+    "domain": "security",
+    "objective": "execution-identity",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Rookhope Shipping is building a backend reconciliation service with the OSDK. It runs every night on a secured server with no person signed in, and must read the same set of `Shipment` objects on every run, whoever built or deployed it. Which permission setup should the Developer Console application use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "User permissions with the authorization code grant, signed in once by the lead developer",
+        "why": "The service would then act with one person's access, which changes with their permissions and attributes every run to them."
+      },
+      {
+        "id": "b",
+        "text": "Application permissions, using a service user through the client credentials grant",
+        "why": "Correct. A backend service that can hold credentials securely can use a generated service user whose access is granted to the application itself."
+      },
+      {
+        "id": "c",
+        "text": "A personal token generated by an administrator and stored in the service's configuration",
+        "why": "A long-lived personal token carries an individual's full access and is not an application identity."
+      },
+      {
+        "id": "d",
+        "text": "A public client using the client credentials grant, so that no secret has to be stored",
+        "why": "Public clients cannot hold a secret and do not support the client credentials grant; they use the authorization code grant with PKCE."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Developer Console applications choose between user permissions, where each signed-in user's access decides what is read and written (authorization code grant), and application permissions, where a generated service user is permissioned separately (client credentials grant). Client-facing applications must use user permissions; backend services that can store credentials securely can use a service user, which should be granted only the access the job needs.",
+    "source": {
+      "title": "Developer Console: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/"
+    }
+  },
+  {
+    "id": "sec-017",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "The `orders_clean` dataset at Dunmore Wholesale backs an object type used all day. Twice this quarter an upstream change silently dropped a column, and once the dataset stopped updating for two days before anyone noticed. What should the pipeline owner set up so that the team is alerted next time?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Submission criteria on the actions that edit the object type backed by the dataset",
+        "why": "Submission criteria decide whether an action may be submitted. They do not observe a dataset's schema or how recently it was built."
+      },
+      {
+        "id": "b",
+        "text": "Action metrics for the action types that write to the object type",
+        "why": "Action metrics report action successes, failures and duration. A dataset that goes stale or loses a column does not show up there."
+      },
+      {
+        "id": "c",
+        "text": "A stricter marking on the dataset so that fewer people are able to change it",
+        "why": "A marking restricts who can access the data. It neither detects schema changes nor raises an alert when updates stop."
+      },
+      {
+        "id": "d",
+        "text": "Health checks on the dataset for its schema and for how recently it was updated",
+        "why": "Correct. Health checks monitor a dataset for issues such as schema changes and staleness and notify people when a check fails."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Health checks in Data Health monitor datasets and other resources for problems related to status, time, size, content and schema. When a check detects a problem, watchers receive in-platform notifications and emails. They are the detailed, per-resource option; monitoring views are the option for coverage at scale.",
+    "source": {
+      "title": "Health checks: Overview",
+      "url": "https://www.palantir.com/docs/foundry/health-checks/overview/"
+    }
+  },
+  {
+    "id": "sec-018",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "An ontology owner at Greyfell Aviation plans to change the type of the `priority` property on `WorkOrder`. Before touching it she wants to see which actions and Workshop applications use that property. Where should she look?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The Check access panel on the Workshop module that shows work orders",
+        "why": "Check access shows whether a given user meets a resource's access and data requirements. It is not a map of what depends on a property."
+      },
+      {
+        "id": "b",
+        "text": "Workflow Lineage, with the property of the object type selected",
+        "why": "Correct. Workflow Lineage shows the downstream usages of a specific property, including dependent actions and Workshop applications."
+      },
+      {
+        "id": "c",
+        "text": "The health check history of the dataset that backs `WorkOrder`",
+        "why": "Health check history shows whether the dataset met its checks over time, not which ontology resources or applications consume a property."
+      },
+      {
+        "id": "d",
+        "text": "The run history of the automation that creates new work orders",
+        "why": "Run history lists past executions of one resource. It does not show which applications and actions reference a property."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Workflow Lineage is the workspace for understanding and managing workflows built on the Ontology. For a specific property of an object type it shows downstream usages such as dependent actions and Workshop applications, which is what is needed to judge the impact of a change before making it.",
+    "source": {
+      "title": "Workflow Lineage: Overview",
+      "url": "https://www.palantir.com/docs/foundry/workflow-lineage/overview/"
+    }
+  },
+  {
+    "id": "sec-019",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "The `Yard Planner` Workshop module at Stanmoor Rail calls a dozen actions and Functions, and each sprint adds more. The support team wants an alert when any of them starts to fail, without having to remember to update the monitoring every time the module changes. What should they configure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A monitoring view with action and function rules that use the Workshop module as their scope",
+        "why": "Correct. With the module as a dynamic scope, the monitors track every action and Function it uses and adjust as they are added or removed."
+      },
+      {
+        "id": "b",
+        "text": "A separate monitoring rule for each action and Function, each with a static scope",
+        "why": "This works today but has to be edited by hand every sprint, which is exactly the maintenance the team wants to avoid."
+      },
+      {
+        "id": "c",
+        "text": "Health checks on the datasets that back the object types shown in the module",
+        "why": "Dataset health checks watch pipeline outputs. They would not notice an action or Function that starts failing."
+      },
+      {
+        "id": "d",
+        "text": "An Observability Chart widget on an admin page of the module, checked by the team each morning",
+        "why": "The widget displays metrics inside an application but does not alert anyone; a failure overnight would wait until someone looked."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Monitoring views in Data Health hold monitoring rules with either a static scope (one named resource) or a dynamic scope. Action and Function monitors support a Workflow Lineage graph, a Workshop module or an OSDK application as dynamic scopes, so the set of monitored resources follows the application automatically. Subscribers to the view then receive the alerts.",
+    "source": {
+      "title": "Monitoring views: Overview",
+      "url": "https://www.palantir.com/docs/foundry/monitoring-views/overview/"
+    }
+  },
+  {
+    "id": "sec-020",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "After a release at Elmstead Credit, failures of the `Close Account` action type rise sharply. The action type has no action log configured. A developer suggests removing its submission criteria to stop the failures. Before changing anything, what can the team rely on from action metrics? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Failures are recorded and shown even though the action type has no action log",
+        "why": "Correct. Action metrics do not depend on an action log and, unlike the log, they track failed submissions."
+      },
+      {
+        "id": "b",
+        "text": "Failures are grouped by category, including one for users who fail the submission criteria",
+        "why": "Correct. Seeing whether the spike is criteria failures, invalid parameters, function errors or conflicts tells the team what actually changed."
+      },
+      {
+        "id": "c",
+        "text": "Nothing is shown until an action log object type has been added to the action type",
+        "why": "An action log records successful submissions as objects. Metrics are a separate capability and are available without one."
+      },
+      {
+        "id": "d",
+        "text": "Only users with the Owner role on the action type are able to open its metrics",
+        "why": "Viewing action metrics requires being a viewer on the action, not an owner."
+      },
+      {
+        "id": "e",
+        "text": "A failure in the conflict category means that a webhook side effect was misconfigured or unreachable",
+        "why": "Conflict failures come from clashes such as concurrent modification. Webhook problems are reported as side effect failures."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Action metrics show near real-time success and failure counts and P95 duration for an action type, and classify failures into categories such as invalid parameter, failed submission criteria, side effect, function and conflict failures. Reading the category first identifies the cause, so the team does not remove validation or grant broad permissions to hide a problem they have not understood.",
+    "source": {
+      "title": "Action types: Action metrics",
+      "url": "https://www.palantir.com/docs/foundry/action-types/action-metrics/"
+    }
+  },
+  {
+    "id": "sec-021",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Users of a Workshop module at Corbridge Parcels report that `Delivery` objects are hours behind, yet the backing dataset builds on time and passes all of its health checks. The object type uses Object Storage v2. The owner wants to find the fault and be alerted the next time the indexed data falls behind. What should she do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tighten the freshness health check on the backing dataset so that it alerts sooner",
+        "why": "The dataset is already fresh. The delay lies between the dataset and the object database, which a dataset check does not observe."
+      },
+      {
+        "id": "b",
+        "text": "Inspect the object type's indexing jobs and add a sync propagation delay monitoring rule",
+        "why": "Correct. The live pipeline view shows which indexing job failed, and a sync propagation delay rule alerts when the indexed data is older than a threshold."
+      },
+      {
+        "id": "c",
+        "text": "Grant the module's users the Editor role on the backing dataset so that they can rebuild it",
+        "why": "Rebuilding an up-to-date dataset does not repair indexing, and Editor on a production dataset is far more access than viewers need."
+      },
+      {
+        "id": "d",
+        "text": "Review action metrics for the action types that edit `Delivery` objects",
+        "why": "Action metrics describe action submissions. They say nothing about whether datasource updates are reaching the object database."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "In Object Storage v2, pipelines orchestrated by the Object Data Funnel index datasource updates into the object databases, so a healthy dataset can still have stale objects if an indexing job fails. Users with view access to the backing datasource can inspect the pipeline's jobs from the object type, and monitoring views can hold rules on those jobs plus sync propagation delay rules on the freshness of the indexed data.",
+    "source": {
+      "title": "Indexing: Funnel batch pipelines",
+      "url": "https://www.palantir.com/docs/foundry/object-indexing/funnel-batch-pipelines/"
+    }
+  },
+  {
+    "id": "sec-022",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "A quoting Function at Aldermoor Insurance deliberately throws user-facing errors when a broker enters an invalid combination of cover options. The on-call engineer wants to be alerted only when the Function fails for reasons outside that expected validation, or when it becomes slow. Which monitoring rules should the team add? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Number of non-user-facing function failures in a window",
+        "why": "Correct. This rule excludes user-facing errors thrown by the code, so it isolates infrastructure and system-level failures."
+      },
+      {
+        "id": "b",
+        "text": "Number of all function failures in a window",
+        "why": "This rule counts every failure type, so routine validation errors from brokers would trigger the on-call alert."
+      },
+      {
+        "id": "c",
+        "text": "Function duration at the 95th percentile",
+        "why": "Correct. This rule alerts when the P95 execution time crosses a threshold, which covers the slowness requirement."
+      },
+      {
+        "id": "d",
+        "text": "Number of user-facing function failures in a window",
+        "why": "This counts exactly the expected validation errors, which the engineer does not want to be alerted about."
+      },
+      {
+        "id": "e",
+        "text": "A schema health check on the dataset behind the quote objects",
+        "why": "A dataset schema check watches the pipeline output and would not detect a Function that fails or slows down."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Function monitoring rules in a monitoring view cover P95 duration and failure counts, with the failure rules split into all failures, user-facing failures thrown by the Function's own code, and non-user-facing failures. Choosing the non-user-facing rule keeps intentional validation errors from generating noise, while the duration rule catches degradation that never produces an error.",
+    "source": {
+      "title": "Functions: Function monitoring",
+      "url": "https://www.palantir.com/docs/foundry/functions/monitoring/"
+    }
+  },
+  {
+    "id": "sec-m-01",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "A governance lead at Sedgewick Utilities has four separate requirements for a new customer-billing workflow. Match each requirement to the control that is designed for it.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "The restriction must stay attached to the data in every dataset later derived from it",
+        "why": "Markings are mandatory controls that propagate through derivation, so derived datasets inherit the same requirement."
+      },
+      {
+        "id": "l2",
+        "text": "Users from a partner company must be kept in a strict silo, unable to reach projects that are not shared with them",
+        "why": "Organizations are mandatory access requirements applied to projects that enforce strict silos between groups of users and resources."
+      },
+      {
+        "id": "l3",
+        "text": "Each billing agent should see only the dataset rows whose region matches their own user attribute",
+        "why": "A restricted view filters the rows of its backing dataset with a granular policy that compares user attributes with column values."
+      },
+      {
+        "id": "l4",
+        "text": "One group should be able to modify the pipeline's resources while everyone else on the team can only read them",
+        "why": "Project roles are the discretionary control for who can read or modify the resources in a project, typically granted to groups."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "A marking applied to the source dataset"
+      },
+      {
+        "id": "r2",
+        "text": "Organizations applied to the projects"
+      },
+      {
+        "id": "r3",
+        "text": "A restricted view with a granular policy"
+      },
+      {
+        "id": "r4",
+        "text": "Editor and Viewer roles granted on the project"
+      },
+      {
+        "id": "r5",
+        "text": "Submission criteria on an action type"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Foundry combines mandatory controls (markings, organizations) with discretionary ones (project roles, restricted views, object and property security policies). Mandatory controls are enforced regardless of role and travel with data through derivation; row-level policies filter what is read; roles decide who can read or modify resources in a project. Submission criteria govern who may submit an action, not who may see data.",
+    "source": {
+      "title": "Security: Access control propagation",
+      "url": "https://www.palantir.com/docs/foundry/security/access-control-propagation/"
+    }
+  },
+  {
+    "id": "sec-m-02",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "The platform team at Harcastle Ports is deciding which built-in observability capability to use for four operational needs. Match each need to the capability that fits it best.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "Apply the same failure and latency rules to every automation and action type in a project, including ones added later",
+        "why": "Monitoring views hold scope-based monitoring rules that cover resources at scale across projects, folders or applications."
+      },
+      {
+        "id": "l2",
+        "text": "Validate the content and schema of one critical dataset in detail after each build",
+        "why": "Health checks are configured on an individual resource and include content and schema validation for datasets."
+      },
+      {
+        "id": "l3",
+        "text": "Browse recent executions of a Function, filter them by status or user, and search the logs they produced",
+        "why": "Workflow Lineage exposes execution history with filters and lets you search logs across executions of a source executor."
+      },
+      {
+        "id": "l4",
+        "text": "Follow one slow request step by step through an action, the Function behind it and its LLM call",
+        "why": "A trace view visualises the full request journey across functions, actions and LLM calls, with duration, inputs, outputs and errors per operation."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Monitoring view in Data Health"
+      },
+      {
+        "id": "r2",
+        "text": "Health check on the resource"
+      },
+      {
+        "id": "r3",
+        "text": "Execution history and log search in Workflow Lineage"
+      },
+      {
+        "id": "r4",
+        "text": "Trace view of the execution"
+      },
+      {
+        "id": "r5",
+        "text": "Check access panel on the resource"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Foundry's observability tools divide into monitoring and debugging. Data Health provides monitoring views for rules at scale and health checks for detailed validation of individual resources; both raise alerts. Workflow Lineage provides execution history and log search, and trace views show a single request across services. The Check access panel answers a permissions question, not a health one.",
+    "source": {
+      "title": "Observability: Overview",
+      "url": "https://www.palantir.com/docs/foundry/observability/overview/"
+    }
+  },
+  {
+    "id": "sec-tf-01",
+    "domain": "security",
+    "objective": "access-controls",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "A user who holds the Owner role on a dataset cannot remove a marking from that dataset unless they also hold the Expand Access permission on the marking itself.",
+    "answer": true,
+    "explanation": "Markings are a mandatory control and roles are a discretionary one. Removing a marking requires the centrally managed Expand Access permission on that marking, so even the Owner of a marked resource cannot widen access to it on their own. An Owner can, by contrast, freely grant roles on the resource to others.",
+    "source": {
+      "title": "Security: Markings",
+      "url": "https://www.palantir.com/docs/foundry/security/markings/"
+    }
+  },
+  {
+    "id": "sec-tf-02",
+    "domain": "security",
+    "objective": "app-vs-data-access",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "Granting a user the Viewer role on a Workshop module also gives that user access to the objects that the module's widgets display.",
+    "answer": false,
+    "correction": "Granting a user the Viewer role on a Workshop module lets them open the module, but the objects, actions and functions it uses are permissioned separately, so the user also needs access to that data.",
+    "explanation": "The ability to open a Workshop module is derived from permissions on the module itself. The data, actions and functions the module uses keep their own permissions, and widgets never display data the user is not authorised to read. The Check access panel lists these as additional data requirements.",
+    "source": {
+      "title": "Workshop: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-permissions/"
+    }
+  },
+  {
+    "id": "sec-tf-03",
+    "domain": "security",
+    "objective": "execution-identity",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Switching an automation from user-scoped to project-scoped mode makes its Action effects execute under a project-level identity instead of as the automation's owner.",
+    "answer": false,
+    "correction": "A project-scoped automation still executes its Action effects as the automation's owner; project scope changes who can see the run history, which becomes visible to users who satisfy the markings on a run.",
+    "explanation": "In Automate, the scoping mode controls visibility of run history, not the executing identity. Whatever the mode, submission criteria are evaluated against the owner and edits are attributed to the owner. To stop depending on an individual, ownership can be transferred to a third-party application's service user.",
+    "source": {
+      "title": "Automate: History visibility and scope",
+      "url": "https://www.palantir.com/docs/foundry/automate/history-visibility-and-scope/"
+    }
+  },
+  {
+    "id": "sec-tf-04",
+    "domain": "security",
+    "objective": "monitoring-health",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "Action metrics show failed submissions of an action type even when no action log has been configured for that action type.",
+    "answer": true,
+    "explanation": "Action metrics are independent of action logs: they do not require a log to be displayed, and unlike action logs they track failures. They report success and failure counts and P95 duration, with failures grouped by category, which makes them the first place to look when an action starts to fail.",
+    "source": {
+      "title": "Action types: Action metrics",
+      "url": "https://www.palantir.com/docs/foundry/action-types/action-metrics/"
+    }
+  }
+]

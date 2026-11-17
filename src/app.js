@@ -2,19 +2,15 @@
 import blueprint from '../data/blueprint.json';
 import forms from '../data/forms.json';
 import guidance from '../data/guidance.json';
-import design from '../data/questions/design.json';
-import implementation from '../data/questions/implementation.json';
-import ux from '../data/questions/ux.json';
-import maintenance from '../data/questions/maintenance.json';
+import bank from 'virtual:bank'; // every file in data/questions/, joined by scripts/bundle.mjs
 import {
   createSession, finalize, formatClock, isAnswered, isComplete, isExpired, practicePool,
-  remainingMs, scoreSession, statusOf, topicProgress, discreteDone,
+  remainingMs, scoreSession, statusOf, topicProgress, discreteDone, outlineOf, outlineDomains, weaknesses,
 } from './engine.js';
 import { esc, rich, FORMAT_HINT, renderBody, feedbackHtml, figureSvg } from './question.js';
 import { store } from './store.js';
 
 const LEARN_URL = 'https://ntezi.github.io/foundry-learn/';
-const bank = [...design, ...implementation, ...ux, ...maintenance];
 const byId = new Map(bank.map((q) => [q.id, q]));
 const data = { bank, forms, blueprint };
 const domainOf = (id) => blueprint.domains.find((d) => d.id === id);
@@ -113,87 +109,105 @@ function setValue(q, value) {
 }
 
 // ---------- view: setup ----------
+const examOf = (id) => blueprint.exams.find((e) => e.id === id) || blueprint.exams[0];
+const neededOf = (exam) => Math.ceil((exam.passPercent * exam.questions) / 100);
+const ALL_FORMATS = blueprint.formats.map((f) => f.id);
 const DEFAULT_SETUP = {
-  mode: 'mock', timed: true, feedback: 'each', formId: forms[0].id, tfMix: false,
-  domains: blueprint.domains.map((d) => d.id), formats: blueprint.formats.map((f) => f.id), length: 10,
+  mode: 'mock', timed: true, feedback: 'each', examId: blueprint.exams[0].id, formId: forms[0].id, tfMix: false,
+  domains: blueprint.domains.map((d) => d.id), formats: ALL_FORMATS, objectives: [], length: blueprint.practice.defaultLength,
 };
 let setup = { ...DEFAULT_SETUP, ...(store.setup() || {}) };
 if (!forms.some((f) => f.id === setup.formId)) setup.formId = forms[0].id;
+const objectiveTitle = (key) => { const [d, o] = key.split('/'); return domainOf(d)?.objectives.find((x) => x.id === o)?.title || key; };
 
 function setupSummary() {
-  const b = blueprint.baseline;
   if (setup.mode === 'mock') {
-    const guide = setup.timed && !setup.tfMix;
+    const exam = examOf(setup.examId), isForms = exam.assembly === 'forms', mix = isForms && setup.tfMix;
+    const guide = setup.timed && !mix;
+    const content = isForms
+      ? `${exam.questions} questions from ${forms.find((f) => f.id === setup.formId).title}: ${blueprint.guide2026.sections.map((s) => `${s.questions} ${s.title}`).join(', ')}.`
+      : `${exam.questions} multiple-choice questions, drawn at random for this attempt: ${Object.entries(exam.quotas).map(([d, n]) => `${n} ${domainOf(d).title}`).join('; ')}.`;
     return {
       ok: true,
-      title: `${setup.timed ? 'Mock Exam' : 'Untimed Mock Exam'}${setup.tfMix ? ' with True/False mix' : ''}`,
-      chip: guide ? '<span class="chip accent">Guide-based simulation</span>' : '<span class="chip warn">Practice variation, not the guide-based simulation</span>',
+      title: `${setup.timed ? 'Mock Exam' : 'Untimed Mock Exam'}${mix ? ' with True/False mix' : ''}`,
+      chip: guide ? `<span class="chip accent">Follows the ${esc(exam.title.replace(/^Current /, 'current '))}</span>` : '<span class="chip warn">Practice variation, not the guide simulation</span>',
       lines: [
-        `${b.questions} questions from ${forms.find((f) => f.id === setup.formId).title}: ${blueprint.domains.map((d) => `${d.questions} ${d.title}`).join(', ')}.`,
-        setup.timed ? `Timed: ${b.minutes} minutes. The clock starts when you press Start, keeps running if you close the tab, and the attempt is submitted automatically when it reaches zero.` : 'Untimed: no clock. A progress indicator shows how far you are.',
-        'Forward-only: each answer is locked when you advance and you cannot return to an earlier question. You may skip a question; skipped questions are scored as unanswered.',
-        `Feedback at the end: correctness, answer keys and explanations appear after you submit. You need ${Math.ceil((b.passPercent * b.questions) / 100)} of ${b.questions} (${b.passPercent}%) to pass.`,
-        ...(setup.tfMix ? ['True/False mix: some questions are replaced by True/False items from the same section. This format is not confirmed by official guidance.'] : []),
+        content,
+        ...(exam.quotaNote ? [exam.quotaNote] : []),
+        setup.timed ? `Timed: ${exam.minutes} minutes. The clock starts when you press Start, keeps running if you close the tab, and the attempt is submitted automatically when it reaches zero.` : 'Untimed: no clock. A progress indicator shows how far you are.',
+        'Sequential and forward-only: each answer is locked when you advance and you cannot return to an earlier question. You may skip a question; skipped questions are scored as unanswered.',
+        `Feedback at the end: correctness, answer keys, explanations and your weakest topics appear after you submit. You need ${neededOf(exam)} of ${exam.questions} (${exam.passPercent}%) to pass.`,
+        ...(mix ? ['True/False mix: some questions are replaced by True/False items from the same section. This format is not confirmed by official guidance.'] : []),
       ],
     };
   }
   const pool = practicePool(bank, setup).length;
-  const n = Math.min(setup.length || pool, pool);
+  const n = Math.max(1, Math.min(setup.length || pool, pool));
   const minutes = Math.ceil((n * blueprint.practice.secondsPerQuestion) / 60);
   return {
     ok: pool > 0,
-    title: `Practice: ${n} question${n === 1 ? '' : 's'}`,
+    title: `${setup.objectives.length ? 'Focused practice' : 'Practice'}: ${pool ? n : 0} question${n === 1 ? '' : 's'}`,
     chip: '<span class="chip">Practice</span>',
-    lines: pool === 0 ? ['No questions match this selection. Choose at least one section and one format that have questions.'] : [
+    lines: pool === 0 ? ['No questions match this selection. Choose at least one domain and one format that have questions.'] : [
       `${n} of ${pool} matching questions, in random order.`,
-      setup.timed ? `Timed: ${minutes} minutes (${blueprint.practice.secondsPerQuestion / 60} minutes per question). The session is submitted automatically when the clock reaches zero.` : 'Untimed: no clock. A progress indicator shows how far you are.',
+      setup.timed ? `Timed: ${minutes} minutes, the official exam's pace of about ${Math.round(blueprint.practice.secondsPerQuestion / 6) / 10} minutes per question. The session is submitted automatically when the clock reaches zero.` : 'Untimed: no clock. A progress indicator shows how far you are.',
       'You can move backwards and forwards between questions.',
       setup.feedback === 'each'
-        ? 'Feedback after each answer: press “Check answer” to lock your response and see the explanation straight away.'
+        ? 'Review as you go: press “Check answer” on each question to see whether you were right, the correct answer and the explanation before moving on.'
         : 'Feedback at the end: answers are saved as you go and you can revise them until you finish the session.',
+      'When you finish, the results list your weakest topics and offer a practice session on them.',
     ],
   };
 }
 
 function viewSetup() {
   setTitle('');
-  const sum = setupSummary();
   const radio = (name, value, label, checked, extra = '') => `<label class="choice"><input type="radio" name="${name}" value="${value}" ${checked ? 'checked' : ''} ${extra}><span>${label}</span></label>`;
   const check = (name, value, label, checked, note = '') => `<label class="choice"><input type="checkbox" name="${name}" value="${value}" ${checked ? 'checked' : ''}><span>${label}${note ? ` <span class="muted">${note}</span>` : ''}</span></label>`;
   const pool = practicePool(bank, setup).length;
-  const lengths = [...blueprint.practice.lengths.filter((n) => n < pool), pool].filter((n) => n > 0);
-  if (!lengths.includes(setup.length)) setup.length = lengths.find((n) => n >= 10) || lengths[0] || 0;
+  setup.length = Math.max(1, Math.min(Math.floor(Number(setup.length)) || blueprint.practice.defaultLength, Math.max(pool, 1)));
+  const sum = setupSummary();
   const countIn = (pred) => bank.filter(pred).length;
+  const exam = examOf(setup.examId);
+  const focus = setup.objectives.length > 0;
 
   main.innerHTML = `<div class="page narrow">
     <h1>Foundry Practice</h1>
-    <p class="lede">Mock exams and practice questions for the Palantir Foundry Application Developer certification, written to complement <a href="${LEARN_URL}">Foundry Learn</a>.</p>
-    <p class="notice"><strong>Independent and unofficial.</strong> Not affiliated with or endorsed by Palantir. All questions are original and are not taken from any exam. The live Associate exam differs from this simulator: <a href="#/about">see what is different</a>.</p>
+    <p class="lede">Mock exams and practice questions for the Palantir Application Developer Associate certification, written to complement <a href="${LEARN_URL}">Foundry Learn</a>.</p>
+    <p class="notice"><strong>Independent and unofficial.</strong> Not affiliated with or endorsed by Palantir. All questions are original and are not taken from any exam. <a href="#/about">How the simulator follows the official guide</a>.</p>
     ${S ? `<div class="card resume" role="status"><div><strong>Session in progress:</strong> ${esc(S.title)}. Question ${S.index + 1} of ${S.qids.length}${S.deadline ? `, ${formatClock(remainingMs(S))} remaining` : ''}.</div>
       <div class="row"><a class="btn primary" href="#/session">Resume</a><button class="btn" data-act="abandon">Discard it</button></div></div>` : ''}
     <form id="setup" class="setup">
       <fieldset><legend>1. Mode</legend><div class="choices">
-        ${radio('mode', 'mock', '<strong>Mock Exam</strong><small>A complete 60-question form, forward-only</small>', setup.mode === 'mock')}
-        ${radio('mode', 'practice', '<strong>Practice</strong><small>Choose sections, formats and length</small>', setup.mode === 'practice')}
+        ${radio('mode', 'mock', '<strong>Mock Exam</strong><small>A full exam, sequential and forward-only</small>', setup.mode === 'mock')}
+        ${radio('mode', 'practice', '<strong>Practice</strong><small>Any number of questions, reviewed as you go</small>', setup.mode === 'practice')}
       </div></fieldset>
       <fieldset><legend>2. Timing</legend><div class="choices">
-        ${radio('timed', 'yes', `<strong>Timed</strong><small>${setup.mode === 'mock' ? `${blueprint.baseline.minutes}-minute limit` : `${blueprint.practice.secondsPerQuestion / 60} minutes per question`}</small>`, setup.timed)}
+        ${radio('timed', 'yes', `<strong>Timed</strong><small>${setup.mode === 'mock' ? `${exam.minutes}-minute limit` : 'The official exam’s pace per question'}</small>`, setup.timed)}
         ${radio('timed', 'no', `<strong>Untimed</strong><small>${setup.mode === 'mock' ? 'Shown as “Untimed Mock Exam”' : 'Work at your own pace'}</small>`, !setup.timed)}
       </div></fieldset>
       <fieldset><legend>3. Feedback</legend><div class="choices">
         ${setup.mode === 'mock'
           ? radio('feedback', 'end', '<strong>At the end</strong><small>Mock exams always reveal feedback after you submit</small>', true, 'disabled')
-          : radio('feedback', 'each', '<strong>After each answer</strong><small>Check each answer and read why</small>', setup.feedback === 'each') + radio('feedback', 'end', '<strong>At the end</strong><small>Save and revise, then see everything</small>', setup.feedback === 'end')}
+          : radio('feedback', 'each', '<strong>After each answer</strong><small>Check each answer and review why before moving on</small>', setup.feedback === 'each') + radio('feedback', 'end', '<strong>At the end</strong><small>Save and revise, then see everything</small>', setup.feedback === 'end')}
       </div></fieldset>
-      ${setup.mode === 'mock' ? `<fieldset><legend>Mock exam options</legend>
-        <div class="field"><label for="form-id">Form</label><select id="form-id" name="formId">${forms.map((f) => `<option value="${esc(f.id)}" ${f.id === setup.formId ? 'selected' : ''}>${esc(f.title)}</option>`).join('')}</select><span class="muted">The forms share no questions.</span></div>
-        ${check('tfMix', 'yes', 'Include a True/False mix', setup.tfMix, '(practice variation: official guidance does not confirm this format)')}
+      ${setup.mode === 'mock' ? `<fieldset><legend>Exam blueprint</legend><div class="choices">
+          ${blueprint.exams.map((e) => radio('examId', e.id, `<strong>${esc(e.title)}</strong><small>${e.questions} questions · ${e.minutes} minutes · ${e.passPercent}% to pass</small>`, e.id === exam.id)).join('')}
+        </div>
+        ${exam.assembly === 'forms' ? `<p class="hint">The earlier guide this site was first built on. The live exam now follows the official Associate guide.</p>
+          <div class="field"><label for="form-id">Form</label><select id="form-id" name="formId">${forms.map((f) => `<option value="${esc(f.id)}" ${f.id === setup.formId ? 'selected' : ''}>${esc(f.title)}</option>`).join('')}</select><span class="muted">The forms share no questions.</span></div>
+          ${check('tfMix', 'yes', 'Include a True/False mix', setup.tfMix, '(practice variation: official guidance does not confirm this format)')}` : '<p class="hint">Every attempt draws a fresh set of questions from the bank, so you can sit this mock more than once.</p>'}
       </fieldset>` : `<fieldset><legend>Practice options</legend>
-        <div class="subhead"><span>Sections</span></div>
-        <div class="checks">${blueprint.domains.map((d) => check('domains', d.id, esc(d.title), setup.domains.includes(d.id), `(${countIn((q) => q.domain === d.id)})`)).join('')}</div>
-        <div class="subhead"><span>Question formats</span><span class="row"><button type="button" class="btn sm" data-act="tf-drill">True/False drill</button><button type="button" class="btn sm" data-act="all-formats">All formats</button></span></div>
+        ${focus ? `<div class="notice"><strong>Focused on ${setup.objectives.length} weak topic${setup.objectives.length === 1 ? '' : 's'}:</strong><ul>${setup.objectives.map((k) => `<li>${esc(objectiveTitle(k))}</li>`).join('')}</ul><button type="button" class="btn sm" data-act="clear-focus">Clear focus and choose domains</button></div>` : `
+        <div class="subhead"><span>Domains</span><span class="row"><button type="button" class="btn sm" data-act="official-domains">Official outline only</button><button type="button" class="btn sm" data-act="all-domains">All</button></span></div>
+        <div class="checks">${blueprint.domains.map((d) => check('domains', d.id, `${d.number ? `${d.number}. ` : ''}${esc(d.title)}`, setup.domains.includes(d.id), `(${countIn((q) => q.domain === d.id)})`)).join('')}</div>`}
+        <div class="subhead"><span>Question formats</span><span class="row"><button type="button" class="btn sm" data-act="mc-formats">Multiple choice</button><button type="button" class="btn sm" data-act="tf-drill">True/False drill</button><button type="button" class="btn sm" data-act="all-formats">All formats</button></span></div>
         <div class="checks">${blueprint.formats.map((f) => check('formats', f.id, esc(f.label), setup.formats.includes(f.id), `(${countIn((q) => q.format === f.id)})`)).join('')}</div>
-        <div class="field"><label for="length">Session length</label><select id="length" name="length" ${pool ? '' : 'disabled'}>${lengths.map((n) => `<option value="${n}" ${n === setup.length ? 'selected' : ''}>${n === pool ? `All ${n} matching questions` : `${n} questions`}</option>`).join('')}</select></div>
+        <div class="field"><label for="length">Number of questions</label>
+          <input type="number" id="length" name="length" inputmode="numeric" min="1" max="${Math.max(pool, 1)}" step="1" value="${pool ? setup.length : 0}" ${pool ? '' : 'disabled'} aria-describedby="length-note">
+          <span class="row">${blueprint.practice.presets.filter((n) => n < pool).map((n) => `<button type="button" class="btn sm" data-act="length" data-n="${n}">${n}</button>`).join('')}${pool ? `<button type="button" class="btn sm" data-act="length" data-n="${pool}">All ${pool}</button>` : ''}</span>
+        </div>
+        <p class="hint" id="length-note">Any number from 1 to ${pool}: the questions that match your choices.</p>
       </fieldset>`}
       <div class="card summary" aria-live="polite">
         <h2>${esc(sum.title)} ${sum.chip}</h2>
@@ -209,6 +223,7 @@ function onSetupChange(e) {
   if (t.name === 'mode') { setup.mode = t.value; setup.timed = t.value === 'mock'; } // Mock defaults to Timed, Practice to Untimed
   else if (t.name === 'timed') setup.timed = t.value === 'yes';
   else if (t.name === 'feedback') setup.feedback = t.value;
+  else if (t.name === 'examId') setup.examId = t.value;
   else if (t.name === 'formId') setup.formId = t.value;
   else if (t.name === 'tfMix') setup.tfMix = t.checked;
   else if (t.name === 'length') setup.length = Number(t.value);
@@ -219,22 +234,45 @@ function onSetupChange(e) {
   rerenderKeepingFocus(viewSetup);
 }
 
+/** Buttons on the setup form that change a choice without being form controls themselves. */
+function setupAct(act, el) {
+  if (act === 'tf-drill') setup.formats = ['truefalse'];
+  else if (act === 'mc-formats') setup.formats = ['single', 'multi'];
+  else if (act === 'all-formats') setup.formats = ALL_FORMATS;
+  else if (act === 'official-domains') setup.domains = blueprint.domains.filter((d) => d.inOutline).map((d) => d.id);
+  else if (act === 'all-domains') setup.domains = blueprint.domains.map((d) => d.id);
+  else if (act === 'clear-focus') setup.objectives = [];
+  else if (act === 'length') setup.length = Number(el.dataset.n);
+  else return false;
+  store.saveSetup(setup);
+  rerenderKeepingFocus(viewSetup);
+  return true;
+}
+
 /** Re-renders a form view and puts focus back on the control the learner was using. */
 function rerenderKeepingFocus(view) {
   const a = document.activeElement;
-  const key = a && main.contains(a) ? (a.id ? `#${a.id}` : a.name ? `[name="${a.name}"][value="${a.value}"]` : a.dataset.act ? `[data-act="${a.dataset.act}"]` : null) : null;
+  const key = a && main.contains(a) ? (a.id ? `#${a.id}` : a.name ? `[name="${a.name}"][value="${a.value}"]` : a.dataset.act ? `[data-act="${a.dataset.act}"]${a.dataset.n ? `[data-n="${a.dataset.n}"]` : ''}` : null) : null;
   const y = scrollY;
   view();
   if (key) $(key, main)?.focus({ preventScroll: true });
   scrollTo(0, y);
 }
 
-async function startSession() {
+async function startSession(opts = setup) {
   if (S && !(await confirmDialog({ title: 'Discard the session in progress?', body: 'Starting a new session discards the one in progress. It will not be scored or saved.', ok: 'Discard and start' }))) return;
-  S = createSession(setup, data);
+  S = createSession(opts, data);
   lastAnnounced = null;
   save();
   go('#/session');
+}
+
+/** Starts a practice session on the given weak topics: untimed, reviewed after each answer. */
+function startFocused(keys) {
+  setup = { ...setup, mode: 'practice', timed: false, feedback: 'each', objectives: keys, formats: ALL_FORMATS };
+  setup.length = Math.min(blueprint.practice.focusLength, practicePool(bank, setup).length);
+  store.saveSetup(setup);
+  return startSession(setup);
 }
 
 // ---------- view: session ----------
@@ -281,7 +319,7 @@ function viewSession({ focus = 'heading' } = {}) {
   main.innerHTML = `<div class="page narrow session">
     <div class="sess-head">
       <div>
-        <div class="eyebrow">${esc(S.title)} ${S.guideBased ? '<span class="chip accent">Guide-based simulation</span>' : ''}</div>
+        <div class="eyebrow">${esc(S.title)} ${S.guideBased ? '<span class="chip accent">Guide simulation</span>' : ''}</div>
         <h1 id="q-heading" tabindex="-1">Question ${S.index + 1} <span class="muted">of ${n}</span></h1>
       </div>
       ${S.deadline !== null ? `<div class="timer" id="timer" role="timer" aria-label="Time remaining"><span class="eyebrow">Time left</span><span id="timer-value">${formatClock(remainingMs(S))}</span></div>` : '<div class="timer untimed"><span class="eyebrow">Untimed</span><span>No clock</span></div>'}
@@ -392,24 +430,47 @@ function pickRegion(el) {
 }
 
 // ---------- view: results ----------
-function domainTable(score) {
-  return `<table class="table"><caption class="sr">Score by section</caption><thead><tr><th scope="col">Section</th><th scope="col">Correct</th><th scope="col" class="bar-col">Share</th></tr></thead><tbody>
-    ${blueprint.domains.filter((d) => score.byDomain[d.id]?.total).map((d) => {
+const bar = (c, t, label = `${pct(c, t)}%`) => `<div class="progress ${pct(c, t) < blueprint.practice.weakBelowPercent ? 'weak' : ''}" aria-hidden="true"><i style="width:${pct(c, t)}%"></i></div><span>${label}</span>`;
+
+function domainTable(score, outline) {
+  const name = outline === 'guide2026' ? 'Section' : 'Domain';
+  return `<table class="table"><caption class="sr">Score by ${name.toLowerCase()}</caption><thead><tr><th scope="col">${name}</th><th scope="col">Correct</th><th scope="col" class="bar-col">Share</th></tr></thead><tbody>
+    ${outlineDomains(blueprint, outline).filter((d) => score.byDomain[d.id]?.total).map((d) => {
       const s = score.byDomain[d.id];
-      return `<tr><th scope="row">${esc(d.title)}</th><td>${s.correct} / ${s.total}</td><td class="bar-col"><div class="progress" aria-hidden="true"><i style="width:${pct(s.correct, s.total)}%"></i></div><span>${pct(s.correct, s.total)}%</span></td></tr>`;
+      return `<tr><th scope="row">${d.number ? `${d.number}. ` : ''}${esc(d.title)}</th><td>${s.correct} / ${s.total}</td><td class="bar-col">${bar(s.correct, s.total)}</td></tr>`;
     }).join('')}
-    <tr class="total"><th scope="row">Overall</th><td>${score.correct} / ${score.total}</td><td class="bar-col"><div class="progress" aria-hidden="true"><i style="width:${pct(score.correct, score.total)}%"></i></div><span>${score.percent}%</span></td></tr>
+    <tr class="total"><th scope="row">Overall</th><td>${score.correct} / ${score.total}</td><td class="bar-col">${bar(score.correct, score.total, `${score.percent}%`)}</td></tr>
   </tbody></table>`;
+}
+
+/** An attempt's results per official domain and objective, whatever exam it was sat under. */
+const officialScore = (a) => scoreSession({ ...a, mode: 'practice', examId: null }, byId, blueprint);
+
+/** "Where to focus": the weakest topics, the documentation behind the questions missed, and a way to practise them. */
+function focusHtml(score, { missedOf, intro, empty }) {
+  const weak = weaknesses(score, blueprint);
+  const threshold = blueprint.practice.weakBelowPercent;
+  if (!weak.length) return `<p class="card">${empty || `No topic scored below ${threshold}% here. Keep mixing domains so that weak spots have a chance to show.`}</p>`;
+  const keys = weak.map((w) => w.key);
+  const pool = practicePool(bank, { objectives: keys, formats: ALL_FORMATS }).length;
+  return `<p class="muted">${intro} Topics below ${threshold}% are listed weakest first.</p>
+    <ol class="weak">${weak.map((w) => {
+      const docs = missedOf ? [...new Map(missedOf(w.key).map((q) => [q.source.url, q.source])).values()].slice(0, 3) : [];
+      return `<li><div class="weak-head"><strong>${esc(w.title)}</strong><span class="chip bad">${w.correct} of ${w.total} correct</span></div>
+        <div class="muted small">${esc(w.domainTitle)}</div>
+        ${docs.length ? `<div class="small">Read: ${docs.map((d) => `<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.title)} ↗</a>`).join(' · ')}</div>` : ''}</li>`;
+    }).join('')}</ol>
+    <div class="row"><button class="btn primary" data-act="practice-weak" data-keys="${esc(keys.join(','))}">Practice these topics</button><span class="muted small">${Math.min(blueprint.practice.focusLength, pool)} of ${pool} questions on these topics, untimed, reviewed after each answer.</span></div>`;
 }
 
 function topicTable(attempts) {
   const rows = topicProgress(attempts, blueprint);
   if (!rows.some((r) => r.total)) return '<p class="muted">Finish a practice session to see progress by topic here.</p>';
   return `<table class="table topics"><caption class="sr">Practice progress by topic, all practice sessions</caption><thead><tr><th scope="col">Topic</th><th scope="col">Latest session</th><th scope="col">All practice</th><th scope="col" class="bar-col">Share correct</th></tr></thead><tbody>
-    ${blueprint.domains.map((d) => `<tr class="group"><th scope="rowgroup" colspan="4">${esc(d.title)}</th></tr>` + rows.filter((r) => r.domain === d.id).map((r) => `<tr><th scope="row">${esc(r.title)}</th>
+    ${blueprint.domains.map((d) => `<tr class="group"><th scope="rowgroup" colspan="4">${d.number ? `${d.number}. ` : ''}${esc(d.title)}</th></tr>` + rows.filter((r) => r.domain === d.id).map((r) => `<tr><th scope="row">${esc(r.title)}</th>
       <td>${r.last ? `${r.last.correct} / ${r.last.total}` : '<span class="muted">not yet</span>'}</td>
       <td>${r.total ? `${r.correct} / ${r.total}` : '<span class="muted">not yet</span>'}</td>
-      <td class="bar-col">${r.total ? `<div class="progress" aria-hidden="true"><i style="width:${pct(r.correct, r.total)}%"></i></div><span>${pct(r.correct, r.total)}%</span>` : ''}</td></tr>`).join('')).join('')}
+      <td class="bar-col">${r.total ? bar(r.correct, r.total) : ''}</td></tr>`).join('')).join('')}
   </tbody></table>`;
 }
 
@@ -421,25 +482,29 @@ function describeAttempt(a) {
 function viewResults(id) {
   const a = store.attempt(id);
   if (!a) { main.innerHTML = notFound('That attempt is no longer saved in this browser.'); return; }
-  const s = a.score;
+  const s = a.score, outline = outlineOf(a);
   setTitle('Results');
   const verdict = s.passed === null ? '' : s.passed
-    ? `<p class="verdict-line ok"><strong>Pass.</strong> ${s.correct} of ${s.total} is at or above the ${blueprint.baseline.passPercent}% threshold (${s.needed} of ${s.total}).</p>`
-    : `<p class="verdict-line bad"><strong>Below the pass mark.</strong> ${s.correct} of ${s.total}; ${s.needed} of ${s.total} (${blueprint.baseline.passPercent}%) is needed.</p>`;
+    ? `<p class="verdict-line ok"><strong>Pass.</strong> ${s.correct} of ${s.total} is at or above the ${s.passPercent}% threshold (${s.needed} of ${s.total}).</p>`
+    : `<p class="verdict-line bad"><strong>Below the pass mark.</strong> ${s.correct} of ${s.total}; ${s.needed} of ${s.total} (${s.passPercent}%) is needed.</p>`;
+  const official = officialScore(a);
+  const missedOf = (key) => a.qids.map((qid) => byId.get(qid)).filter((q) => q && `${q.domain}/${q.objective}` === key && statusOf(q, a.responses[q.id]?.value) !== 'correct');
   main.innerHTML = `<div class="page narrow">
     <div class="eyebrow">Results · ${esc(fmtDate(a.finalizedAt))}</div>
     <h1 id="results-heading" tabindex="-1">${esc(a.title)}</h1>
-    <p class="muted">${esc(describeAttempt(a))}. Time used: ${duration(a.finalizedAt - a.startedAt)}. ${a.guideBased ? '<span class="chip accent">Guide-based simulation</span>' : a.mode === 'mock' ? '<span class="chip warn">Practice variation</span>' : ''}</p>
+    <p class="muted">${esc(describeAttempt(a))}. Time used: ${duration(a.finalizedAt - a.startedAt)}. ${a.guideBased ? `<span class="chip accent">Follows the ${esc(examOf(a.examId).short)} guide</span>` : a.mode === 'mock' ? '<span class="chip warn">Practice variation</span>' : ''}</p>
     ${a.expired ? '<p class="notice warn" role="status"><strong>Time expired.</strong> The attempt was submitted automatically at the deadline. Questions you had not answered are scored as unanswered.</p>' : ''}
     <div class="score-card card">
       <div class="score"><span class="score-num">${s.percent}%</span><span class="score-sub">${s.correct} of ${s.total} correct${s.unanswered ? ` · ${s.unanswered} unanswered` : ''}</span></div>
       ${verdict}
     </div>
     <div class="row"><a class="btn primary big" href="#/review/${esc(a.id)}">Review answers</a><a class="btn big" href="#/">New session</a></div>
-    <h2>Score by section</h2>
-    ${domainTable(s)}
+    <h2>Where to focus</h2>
+    ${focusHtml(official, { missedOf, intro: 'Based on the questions you missed or left unanswered in this session.' })}
+    <h2>Score by ${outline === 'guide2026' ? 'section' : 'domain'}</h2>
+    ${domainTable(s, outline)}
     ${a.mode === 'practice' ? `<h2>Progress by topic</h2><p class="muted">Across every practice session saved in this browser, including this one.</p>${topicTable(store.attempts())}` : ''}
-    <p class="muted small">Each question is worth one point with no partial credit. <a href="#/about">How scoring works</a>.</p>
+    <p class="muted small">Each question is worth one point with no partial credit. A few questions on a topic is thin evidence, so treat the focus list as a pointer, not a verdict. <a href="#/about">How scoring works</a>.</p>
   </div>`;
   $('#results-heading').focus({ preventScroll: true });
   scrollTo(0, 0);
@@ -467,7 +532,7 @@ function viewReview(id, filter = 'all') {
     </div>
     ${shown.length ? shown.map(({ q, i, r }) => `<article class="rq" aria-labelledby="rq-${i}">
       <h2 id="rq-${i}">Question ${i + 1}</h2>
-      <div class="chips"><span class="chip">${esc(domainOf(q.domain).title)}</span><span class="chip">${esc(domainOf(q.domain).objectives.find((o) => o.id === q.objective)?.title || q.objective)}</span><span class="chip accent">${esc(formatLabel(q.format))}</span><span class="chip">${esc(q.difficulty)}</span></div>
+      <div class="chips"><span class="chip">${esc(domainOf(q.domain).title)}</span><span class="chip">${esc(objectiveTitle(`${q.domain}/${q.objective}`))}</span><span class="chip accent">${esc(formatLabel(q.format))}</span><span class="chip">${esc(q.difficulty)}</span></div>
       <div class="stem ${q.format === 'truefalse' ? 'statement' : ''}">${rich(q.stem)}</div>
       ${q.format === 'hotspot' ? figureSvg(q, { selected: r.value || null, reveal: true }) : ''}
       ${feedbackHtml(q, r, a, { withYours: true })}
@@ -480,16 +545,20 @@ function viewReview(id, filter = 'all') {
 function viewProgress() {
   setTitle('Progress');
   const attempts = store.attempts();
+  // Topics with at least three practice questions behind them, so one unlucky question does not flag a topic.
+  const cumulative = { byObjective: Object.fromEntries(topicProgress(attempts, blueprint).filter((r) => r.total >= 3).map((r) => [`${r.domain}/${r.objective}`, { correct: r.correct, total: r.total }])) };
   main.innerHTML = `<div class="page narrow">
     <h1>Progress</h1>
+    <h2>Where to focus</h2>
+    ${focusHtml(cumulative, { intro: 'Across every practice session saved in this browser, counting topics with at least three questions answered.', empty: attempts.some((a) => a.mode === 'practice') ? `No topic with at least three practice questions is below ${blueprint.practice.weakBelowPercent}% yet.` : 'Finish a practice session and your weakest topics will be listed here.' })}
     <h2>Practice progress by topic</h2>
     ${topicTable(attempts)}
     <h2>Saved attempts</h2>
-    ${attempts.length ? `<table class="table"><caption class="sr">Saved attempts, newest first</caption><thead><tr><th scope="col">Session</th><th scope="col">Finished</th><th scope="col">Score</th><th scope="col"><span class="sr">Links</span></th></tr></thead><tbody>
+    ${attempts.length ? `<div class="table-scroll"><table class="table"><caption class="sr">Saved attempts, newest first</caption><thead><tr><th scope="col">Session</th><th scope="col">Finished</th><th scope="col">Score</th><th scope="col"><span class="sr">Links</span></th></tr></thead><tbody>
       ${attempts.map((a) => `<tr><th scope="row">${esc(a.title)}<div class="muted small">${esc(describeAttempt(a))}${a.expired ? ' · time expired' : ''}</div></th><td>${esc(fmtDate(a.finalizedAt))}</td>
         <td>${a.score.correct} / ${a.score.total} (${a.score.percent}%) ${a.score.passed === null ? '' : a.score.passed ? '<span class="chip ok">Pass</span>' : '<span class="chip bad">Below pass mark</span>'}</td>
         <td><a href="#/results/${esc(a.id)}">Results</a> · <a href="#/review/${esc(a.id)}">Review</a></td></tr>`).join('')}
-    </tbody></table>
+    </tbody></table></div>
     <p><button class="btn" data-act="clear-history">Delete saved attempts</button></p>` : '<p class="muted">No finished attempts yet.</p>'}
     <p class="muted small">Attempts are saved only in this browser (the newest 40 are kept). Clearing site data removes them.</p>
   </div>`;
@@ -498,27 +567,32 @@ function viewProgress() {
 // ---------- view: about ----------
 function viewAbout() {
   setTitle('About & scoring');
-  const b = blueprint.baseline;
+  const A = examOf('associate'), G = examOf('guide2026');
+  const mc = (d) => bank.filter((q) => q.domain === d && A.formats.includes(q.format)).length;
   const fmtCounts = blueprint.formats.map((f) => `${bank.filter((q) => q.format === f.id).length} ${f.label}`).join(', ');
+  const list = (items) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
   main.innerHTML = `<div class="page narrow prose">
     <h1>About & scoring</h1>
     <p class="notice"><strong>Independent and unofficial.</strong> Foundry Practice is a personal study project. It is not affiliated with, endorsed by, or reviewed by Palantir Technologies. Every question is original, written from public Palantir documentation; none is taken from, or claims to reproduce, a real exam.</p>
-    <h2>What the simulator is based on</h2>
-    <p>The mock exam follows the ${esc(b.label)}: ${b.questions} questions, ${b.minutes} minutes, a ${b.passPercent}% passing score and questions presented in sequence with no way back. The guide itself is not redistributed here.</p>
-    <table class="table"><caption class="sr">Mock exam blueprint</caption><thead><tr><th scope="col">Section</th><th scope="col">Weight</th><th scope="col">Questions per form</th></tr></thead><tbody>
-      ${blueprint.domains.map((d) => `<tr><th scope="row">${esc(d.title)}<div class="muted small">${d.objectives.map((o) => esc(o.title)).join(' · ')}</div></th><td>${d.weightPercent}%</td><td>${d.questions}</td></tr>`).join('')}
-    </tbody></table>
-    <p>The bank holds ${bank.length} questions (${fmtCounts}) and ${forms.length} mock forms that share no questions.</p>
-    <h2>How this differs from the current official Associate guidance</h2>
+    <h2>How the simulator follows the official guide</h2>
     <p>${esc(guidance.summary)}</p>
-    <div class="table-scroll"><table class="table"><caption class="sr">Simulator compared with the current official guide</caption><thead><tr><th scope="col">Topic</th><th scope="col">This simulator</th><th scope="col">Current official guidance</th></tr></thead><tbody>
-      ${guidance.rows.map((r) => `<tr><th scope="row">${esc(r.topic)}</th><td>${esc(r.simulator)}</td><td>${esc(r.official)}</td></tr>`).join('')}
-    </tbody></table></div>
+    <h3>Taken from the official guide</h3>${list(guidance.follows)}
+    <h3>Where the guide is silent and the simulator has to assume</h3>${list(guidance.assumptions)}
     <p class="muted small">Checked on ${esc(guidance.checkedOn)} against <a href="${esc(guidance.officialGuide.url)}" target="_blank" rel="noopener">${esc(guidance.officialGuide.title)} ↗</a> and <a href="${esc(guidance.announcement.url)}" target="_blank" rel="noopener">${esc(guidance.announcement.title)} ↗</a>. Official guidance changes; check it before you book.</p>
+    <h2>The Associate mock: ${A.questions} questions, ${A.minutes} minutes</h2>
+    <div class="table-scroll"><table class="table"><caption class="sr">Official domains, questions per mock and bank size</caption><thead><tr><th scope="col">Official domain</th><th scope="col">Per mock</th><th scope="col">Multiple-choice in bank</th><th scope="col">All formats</th></tr></thead><tbody>
+      ${blueprint.domains.map((d) => `<tr><th scope="row">${d.number ? `${d.number}. ` : ''}${esc(d.title)}<div class="muted small">${d.objectives.map((o) => esc(o.title)).join(' · ')}</div></th><td>${A.quotas[d.id] || '<span class="muted">not used</span>'}</td><td>${mc(d.id)}</td><td>${bank.filter((q) => q.domain === d.id).length}</td></tr>`).join('')}
+    </tbody></table></div>
+    <p>The bank holds ${bank.length} questions (${fmtCounts}). Each Associate mock is drawn at random from the multiple-choice questions of the eight official domains.</p>
+    <h2>The earlier 2026 PDF guide</h2>
+    <p>${esc(guidance.pdfGuide)}</p>
+    <table class="table"><caption class="sr">2026 PDF guide blueprint</caption><thead><tr><th scope="col">Section</th><th scope="col">Weight</th><th scope="col">Questions per form</th></tr></thead><tbody>
+      ${blueprint.guide2026.sections.map((d) => `<tr><th scope="row">${esc(d.title)}</th><td>${d.weightPercent}%</td><td>${d.questions}</td></tr>`).join('')}
+    </tbody></table>
     <h2>Scoring</h2>
     <ul>
       <li>Every question is worth one point. There is no partial credit and no penalty for a wrong answer.</li>
-      <li>A 60-question mock passes at ${b.passPercent}%: ${Math.ceil((b.passPercent * b.questions) / 100)} of ${b.questions} passes, ${Math.ceil((b.passPercent * b.questions) / 100) - 1} of ${b.questions} does not. Practice sessions show a score but no pass or fail.</li>
+      <li>The Associate mock passes at ${A.passPercent}%: ${neededOf(A)} of ${A.questions} passes, ${neededOf(A) - 1} of ${A.questions} does not. The 2026 PDF guide mock passes at ${neededOf(G)} of ${G.questions}. Practice sessions show a score but no pass or fail.</li>
       <li><strong>Single-select, hotspot, True/False:</strong> correct when you choose the one keyed answer or region.</li>
       <li><strong>Multi-select:</strong> correct only when you select exactly the keyed set. One missing or one extra selection scores zero.</li>
       <li><strong>Matching:</strong> correct only when every item on the left is matched to its keyed answer.</li>
@@ -526,8 +600,10 @@ function viewAbout() {
       <li>Skipped and unanswered questions score zero and are listed as unanswered. A discrete-options item you did not finish is unanswered.</li>
       <li>When a timed session reaches its deadline it is submitted automatically, even if the tab was closed, and is scored on the answers saved by then.</li>
     </ul>
-    <h2>True/False</h2>
-    <p>True/False questions are a practice format here. The official material does not list True/False for the Associate exam, so the optional True/False mix in a mock form is labelled as a practice variation and is never called the guide-based simulation.</p>
+    <h2>Where to focus</h2>
+    <p>After every session the results list the topics where you scored below ${blueprint.practice.weakBelowPercent}%, weakest first, with the documentation pages behind the questions you missed and a button that starts a practice session on those topics. The Progress page does the same across all your practice sessions, counting only topics with at least three questions answered. Unanswered questions count as missed.</p>
+    <h2>True/False, hotspot, matching and discrete options</h2>
+    <p>The official material describes the Associate exam as multiple-choice, so the Associate mock uses single-select and multi-select questions only. The other formats are available in Practice and in the 2026 PDF guide mock, whose guide lists them. True/False appears in neither guide and is a practice format.</p>
     <h2>Your data</h2>
     <p>Sessions, answers and results are stored in this browser's local storage only. Nothing is sent anywhere, and there are no accounts or analytics.</p>
     <p>Study notes: <a href="${LEARN_URL}">Foundry Learn</a>. Documentation: <a href="https://www.palantir.com/docs/foundry/" target="_blank" rel="noopener">palantir.com/docs/foundry ↗</a>.</p>
@@ -561,8 +637,8 @@ main.addEventListener('click', async (e) => {
   const el = e.target.closest('[data-act]');
   if (!el || el.disabled) return;
   const act = el.dataset.act;
-  if (act === 'tf-drill') { setup.formats = ['truefalse']; store.saveSetup(setup); rerenderKeepingFocus(viewSetup); }
-  else if (act === 'all-formats') { setup.formats = blueprint.formats.map((f) => f.id); store.saveSetup(setup); rerenderKeepingFocus(viewSetup); }
+  if (setupAct(act, el)) return;
+  if (act === 'practice-weak') startFocused(el.dataset.keys.split(','));
   else if (act === 'abandon') {
     if (await confirmDialog({ title: 'Discard the session in progress?', body: 'It will not be scored or saved.', ok: 'Discard' })) { store.clearActive(); S = null; render(); }
   } else if (act === 'clear-history') {
@@ -582,5 +658,5 @@ main.addEventListener('keydown', (e) => {
 
 addEventListener('hashchange', render);
 // Another tab may finish or replace the session; follow it rather than overwrite it.
-addEventListener('storage', (e) => { if (e.key === 'fp:active') { S = store.active(); render(); } });
+addEventListener('storage', (e) => { if (e.key === 'fp:active:v2') { S = store.active(); render(); } });
 render();

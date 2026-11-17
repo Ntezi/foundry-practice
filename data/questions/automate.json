@@ -1,0 +1,1222 @@
+[
+  {
+    "id": "auto-001",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Larkfield Logistics wants its planners to be told when the `deliveryDate` or `carrier` of an open `Shipment` changes. Edits to other properties, such as internal notes, happen constantly and must not cause a notification. Which Automate condition fits this requirement?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Objects added to set, on the set of open shipments, evaluated with live monitoring",
+        "why": "This fires when a shipment enters the set of open shipments, not when a property changes on a shipment that is already in it."
+      },
+      {
+        "id": "b",
+        "text": "Objects modified in set, on open shipments, watching only those two properties",
+        "why": "Correct. The modified condition can be limited to selected properties, so only changes to `deliveryDate` or `carrier` on shipments in the set trigger the automation."
+      },
+      {
+        "id": "c",
+        "text": "Threshold crossed, on a count of the open shipments",
+        "why": "A threshold condition watches a metric or a Boolean check across a set; it does not react to an individual property edit on one object."
+      },
+      {
+        "id": "d",
+        "text": "A daily time condition that notifies planners with all open shipments",
+        "why": "A schedule runs whether or not anything changed and cannot tell planners which shipments had the two properties edited."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Objects modified in set triggers when an object in the monitored set changes, and it lets you choose the properties to watch. With no properties selected any property change triggers it, so selecting the two relevant properties is what keeps unrelated edits from producing notifications.",
+    "source": {
+      "title": "Automate: Object set conditions",
+      "url": "https://www.palantir.com/docs/foundry/automate/condition-objects/"
+    }
+  },
+  {
+    "id": "auto-002",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "At Pennant Transit an automation uses Objects added to set on the `Vehicle` object type with no filters. The team expected it to run when a mechanic edits a vehicle's `status` to `Out of service`, but it only runs when a brand-new vehicle is registered. What change makes the automation behave as intended?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add the filter `status` is `Out of service` to the monitored object set",
+        "why": "Correct. With a filter, an edit that makes an existing vehicle match counts as the object being added to the set; without one, only completely new objects are additions."
+      },
+      {
+        "id": "b",
+        "text": "Switch the condition from live monitoring to a schedule that runs every hour",
+        "why": "Evaluation frequency changes when the set is checked, not what counts as an addition; an unfiltered set still only gains brand-new vehicles."
+      },
+      {
+        "id": "c",
+        "text": "Replace the condition with Run on all objects over every vehicle",
+        "why": "This would run the effect on every vehicle on each schedule, including the ones whose status never changed."
+      },
+      {
+        "id": "d",
+        "text": "Enable the Allow cycles option in the condition's advanced settings",
+        "why": "Allow cycles relaxes cycle detection between automations that trigger each other; it has no bearing on which objects enter the set."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "An unfiltered object set is every object of the type, so the only way to be added to it is to be created. Once the set is filtered, an edit that makes an object satisfy the filter moves it into the set and triggers the condition. Watching for one specific value is therefore done with Objects added to set plus a filter on that value.",
+    "source": {
+      "title": "Automate: Object set conditions",
+      "url": "https://www.palantir.com/docs/foundry/automate/condition-objects/"
+    }
+  },
+  {
+    "id": "auto-003",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Oakhurst Support builds an automation to close `Ticket` objects that are not closed and whose `lastUpdated` is more than 90 days ago. Another automation on the same object type is monitored live, yet for this one the condition is labelled as scheduled monitoring. What explains this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Automations whose effect is an Action can only be evaluated on a schedule, never live",
+        "why": "The effect type does not decide the evaluation frequency; the other live automation in the scenario could equally have an action effect."
+      },
+      {
+        "id": "b",
+        "text": "The object type has not been moved to Object Storage v2 yet",
+        "why": "Live monitoring does need Object Storage v2, but another automation on the same type is already live, so this is not the reason."
+      },
+      {
+        "id": "c",
+        "text": "The object set uses a relative time filter, which live monitoring does not support",
+        "why": "Correct. Relative time conditions are among the object set features live monitoring cannot evaluate, so the condition falls back to scheduled monitoring."
+      },
+      {
+        "id": "d",
+        "text": "Objects added to set conditions are never able to use live monitoring",
+        "why": "Objects added to set supports both live and scheduled evaluation; it is the filter in this set that rules out live monitoring."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Live monitoring reacts to indexed object changes, and some object set features cannot be evaluated that way, including relative time filters, joined sets, function-generated sets and interfaces. When one of them is used the condition defaults to scheduled monitoring, and the label says which feature caused it. For an age-based rule a daily schedule is the appropriate mode anyway.",
+    "source": {
+      "title": "Automate: Evaluation frequency",
+      "url": "https://www.palantir.com/docs/foundry/automate/evaluation-frequency/"
+    }
+  },
+  {
+    "id": "auto-004",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Ridgeline Water has an automation on `Sensor` objects that runs an Action whenever a sensor is updated. Each of roughly a thousand sensors is updated many times an hour, the Action runs once per sensor, and compute usage has become very high. Which changes reduce the cost while still reacting to updates? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Combine the object set condition with a time condition, so evaluations are capped at the schedule's frequency",
+        "why": "Correct. For frequently updated objects, pairing the object condition with a time condition limits how often the automation evaluates."
+      },
+      {
+        "id": "b",
+        "text": "Run the effect once for all triggering objects, using an Action that takes an object set",
+        "why": "Correct. Single execution with an object set input handles every triggering sensor in one run instead of one run per sensor."
+      },
+      {
+        "id": "c",
+        "text": "Keep per-object execution and raise the parallelization setting",
+        "why": "More parallelism finishes the same number of executions sooner; it does not reduce how many executions happen."
+      },
+      {
+        "id": "d",
+        "text": "Enable Allow cycles so that repeated triggers are tolerated",
+        "why": "Allow cycles relaxes cycle detection for automations that trigger each other; it does nothing to reduce evaluations."
+      },
+      {
+        "id": "e",
+        "text": "Enable dropping of objects above the live automation scale limit",
+        "why": "That setting only changes what happens when a single event exceeds the scale limit, and it discards objects rather than processing them efficiently."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Automate's cost is driven by how often the condition evaluates, how many effect executions each evaluation creates, and how the effect handles its input. Bulk processing is only possible if the condition delivers objects in bulk, so a time cap on the condition comes first, followed by single execution and an Action designed for object sets.",
+    "source": {
+      "title": "Automate: Performance best practices",
+      "url": "https://www.palantir.com/docs/foundry/automate/performance-best-practices/"
+    }
+  },
+  {
+    "id": "auto-005",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "At Greywell Supply a parent automation runs an Action that validates supplier invoices and sets `validationStatus` on each one. A second automation, which posts invoices to the ledger, was made dependent on the parent. The team finds that it also runs after parent runs that failed. They want only invoices the parent validated to be posted. Which design achieves this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set the dependency to trigger only when the parent automation's run succeeded",
+        "why": "No such setting exists: a dependent automation triggers when the parent completes, whether it succeeded or failed."
+      },
+      {
+        "id": "b",
+        "text": "Configure a wait time between the parent completing and the dependent automation evaluating",
+        "why": "A wait time only delays evaluation; the dependent automation still evaluates after failed parent runs."
+      },
+      {
+        "id": "c",
+        "text": "Turn on the option to always trigger effects when the linked automation completes",
+        "why": "This makes effects run even when no objects matched the condition, which is the opposite of restricting the run to validated invoices."
+      },
+      {
+        "id": "d",
+        "text": "Give the dependent automation an Objects added to set condition on validated invoices",
+        "why": "Correct. With a filter on `validationStatus` being `Validated`, the object set condition is evaluated at each parent completion, so only invoices that actually reached the validated state are passed to the posting effect."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "An automation dependency means 'after the parent completes', not 'after the parent succeeds', and it cannot be restricted to one outcome. The outcome has to be expressed in data: pair the dependency with an object set condition on a state that the parent's effect writes. With the always-trigger option off, nothing runs when no object matches.",
+    "source": {
+      "title": "Automate: Automation dependencies",
+      "url": "https://www.palantir.com/docs/foundry/automate/automation-dependencies/"
+    }
+  },
+  {
+    "id": "auto-006",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A supervisor at Thornbury Maintenance occasionally selects a few `WorkOrder` objects in a Workshop table and wants to set their `priority` to a value computed from the asset's criticality. A colleague suggests building an automation for this. What is the smallest design that meets the need?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An automation with Run on all objects that recomputes the priority of every work order each hour",
+        "why": "This recalculates all work orders on a timer, although the supervisor wants to decide which ones change and when."
+      },
+      {
+        "id": "b",
+        "text": "An Action type that the supervisor runs from Workshop on the selected work orders",
+        "why": "Correct. When a person decides when to change property values, invoking an Action directly is more efficient and gives control over when it runs; no automation is needed."
+      },
+      {
+        "id": "c",
+        "text": "An automation with Objects modified in set that sets the priority after any work order edit",
+        "why": "This reacts to every edit of every work order and takes the decision away from the supervisor."
+      },
+      {
+        "id": "d",
+        "text": "A scheduled pipeline build that rewrites the priority column of the backing dataset",
+        "why": "A scheduled build recomputes on a timer for all rows and removes the supervisor's choice of which work orders to change and when."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Automate is meant for responses to data changes or schedules that must run without a person. When a user is manually setting properties to hardcoded or computed values, the documented recommendation is to create an Action type and invoke it from Workshop or Object Explorer on the target objects.",
+    "source": {
+      "title": "Automate: Performance best practices",
+      "url": "https://www.palantir.com/docs/foundry/automate/performance-best-practices/"
+    }
+  },
+  {
+    "id": "auto-007",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Marlow Analytics appends rows to a `parsed_invoice_lines` dataset each night. An engineer adds a dataset condition, 'has at least 1 row', expecting the automation to run only on nights when new lines arrived. It runs after every build instead. Which statements about dataset conditions explain this? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The row-count check counts the rows in the dataset as of the committed transaction, not only the rows that the update added",
+        "why": "Correct. An append-only dataset that already holds rows satisfies 'at least 1 row' after every update."
+      },
+      {
+        "id": "b",
+        "text": "Every committed update that meets the row-count condition can trigger effects; the count does not have to cross the threshold",
+        "why": "Correct. The condition is not edge-triggered, so consecutive qualifying updates each trigger the automation."
+      },
+      {
+        "id": "c",
+        "text": "Dataset conditions are evaluated on a fixed schedule rather than when the dataset is updated",
+        "why": "The condition is evaluated when a transaction is committed to the selected dataset branch, not on a timer."
+      },
+      {
+        "id": "d",
+        "text": "A dataset condition hands the newly appended rows to an action effect as an object set input",
+        "why": "Effect inputs are exposed by the objects added, removed and modified conditions; a dataset condition does not pass objects to an Action."
+      },
+      {
+        "id": "e",
+        "text": "Dataset conditions only behave this way on an automation branch created with Global Branching",
+        "why": "Dataset conditions are not supported on automation branches at all; the behaviour described is how they work on main."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "A dataset condition fires on a committed update to the chosen dataset branch, optionally requiring the whole dataset to have at least or at most a number of rows. Because it looks at the total row count and does not need a crossing, it cannot answer 'did this run add anything?' on an append-only dataset. Watching objects added to a filtered set is the better fit for that question.",
+    "source": {
+      "title": "Automate: Dataset condition",
+      "url": "https://www.palantir.com/docs/foundry/automate/condition-dataset/"
+    }
+  },
+  {
+    "id": "auto-008",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "At Calder Freight a dispatcher moves a `Shipment` to `Customs hold` in Workshop. An automation then runs an Action that creates a `ComplianceCase` object, a type the dispatcher has no access to. The dispatcher asks how their edit could produce data they are not allowed to see. Which explanation is correct?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Automate temporarily grants the triggering user the access that the Action needs",
+        "why": "Nobody's permissions are elevated; the dispatcher's access is unchanged and the Action does not run as the dispatcher."
+      },
+      {
+        "id": "b",
+        "text": "Actions submitted by Automate skip submission criteria and object permissions",
+        "why": "Submission criteria are still evaluated, against the automation's owner, who must satisfy them."
+      },
+      {
+        "id": "c",
+        "text": "The action effect ran as the automation owner, who satisfies the Action criteria",
+        "why": "Correct. Action effects execute on behalf of the owner, and the edit is attributed to the owner; the dispatcher only caused the condition to be met."
+      },
+      {
+        "id": "d",
+        "text": "The Action ran as the dispatcher, and the platform hides the object it created from them",
+        "why": "The effect does not use the identity of whoever edited the triggering object; it uses the automation owner's identity."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "An automation's condition is evaluated with the owner's permissions, and its action, Logic and function effects execute as the owner. Submission criteria are checked against the owner, and edit history and audit logs show the owner as the editor. The user whose edit satisfied the condition gains no visibility of what the effect writes.",
+    "source": {
+      "title": "Automate: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/automate/permissions/"
+    }
+  },
+  {
+    "id": "auto-009",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Elmstead Legal notifies contract owners when a `Contract` enters `Requires review`. Recipients are read dynamically from a user ID property on the contract. One owner, Tomas, can open his contracts in Object Explorer but never receives the notification, while other owners do. What is the most likely cause?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tomas does not have at least Viewer permission on the automation itself",
+        "why": "Correct. Every recipient, static or dynamic, needs Viewer on the automation as well as on the triggering objects, and Tomas already has the latter."
+      },
+      {
+        "id": "b",
+        "text": "Dynamic recipients have to be groups, so individual user IDs are ignored",
+        "why": "Dynamic recipients can be users or groups, and other individually named owners are receiving the notification."
+      },
+      {
+        "id": "c",
+        "text": "Notifications use the owner's permissions, so the owner must be losing access to his contracts",
+        "why": "Notification effects use each recipient's own permissions rather than the automation owner's."
+      },
+      {
+        "id": "d",
+        "text": "Tomas needs the Editor role on the automation before he can be a recipient",
+        "why": "Viewer on the automation is sufficient to receive notifications; Editor is for changing or operating the automation."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Notification effects are evaluated per recipient with that recipient's permissions. To be eligible, a recipient needs at least Viewer on the automation and Viewer on the object instances that trigger it. Naming someone in a dynamic recipient property does not give them access to the automation resource, so that permission has to be granted separately.",
+    "source": {
+      "title": "Automate: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/automate/permissions/"
+    }
+  },
+  {
+    "id": "auto-010",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Farrow Retail has an Action, Assign tickets to regional queue, that takes an object set of `Ticket` objects and assumes every ticket in the set has the same `region`. An Objects added to set automation passes it the added tickets, which often arrive from several regions at once. Which execution mode should the action effect use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Execute once for all objects",
+        "why": "This passes tickets from every region in one set, which breaks the Action's assumption that all tickets share a region."
+      },
+      {
+        "id": "b",
+        "text": "Execute once for each batch of objects, with a small batch size",
+        "why": "Batches are split by size, not by property value, so a batch can still mix regions."
+      },
+      {
+        "id": "c",
+        "text": "Switch to a single object input so that the Action runs once per ticket",
+        "why": "The Action takes an object set, and running per ticket gives up bulk processing when grouping already satisfies the constraint."
+      },
+      {
+        "id": "d",
+        "text": "Execute once for each group of objects, grouped by `region`",
+        "why": "Correct. Grouping by a property runs the Action once per distinct value, so each execution receives tickets from a single region."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "With object set or object list inputs, the execution mode decides how triggering objects are divided across action executions: all together, in batches up to a maximum size, or in groups that share exact values of chosen properties. Grouping is the mode intended for Actions that accept a set but assume its members agree on some property.",
+    "source": {
+      "title": "Automate: Action effects",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-actions/"
+    }
+  },
+  {
+    "id": "auto-011",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Hollin Insurance has a claims automation owned by an engineer who is leaving. The team transfers ownership to the service user of a third-party application so that it no longer depends on one person. Which statements about the automation after the transfer are accurate? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Condition evaluation and action effects use the service user's permissions, so it needs the access those Actions require",
+        "why": "Correct. The service user becomes the execution identity for conditions and for action and Logic effects."
+      },
+      {
+        "id": "b",
+        "text": "Notification effects still use each recipient's own permissions",
+        "why": "Correct. Ownership by an application does not change how notifications are evaluated; they remain per recipient."
+      },
+      {
+        "id": "c",
+        "text": "Rotating the application's client secret stops the automation until it is saved again",
+        "why": "Rotating the secret does not break automations that the application already owns."
+      },
+      {
+        "id": "d",
+        "text": "Any Editor can now save changes to the automation without supplying the client credentials",
+        "why": "Later edits to an automation owned by a third-party application require the client ID and secret before saving."
+      },
+      {
+        "id": "e",
+        "text": "Notifications are now rendered with the service user's view of the data for every recipient",
+        "why": "Notification content and eligibility continue to depend on each recipient's access, not on the owner's."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "An automation can be owned by a third-party application's service user, which keeps it running through team changes. The owner's identity, here the service user, is used for condition evaluation and for action and Logic effects, so that account must hold the necessary permissions. Notification effects are unaffected because they always use the recipients' permissions.",
+    "source": {
+      "title": "Automate: Third-party application ownership",
+      "url": "https://www.palantir.com/docs/foundry/automate/third-party-app-ownership/"
+    }
+  },
+  {
+    "id": "auto-012",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Stanmore Payments runs a user-scoped automation with a single action effect. Shared history events are enabled, so the on-call team can see that runs happened, but they cannot see whether the Action succeeded or read its error. Only the owner can. The team needs to debug failures without using the owner's account. What should be changed?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Grant the on-call team the Editor role on the user-scoped automation",
+        "why": "In user-scoped mode effect execution details stay visible only to the owner, whatever role other users hold on the resource."
+      },
+      {
+        "id": "b",
+        "text": "Make the automation project-scoped, importing the resources it uses into the project",
+        "why": "Correct. Project scope makes run history, including effect executions, visible to all users who satisfy the markings on a run, while the automation still runs as its owner."
+      },
+      {
+        "id": "c",
+        "text": "Add the on-call team as automation administrators for effect failure notifications",
+        "why": "Administrators receive warning and failure notifications; that does not open the run history and effect logs to them."
+      },
+      {
+        "id": "d",
+        "text": "Turn shared history events off and on again so that effect details are regenerated",
+        "why": "Shared history only ever shows that executions occurred; effect status, failure messages and logs remain private to the owner."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "The scope mode decides who can read an automation's run history. User scope restricts it to the owner, with shared history events exposing only the fact that a run happened. Project scope, the recommended mode, shares run history including effect executions with users who satisfy the run's markings, and requires all transitive resources to be imported into the project.",
+    "source": {
+      "title": "Automate: History visibility and scope",
+      "url": "https://www.palantir.com/docs/foundry/automate/history-visibility-and-scope/"
+    }
+  },
+  {
+    "id": "auto-013",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A developer at Wexcombe Health writes a function that returns Ontology edits setting `triageLevel` on new `Referral` objects, and adds it to an automation as a function effect. The function runs without errors, but no referral is ever updated. What should the developer do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enable automatic upgrades to compatible versions on the function effect",
+        "why": "Auto upgrade selects newer compatible versions of the function; it does not make a function effect apply edits."
+      },
+      {
+        "id": "b",
+        "text": "Change the function effect's retry strategy to exponential backoff",
+        "why": "The function is not failing, so there is nothing to retry; its returned edits are simply not applied by this effect type."
+      },
+      {
+        "id": "c",
+        "text": "Wrap the function in a function-backed Action and use an action effect",
+        "why": "Correct. A function effect does not apply returned Ontology edits; a function-backed Action run by an action effect does."
+      },
+      {
+        "id": "d",
+        "text": "Run the effect once for all objects instead of once per object",
+        "why": "The execution mode changes how objects are grouped, not whether a function effect's returned edits are written."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Function effects run a function when the automation triggers, but a function whose return type is Ontology edits cannot have those edits applied as part of a function effect. To write to the Ontology the function has to back an Action, and the automation calls that Action through an action effect.",
+    "source": {
+      "title": "Automate: Function effects",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-function/"
+    }
+  },
+  {
+    "id": "auto-014",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "A builder at Dunmere Aviation is wiring an Objects added to set condition on `Alert` into an action effect and is choosing how the added alerts reach the Action. Which statements about effect inputs and execution are accurate? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "With a single object input, the Action runs once per alert, and a parallelization setting controls how many run at a time",
+        "why": "Correct. Single object and property reference inputs mean one execution per triggering object, tuned by parallelization."
+      },
+      {
+        "id": "b",
+        "text": "In batch mode the batch size is a maximum; the automation does not wait for more alerts to fill a batch",
+        "why": "Correct. A batch may hold fewer objects than the configured size because execution does not wait for additional objects."
+      },
+      {
+        "id": "c",
+        "text": "An object set input and a single object input can be mixed freely within the same action effect",
+        "why": "Set and list inputs carry many objects at once and cannot be combined with single object or property reference inputs."
+      },
+      {
+        "id": "d",
+        "text": "Several Actions added to one action effect are executed in the order in which they are listed",
+        "why": "The execution sequence of multiple Actions in one action effect is not guaranteed; they may run in any order."
+      },
+      {
+        "id": "e",
+        "text": "The Action's parameter may reference any object type, whichever type the condition monitors",
+        "why": "The parameter type has to align with the condition's input: a condition on `Alert` needs an Action that takes `Alert`."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Object set conditions expose the triggering objects as effect inputs: an object set, an object list, a single object or a property reference. The input shape determines execution: single object inputs run the Action per object, while set and list inputs run it for many objects at once, all together, in batches up to a maximum size, or in groups by property value.",
+    "source": {
+      "title": "Automate: Action effects",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-actions/"
+    }
+  },
+  {
+    "id": "auto-015",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "At Kestwick Manufacturing an automation runs an Action that creates an `Inspection` object, with a randomly generated ID, for each new `Defect`. Occasionally one defect ends up with two inspections, and the history shows the effect executed twice for the same trigger event. Which change addresses the cause?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Derive the inspection's ID from the defect's ID, so a repeated run cannot create a second inspection",
+        "why": "Correct. Creating a resource with a consistent ID makes the operation idempotent, so it creates the resource only once even if the effect runs again."
+      },
+      {
+        "id": "b",
+        "text": "Switch the automation's execution guarantee from at-least-once to exactly-once in its settings",
+        "why": "There is no such setting; effects follow at-least-once semantics and duplicates cannot be completely removed by the platform."
+      },
+      {
+        "id": "c",
+        "text": "Raise the parallelization setting so that both executions finish at the same time",
+        "why": "Running more executions at once does not stop the same effect from being executed twice for one event."
+      },
+      {
+        "id": "d",
+        "text": "Mute the automation whenever a duplicate inspection is noticed, then unmute it later",
+        "why": "Muting stops all effects, including the wanted ones, and does nothing about the duplicate that has already been created."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Automate effects are at-least-once: in rare cases the same effect executes more than once for the same trigger event. Actions and functions used with Automate should therefore be idempotent, for example by creating objects with a consistent ID or checking whether the work was already done before proceeding.",
+    "source": {
+      "title": "Automate: Effect settings",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-settings/"
+    }
+  },
+  {
+    "id": "auto-016",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "An automation at Norvale Energy runs an Action that sends a meter-reading correction to an external billing system. After the billing system responded slowly, the history shows the effect ran twice for one event, and billing applied the correction twice. A developer proposes raising the number of retries to make the integration more robust. What should be done first?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Raise the retry count and add exponential backoff with jitter to the action effect retry policy",
+        "why": "More retries on an operation that is not safe to repeat increase the chance of sending the correction again."
+      },
+      {
+        "id": "b",
+        "text": "Enable Queue effect executions so that events are processed one at a time",
+        "why": "Queuing orders separate events; it does not stop the effect of one event from being executed again."
+      },
+      {
+        "id": "c",
+        "text": "Configure the automation's effects to execute in parallel instead of sequentially",
+        "why": "Parallel execution only decouples effects from each other's failures; it has no influence on repeated execution of one effect."
+      },
+      {
+        "id": "d",
+        "text": "Make the Action idempotent, with a consistent identifier and a status check before sending",
+        "why": "Correct. Effects are at-least-once, so the Action must be idempotent and verify whether the work was already done; retries can be tuned safely after that."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Because effects have at-least-once semantics, a slow or timed-out call can be followed by another execution of the same effect. The documented strategies are idempotent operations with a consistent ID, conditional checks that an operation has not already been performed, and data models that tolerate duplicates. Retries are only safe to add once repeating the effect is harmless.",
+    "source": {
+      "title": "Automate: Effect settings",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-settings/"
+    }
+  },
+  {
+    "id": "auto-017",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Brackley Foods has an automation whose Action calls a warehouse system that is unavailable for about half an hour during nightly maintenance. The action effect already retries with backoff, but those short retries are exhausted long before the system is back, and the affected objects are left unprocessed. Which configuration fits this failure best?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Event retries, with an interval longer than the outage",
+        "why": "Correct. Event retries re-attempt the failed effect executions on the affected objects at a configured interval later, which suits outages and degraded services."
+      },
+      {
+        "id": "b",
+        "text": "A fallback effect that immediately submits the same Action again",
+        "why": "The fallback would run while the warehouse system is still down, and fallbacks are themselves not eligible for event retries."
+      },
+      {
+        "id": "c",
+        "text": "Auto-mute, so that the automation stops running effects when they fail",
+        "why": "Muting stops effects from running; it does not get the unprocessed objects through once the system returns."
+      },
+      {
+        "id": "d",
+        "text": "Allow cycles, so that the automation can trigger itself again",
+        "why": "Allow cycles relaxes cycle detection between automations; it is not a retry mechanism for failed effects."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Automate has layered retries. Per-effect retries are immediate and short-term, for ephemeral errors such as rate limits. Event retries cover outages: for each effect and object that failed with a retryable error, the execution is attempted again after a configured interval, a limited number of times, and each retry appears as a new event linked in the history.",
+    "source": {
+      "title": "Automate: Manual and automatic retries",
+      "url": "https://www.palantir.com/docs/foundry/automate/retries/"
+    }
+  },
+  {
+    "id": "auto-018",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "At Ashdown Rail several automation events often fire within seconds for the same `Train` object. Their Actions sometimes fail with conflict errors, and a 'Service started' notification has arrived after 'Service finished'. The team is considering Queue effect executions. Which statements about this setting are accurate? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Events of the automation are processed one at a time, in the order in which they were triggered",
+        "why": "Correct. With queuing on, one event completes all of its effects before the next event begins, which preserves order."
+      },
+      {
+        "id": "b",
+        "text": "It reduces conflicts between Actions editing the same object, at the cost of lower throughput",
+        "why": "Correct. Two Actions cannot edit one object simultaneously; running events sequentially avoids that, but fewer events are processed at once."
+      },
+      {
+        "id": "c",
+        "text": "It also forces the effects inside each individual event to run sequentially",
+        "why": "Queuing applies between events; within an event the configured parallel or sequential effect settings still apply."
+      },
+      {
+        "id": "d",
+        "text": "It guarantees that each effect is executed exactly once per event",
+        "why": "Queuing does not change execution guarantees; effects remain at-least-once."
+      },
+      {
+        "id": "e",
+        "text": "It lets automations that trigger each other run without cycle detection",
+        "why": "That describes the separate Allow cycles setting, which is unrelated to ordering events."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "By default several events of one automation can be processed at the same time, so their effects may interleave and two Actions may try to edit the same object, with the second failing on a conflict. Queue effect executions processes events sequentially in trigger order, trading throughput for ordering and fewer conflicts. It works at the event level only.",
+    "source": {
+      "title": "Automate: Condition settings",
+      "url": "https://www.palantir.com/docs/foundry/automate/condition-settings/"
+    }
+  },
+  {
+    "id": "auto-019",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Tavistock Finance has an automation that runs a function-backed Action whenever an `Invoice` is modified. The function normalises a few fields and writes them back to the same invoice. Execution counts have exploded: the history shows the same invoices being processed again and again. Which fix removes the cause?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enable Allow cycles in the condition settings so that the repeated executions are permitted",
+        "why": "This tolerates a number of repeats rather than stopping them; the function's own edits would still re-trigger the automation."
+      },
+      {
+        "id": "b",
+        "text": "Add a processed flag or timestamp guard and skip the edit when it is not needed",
+        "why": "Correct. The function's edits re-trigger the automation that calls it; a status guard and a check before editing break the loop."
+      },
+      {
+        "id": "c",
+        "text": "Configure event retries so that each invoice is attempted at most five times",
+        "why": "Event retries re-attempt failed executions; these executions are succeeding, which is exactly why the loop continues."
+      },
+      {
+        "id": "d",
+        "text": "Raise the effect's parallelization so that the backlog clears faster",
+        "why": "Faster execution of a self-feeding loop consumes more resources without ending it."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "A function that edits objects which then satisfy the same automation's condition creates a self-calling loop that can continue until someone stops it. The documented remedy is to add a status flag or timestamp to prevent re-processing and conditional logic that checks whether processing is needed before making edits. Pausing the automation is the immediate mitigation while the fix is made.",
+    "source": {
+      "title": "Automate: Troubleshooting performance",
+      "url": "https://www.palantir.com/docs/foundry/automate/troubleshooting-performance/"
+    }
+  },
+  {
+    "id": "auto-020",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "A Quarry Lane Bank automation has two sequential action effects on new `Payment` objects: Hold payment, then Open review case. Hold payment has a fallback effect that logs failures to a `HoldFailure` object. In one event, 3 of 40 payments fail Hold payment with an error that cannot be retried. What happens? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only the three failed payments are passed to the fallback; the other 37 continue to Open review case",
+        "why": "Correct. Fallbacks are triggered per object, so only the failed subset reaches the fallback and the rest carry on through the sequence."
+      },
+      {
+        "id": "b",
+        "text": "Open review case does not run for the three failed payments, even if the fallback succeeds",
+        "why": "Correct. A successful fallback handles the failure but does not resume the sequential chain for those objects."
+      },
+      {
+        "id": "c",
+        "text": "Open review case is skipped for all 40 payments because one effect in the sequence failed",
+        "why": "Failure behaviour applies per object; payments that succeeded continue through the later effects."
+      },
+      {
+        "id": "d",
+        "text": "The fallback runs with the permissions of the user who created the failed payments",
+        "why": "Fallback effects run with the automation owner's permissions, like the primary effects."
+      },
+      {
+        "id": "e",
+        "text": "Once the fallback succeeds, the three payments resume at Open review case",
+        "why": "The sequence is not resumed after a fallback; the failed objects stop at the fallback."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "A fallback effect is an Action that runs when a primary action, Logic or function effect fails with a non-retryable error or after the last retry. It works per object: only failed objects go to it, with the original input and the error information. In sequential execution a failed object does not continue to later effects, whether or not its fallback succeeds.",
+    "source": {
+      "title": "Automate: Fallback effects",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-fallback/"
+    }
+  },
+  {
+    "id": "auto-021",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Before letting a new automation react to every incoming `Order`, a builder at Lindale Commerce wants to confirm that its action effect behaves correctly on five known test orders. Which approach tests the effects safely before the automation is released more widely?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Mute the automation and review the trigger events it records over a week",
+        "why": "A muted automation still evaluates its condition but triggers no effects, so the Action itself is never exercised."
+      },
+      {
+        "id": "b",
+        "text": "Run the automation live on all orders and manually revert any incorrect edits afterwards",
+        "why": "This tests in production on every order and relies on cleaning up after mistakes instead of preventing them."
+      },
+      {
+        "id": "c",
+        "text": "Manually execute the automation on an object set containing only the five test orders",
+        "why": "Correct. Manual execution runs the configured effects immediately on a chosen object set, which is intended for testing before a wider release and for backfills."
+      },
+      {
+        "id": "d",
+        "text": "Set the automation to expire immediately and read its history afterwards",
+        "why": "An expired automation blocks all execution, including manual runs, so nothing would be tested."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "An automation can be executed manually from its Execute tab on a defined, saved or function-generated object set of the condition's object type. The trigger condition is bypassed and the effects run immediately for the chosen objects, and the results appear in the event history. This makes a small, controlled trial possible before real triggers are relied on.",
+    "source": {
+      "title": "Automate: Manual executions",
+      "url": "https://www.palantir.com/docs/foundry/automate/manual-execution/"
+    }
+  },
+  {
+    "id": "auto-022",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "At Fenwick Utilities an automation's Action failed repeatedly last week because a backing function was broken. The function has been fixed, but for two days the history has kept recording that the condition triggered while no Action has run at all. Which state explains this, and what resolves it?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The automation is paused; an Editor has to resume it",
+        "why": "While paused, scheduled and live triggers do not run, so the history would not keep recording new triggers."
+      },
+      {
+        "id": "b",
+        "text": "The automation is muted, perhaps by auto-mute; an Editor has to unmute it",
+        "why": "Correct. A muted automation keeps evaluating its condition and recording activity but triggers no effects, and auto-mute can apply this after repeated effect failures."
+      },
+      {
+        "id": "c",
+        "text": "The automation has expired; an Editor has to set a later expiration date",
+        "why": "An expired automation blocks all execution, so it would not keep recording that the condition triggered."
+      },
+      {
+        "id": "d",
+        "text": "The automation moved to scheduled monitoring; an Editor has to switch it back to live",
+        "why": "A change of evaluation frequency alters when the condition is checked; effects would still run when it triggers."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Muting and pausing differ in what continues. A muted automation still evaluates its condition and records activity but runs no effects, whereas a paused one does not run scheduled or live triggers at all. With the auto-mute setting enabled, an automation is muted automatically when its effects keep failing, and it stays muted until a user with the Editor role unmutes it.",
+    "source": {
+      "title": "Automate: Muting, pausing, and expiration",
+      "url": "https://www.palantir.com/docs/foundry/automate/muting-pausing-expiration/"
+    }
+  },
+  {
+    "id": "auto-023",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "The owner of an automation at Sorrel Logistics is told that last night's run 'did something wrong' to one `Delivery` object. She wants to see when the condition was evaluated, which effects ran, whether they succeeded, and the detailed logs for the effect in question. Where should she look?",
+    "options": [
+      {
+        "id": "a",
+        "text": "In the Data Lineage graph of the dataset that backs the `Delivery` object type",
+        "why": "Data Lineage shows how datasets are produced and whether builds ran; it does not show an automation's effect executions."
+      },
+      {
+        "id": "b",
+        "text": "On the Usage tab of the `Delivery` object type in Ontology Manager",
+        "why": "Usage metrics show who uses an object type and where, not the timeline and logs of one automation event."
+      },
+      {
+        "id": "c",
+        "text": "In the Performance Profiler of the Workshop module that displays deliveries",
+        "why": "The profiler measures how a Workshop module loads and has no information about automation runs."
+      },
+      {
+        "id": "d",
+        "text": "In the automation History tab, by opening the event and then its effect",
+        "why": "Correct. An event's details show the execution timeline, effect status, timestamps and errors, and selecting an effect opens its trace logs."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Each automation has a History tab listing its events. Selecting an event shows the full execution timeline, including condition evaluation details, effect execution status, timestamps and any errors; selecting an individual effect opens a panel with detailed trace logs, and the triggering object can be opened from there.",
+    "source": {
+      "title": "Automate: Automation history",
+      "url": "https://www.palantir.com/docs/foundry/automate/history/"
+    }
+  },
+  {
+    "id": "auto-024",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "An automation at Granby Telecom evaluated its condition successfully this morning, but the history timeline shows that its action effect failed to execute. Nobody has edited the automation itself in recent weeks. Which causes are consistent with this symptom? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The automation's owner no longer satisfies the Action's submission criteria",
+        "why": "Correct. The Action is submitted on behalf of the owner, so unmet submission criteria for the owner make the action effect fail."
+      },
+      {
+        "id": "b",
+        "text": "The Action type was changed and no longer matches the input configuration saved on the automation",
+        "why": "Correct. A change to the Action that is incompatible with the automation's saved inputs causes the effect to fail after a successful evaluation."
+      },
+      {
+        "id": "c",
+        "text": "The user whose edit met the condition does not have permission to submit the Action",
+        "why": "The triggering user's permissions are irrelevant to an action effect, which runs as the automation owner."
+      },
+      {
+        "id": "d",
+        "text": "The automation was muted by one of its Editors",
+        "why": "A muted automation triggers no effects at all, so there would be no failed action execution to see."
+      },
+      {
+        "id": "e",
+        "text": "A notification recipient lacks Viewer permission on the automation",
+        "why": "That affects whether that recipient is notified; it does not make an action effect fail."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "An action effect can fail even though the condition evaluated correctly. The documented causes are changes to the Action that make it incompatible with the saved input configuration, submission criteria that are not met, and a runtime failure of the function backing the Action. The history timeline for the event shows which Actions failed and the error details.",
+    "source": {
+      "title": "Automate: Error reference",
+      "url": "https://www.palantir.com/docs/foundry/automate/errors/"
+    }
+  },
+  {
+    "id": "auto-025",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "At Ellerby Housing an Action used by an automation was misconfigured, and a dozen events from yesterday failed their action effect while many others succeeded. The Action type has now been corrected. The team wants only the failed work to be done, using the corrected configuration. What should they do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Manually execute the automation on every object that matched the condition yesterday",
+        "why": "This would also run the effect again on the objects that already succeeded, risking duplicate edits."
+      },
+      {
+        "id": "b",
+        "text": "Configure event retries now and wait for yesterday's events to be retried automatically",
+        "why": "Event retries apply to retryable errors such as rate limits and outages as they occur; they are not a way to re-run past misconfiguration failures."
+      },
+      {
+        "id": "c",
+        "text": "Use Retry failed events, selecting the failed events and the effect to retry",
+        "why": "Correct. A manual retry re-runs the chosen effects of the chosen failed events, and it uses the latest configuration."
+      },
+      {
+        "id": "d",
+        "text": "Add a fallback effect and wait for it to process yesterday's failed objects",
+        "why": "A fallback added now handles future failures; it does not go back and process events that failed earlier."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Failures caused by a wrong configuration are handled with a manual retry once the configuration is fixed. Retry failed events lets you choose the events and then the effects to retry, and those effects run on the latest configuration, so a corrected Action is picked up. The retry job is scheduled and appears in the event log.",
+    "source": {
+      "title": "Automate: Manual and automatic retries",
+      "url": "https://www.palantir.com/docs/foundry/automate/retries/"
+    }
+  },
+  {
+    "id": "auto-026",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "During an incident at Corbridge Energy an engineer pauses an automation that is flooding a downstream system. Which statements describe what pausing does? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Scheduled and live triggers stop, but manual runs and retries of failed events remain possible",
+        "why": "Correct. A paused automation can still be run manually or have events retried, with a warning that triggers remain disabled."
+      },
+      {
+        "id": "b",
+        "text": "Executions that are active at the moment of pausing are interrupted",
+        "why": "Correct. Pausing does not only prevent new triggers; it also interrupts active executions."
+      },
+      {
+        "id": "c",
+        "text": "The condition keeps being evaluated and recorded, and only the effects are suppressed",
+        "why": "That describes muting. While paused, scheduled and live triggers do not run."
+      },
+      {
+        "id": "d",
+        "text": "Only the automation's owner is able to resume it once the incident is over",
+        "why": "Any user with the Editor role on the automation can resume it."
+      },
+      {
+        "id": "e",
+        "text": "The effect is the same as letting the automation expire, including for manual runs",
+        "why": "An expired automation blocks all execution, including manual runs, whereas a paused one still allows them."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Pausing stops an automation's scheduled and live triggers and interrupts executions in progress, which is why it is the first mitigation step when an automation misbehaves. Manual execution and event retries stay available while paused, unlike with expired, trashed or disabled automations. An Editor can resume the automation at any time.",
+    "source": {
+      "title": "Automate: Muting, pausing, and expiration",
+      "url": "https://www.palantir.com/docs/foundry/automate/muting-pausing-expiration/"
+    }
+  },
+  {
+    "id": "auto-m-01",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Halvering Facilities is planning four automations on its `Defect` and `Case` object types. Match each requirement to the Automate condition that fits it most directly.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "Notify the reviewer whenever a defect's status becomes `Needs review`",
+        "why": "Objects added to set on a set filtered to that status triggers both for new defects with the status and for existing defects edited to it."
+      },
+      {
+        "id": "l2",
+        "text": "Every night, recalculate an ageing score for each open case, in batches",
+        "why": "Run on all objects runs effects on a schedule for every object in the set and respects batch size and parallelization settings."
+      },
+      {
+        "id": "l3",
+        "text": "Alert when the count of open critical defects goes above 200, and record when it drops back",
+        "why": "Threshold crossed compares a metric with a value and records activity when the threshold is crossed in either direction."
+      },
+      {
+        "id": "l4",
+        "text": "Send the facilities summary every Monday at 09:00, whatever has changed",
+        "why": "A time condition triggers effects at a specific time or on a schedule, independently of any object change."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Objects added to set, with a filter"
+      },
+      {
+        "id": "r2",
+        "text": "Run on all objects, with a schedule"
+      },
+      {
+        "id": "r3",
+        "text": "Threshold crossed"
+      },
+      {
+        "id": "r4",
+        "text": "Time condition"
+      },
+      {
+        "id": "r5",
+        "text": "Objects removed from set"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Automate conditions answer different questions. Objects added to a filtered set captures an object reaching a state, Run on all objects applies an effect to a whole set on a schedule, Threshold crossed watches an aggregate and records both the trigger and the recovery, and a time condition is a plain schedule. Objects removed from set would instead fire when an object leaves a state.",
+    "source": {
+      "title": "Automate: Object set conditions",
+      "url": "https://www.palantir.com/docs/foundry/automate/condition-objects/"
+    }
+  },
+  {
+    "id": "auto-m-02",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Wrenfield Health is deciding how its automations should recover from different kinds of failure. Match each situation to the Automate mechanism designed for it.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "A language model occasionally returns a rate-limit error that clears within moments",
+        "why": "Per-effect automatic retries, with constant or exponential backoff, are meant for short transient errors inside a trigger event."
+      },
+      {
+        "id": "l2",
+        "text": "An external service is degraded for an hour, and the failed objects should be tried again later",
+        "why": "Event retries re-attempt failed executions for the affected objects after a configured interval, for outages that outlast immediate retries."
+      },
+      {
+        "id": "l3",
+        "text": "An Action was misconfigured, has now been fixed, and past failed events need to be run again",
+        "why": "A manual retry of failed events re-runs selected effects on the latest configuration."
+      },
+      {
+        "id": "l4",
+        "text": "For objects that still fail after all retries, the error message must be stored on an object",
+        "why": "A fallback effect runs for failed objects after a non-retryable error or the last retry and receives the error information."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Per-effect automatic retry with backoff"
+      },
+      {
+        "id": "r2",
+        "text": "Event retries"
+      },
+      {
+        "id": "r3",
+        "text": "Manual retry of failed events"
+      },
+      {
+        "id": "r4",
+        "text": "Fallback effect"
+      },
+      {
+        "id": "r5",
+        "text": "Auto-mute"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Automate layers its failure handling. Short transient errors are absorbed by per-effect retries, longer outages by event retries that run later as new events, and configuration mistakes by manual retries after the fix. A fallback effect is the last step, running only after a non-retryable error or the final retry. Auto-mute stops effects rather than recovering anything.",
+    "source": {
+      "title": "Automate: Manual and automatic retries",
+      "url": "https://www.palantir.com/docs/foundry/automate/retries/"
+    }
+  },
+  {
+    "id": "auto-tf-01",
+    "domain": "automate",
+    "objective": "reliability",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "Automate effects follow at-least-once execution semantics, so in rare cases the same effect can execute more than once for a single trigger event.",
+    "answer": true,
+    "explanation": "Automate tries to minimise duplicate executions but cannot remove them entirely, because of the distributed nature of the system and the retry mechanisms for transient failures. Actions and functions used as effects should therefore be idempotent or check whether their work has already been done.",
+    "source": {
+      "title": "Automate: Effect settings",
+      "url": "https://www.palantir.com/docs/foundry/automate/effect-settings/"
+    }
+  },
+  {
+    "id": "auto-tf-02",
+    "domain": "automate",
+    "objective": "triggers-conditions",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "An automation that depends on a parent automation can be configured to trigger only when the parent's run succeeded.",
+    "answer": false,
+    "correction": "A dependent automation triggers whenever its parent automation completes, whether the parent succeeded or failed; the trigger cannot be restricted to one outcome.",
+    "explanation": "Automation dependencies schedule a child automation after the parent completes, regardless of the parent's result. If the child should act only on successful work, that has to be expressed through the child's object set condition, for example on a status the parent's effect writes.",
+    "source": {
+      "title": "Automate: Automation dependencies",
+      "url": "https://www.palantir.com/docs/foundry/automate/automation-dependencies/"
+    }
+  },
+  {
+    "id": "auto-tf-03",
+    "domain": "automate",
+    "objective": "testing-monitoring",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "A manual execution of an automation is considered to be run by the user who starts it, and its input object set is evaluated with that user's permissions.",
+    "answer": true,
+    "explanation": "Manual executions are attributed to the user who selects Execute, who needs edit permission on the automation resource. The input object set is evaluated with that user's token, so a test or backfill only covers objects that this user is able to access.",
+    "source": {
+      "title": "Automate: Manual executions",
+      "url": "https://www.palantir.com/docs/foundry/automate/manual-execution/"
+    }
+  },
+  {
+    "id": "auto-tf-04",
+    "domain": "automate",
+    "objective": "effects-execution",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "In a project-scoped automation, action effects run with the permissions of the user whose edit caused the condition to be met.",
+    "answer": false,
+    "correction": "Whatever the scope mode, an automation's action effects run as the automation's owner; project scope only changes who can see the run history.",
+    "explanation": "Scope mode controls the visibility of run history, not the execution identity. Project-scoped and user-scoped automations both execute as the owner: submission criteria are checked against the owner, functions receive the owner's token, and edits are attributed to the owner.",
+    "source": {
+      "title": "Automate: History visibility and scope",
+      "url": "https://www.palantir.com/docs/foundry/automate/history-visibility-and-scope/"
+    }
+  }
+]

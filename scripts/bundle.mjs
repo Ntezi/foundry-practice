@@ -8,7 +8,21 @@ const dist = join(root, 'dist');
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 
+// `virtual:bank` is every question file in data/questions/, so a new file needs no code change.
+const bankPlugin = {
+  name: 'bank',
+  setup(b) {
+    b.onResolve({ filter: /^virtual:bank$/ }, () => ({ path: 'bank', namespace: 'bank' }));
+    b.onLoad({ filter: /.*/, namespace: 'bank' }, () => {
+      const dir = join(root, 'data/questions');
+      const files = readdirSync(dir).filter((f) => f.endsWith('.json')).sort();
+      return { contents: JSON.stringify(files.flatMap((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')))), loader: 'json', watchFiles: files.map((f) => join(dir, f)) };
+    });
+  },
+};
+
 await build({
+  plugins: [bankPlugin],
   entryPoints: [join(root, 'src/app.js')],
   bundle: true,
   format: 'esm',

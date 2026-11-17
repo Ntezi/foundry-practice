@@ -1,0 +1,546 @@
+[
+  {
+    "id": "osdk-001",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Larkfield Housing is creating its first Developer Console application for a tenant-repairs front end. In the creation wizard a developer selects the `RepairRequest` and `Property` object types and one action type for the Ontology SDK. Besides deciding what the generated package and its documentation contain, what else does this selection decide?",
+    "options": [
+      { "id": "a", "text": "By default, the application's OAuth token is restricted to the selected entities", "why": "Correct. The chosen entities drive the generated bindings and documentation, and they also become the default resource restrictions on tokens issued to the application." },
+      { "id": "b", "text": "Every user of the application is granted read access to the data behind the selected types", "why": "Selecting entities grants nobody data access. A user still needs their own permissions; the selection only caps what the application's token may reach." },
+      { "id": "c", "text": "The selected types are locked against schema changes while an SDK version refers to them", "why": "Adding a type to an application does not freeze it in Ontology Manager. The ontology can keep changing, which is why SDK versions are regenerated." },
+      { "id": "d", "text": "Only users from the organization that owns the selected types are allowed to sign in", "why": "Who can use the application is controlled by sharing and organization settings, not by the list of ontology entities in the SDK." }
+    ],
+    "answer": ["a"],
+    "explanation": "The entities chosen for an application's Ontology SDK do two jobs. They determine the language bindings and the tailored documentation that Developer Console generates, and they define the default restriction on the token the OAuth flow returns. They never add to a user's own data permissions.",
+    "source": { "title": "Developer Console: Create a new application", "url": "https://www.palantir.com/docs/foundry/developer-console/create-application/" }
+  },
+  {
+    "id": "osdk-002",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Pennington Freight's dispatch app is a restricted Developer Console application. The ontology team has published a new `reassignDriver` action type, and a developer wants the app to call it with typed code. What is the smallest set of steps that makes it callable?",
+    "options": [
+      { "id": "a", "text": "Run `npm install` again so that the existing SDK version picks up the newly published action type", "why": "A generated SDK version is fixed at generation time. Reinstalling the same version returns the same code, and the application's restrictions still exclude the action." },
+      { "id": "b", "text": "Add the action type to the application's resources, generate a new SDK version and update the app", "why": "Correct. Adding an ontology resource allows it in the application's restrictions and includes it in SDK versions generated afterwards; the app then has to move to that version." },
+      { "id": "c", "text": "Switch the application to unrestricted so that every action the user can run becomes reachable from it", "why": "This removes the maximum-scope guarantee for the whole application and still produces no typed binding for the action. It is over-permissioning to solve a configuration step." },
+      { "id": "d", "text": "Ask an administrator to give the dispatchers an editing role on the new action type", "why": "The dispatchers' permissions are not the gap. The action is missing from the application's resources and from the generated package." }
+    ],
+    "answer": ["b"],
+    "explanation": "Adding an ontology resource to a Developer Console application changes it in two ways: the resource restrictions start to allow it, and any SDK generated from then on includes it. Existing SDK versions do not change, so the app must take the newly generated version.",
+    "source": { "title": "Developer Console: Application restrictions", "url": "https://www.palantir.com/docs/foundry/developer-console/application-restrictions/" }
+  },
+  {
+    "id": "osdk-003",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Corvale Energy's meter-reading app no longer needs the `LegacyTariff` object type. Field tablets update slowly, so many still run a build compiled against the previous SDK version, which reads `LegacyTariff`. The team wants to retire the type from the application without breaking those tablets. Which steps belong in the plan? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Remove `LegacyTariff` from the SDK in a new version, but keep it in the restrictions for now", "why": "Correct. New builds stop depending on the type, while tokens used by the old builds are still allowed to read it." },
+      { "id": "b", "text": "Remove `LegacyTariff` from the resource access restrictions once every tablet runs the new version", "why": "Correct. When no client depends on the type any more, cleaning it out of the restrictions returns the application to least privilege." },
+      { "id": "c", "text": "Remove `LegacyTariff` from the SDK and from the restrictions in the same change so that nothing lingers", "why": "Tablets on the old build would immediately lose access to a type they still read, which breaks the current version of the app." },
+      { "id": "d", "text": "Make the application unrestricted for the length of the rollout, then restrict it again afterwards", "why": "This drops every limit on the application to manage one type, and switching discards the project and operation restriction configuration." },
+      { "id": "e", "text": "Delete the `LegacyTariff` object type from the ontology first so that old builds fail quickly", "why": "The goal is to avoid breaking the tablets. Deleting the type breaks them and every other consumer of the type at once." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "Removing a resource from an application is a two-step job. Take it out of the SDK first, keep it in the resource access restrictions until all clients have upgraded, and only then remove it from the restrictions. Developer Console asks whether to keep the restriction when a resource is removed and offers a clean-up later.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-004",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Ashby Water's restricted Developer Console application must read a dataset through the platform API in addition to its ontology calls. A user who has read access to that dataset signs in and the code requests `api:use-datasets-read`, yet the call is refused. Which changes fix this while keeping the application restricted? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Add the project that contains the dataset to the application's resource restrictions", "why": "Correct. A restricted application can only read or write platform resources inside the projects listed in its resource restrictions." },
+      { "id": "b", "text": "Add the datasets read operation to the application's operation restrictions", "why": "Correct. Every operation a restricted application calls must be allowed in its operation restrictions; requesting the scope in code is not enough." },
+      { "id": "c", "text": "Raise the user's role on the dataset from Viewer to Owner so that the read is permitted", "why": "The user can already read the dataset. The refusal comes from the application's maximum scope, so more user permission changes nothing." },
+      { "id": "d", "text": "Add the dataset on the Ontology SDK tab alongside the object types", "why": "That tab lists ontology resources such as object types, actions and functions. Platform resources are scoped by project instead." },
+      { "id": "e", "text": "Request the scope `api:datasets-read` in code instead of `api:use-datasets-read`", "why": "Restricted applications use the `use-` scopes. Changing the requested scope cannot widen what the application's restrictions allow." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "A token's reach is the intersection of the user's permissions, the application's restrictions and the operations requested in code. For a restricted application to read a dataset, the dataset's project must be in the resource restrictions and the read operation must be in the operation restrictions, on top of the user's own access.",
+    "source": { "title": "Developer Console: Application restrictions", "url": "https://www.palantir.com/docs/foundry/developer-console/application-restrictions/" }
+  },
+  {
+    "id": "osdk-005",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Dunmore Port Authority is building an OSDK app for a shared wall display in its control room. Operators with very different clearances sign in to it during a shift, and the security officer wants a guarantee that the display can never show customs-investigation objects, whoever is signed in. Which configuration gives that guarantee?",
+    "options": [
+      { "id": "a", "text": "Make the application unrestricted and rely on each operator's own permissions", "why": "An unrestricted application can reach anything its user can. A cleared operator signing in would make investigation objects reachable on the wall display." },
+      { "id": "b", "text": "Request only the ontology read scope in code so the application cannot write anything", "why": "The scope requested in code limits operations, not resources. Investigation objects would still be readable for an operator who has access." },
+      { "id": "c", "text": "Keep the application restricted and leave the investigation object types out of its resources", "why": "Correct. Restrictions are a maximum scope for the application, so a type that is not listed cannot be reached through its token whoever the user is." },
+      { "id": "d", "text": "Hide the investigation screens in the front end's routing for operators without clearance", "why": "Hiding screens is presentation, not enforcement. The token could still fetch the objects, and a cleared operator would see them anyway." }
+    ],
+    "answer": ["c"],
+    "explanation": "Application restrictions define the most an application can ever do, independent of the user. They act as a guaranteed limit on the data Foundry can send to a particular device or system, which is exactly what a shared display needs. User permissions then narrow access further inside that limit.",
+    "source": { "title": "Developer Console: Application restrictions", "url": "https://www.palantir.com/docs/foundry/developer-console/application-restrictions/" }
+  },
+  {
+    "id": "osdk-006",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Tarnbrook Council's OSDK React app worked on a developer's laptop. After it is deployed to a Foundry-hosted subdomain, sign-in fails at the point where Foundry should send the user back to the app. The only redirect URL registered for the application is still the localhost one. What should the team do?",
+    "options": [
+      { "id": "a", "text": "Use `https://<hosted domain>/auth/callback` in the app's code and register it in Developer Console", "why": "Correct. The redirect URL used by the code must be one registered for the application, and for a hosted site it is the hosting domain followed by `/auth/callback`." },
+      { "id": "b", "text": "Register the hosted callback with `http://` and let the platform upgrade it to a secure connection", "why": "The platform does not upgrade `http` redirect URLs, and using `http` can cause Content Security Policy violations." },
+      { "id": "c", "text": "Switch the application to the client credentials grant so that no redirect is needed", "why": "That would require a client secret in a browser app, and an application with a confidential client cannot use website hosting." },
+      { "id": "d", "text": "Add the hosted subdomain to the site's Content Security Policy and deploy again", "why": "The Content Security Policy governs what the page may load. It does not register an OAuth redirect URL." }
+    ],
+    "answer": ["a"],
+    "explanation": "In the authorization code flow, Foundry only redirects the user back to a URL registered for the application. Moving from local development to a hosted domain therefore needs the new `https` callback URL both in the application code and in Developer Console.",
+    "source": { "title": "Developer Console: Hosting an application on Foundry", "url": "https://www.palantir.com/docs/foundry/developer-console/deploy-custom-application-on-foundry/" }
+  },
+  {
+    "id": "osdk-007",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Meridian Clinics' restricted OSDK app has read `Appointment` objects for a year. The ontology team then configures an additional backing dataset for `Appointment`. Soon afterwards Developer Console shows a warning that the application's restrictions are outdated. Which statements explain the situation and the right response? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Adding `Appointment` to the SDK also added its dependencies, such as backing datasets, to the restrictions", "why": "Correct. Adding a resource to the SDK also adds the resources it depends on to the application's resource access restrictions." },
+      { "id": "b", "text": "Later dependency changes need the restrictions updated, which a guided workflow in Developer Console does", "why": "Correct. When a dependency changes after the resource was added, the restrictions should be brought up to date; Developer Console warns and offers a guided correction." },
+      { "id": "c", "text": "The warning means the generated package is damaged, so the application should be deleted and created again", "why": "Nothing is wrong with the package. The restrictions are simply missing a dependency, and recreating the application would discard its client and history." },
+      { "id": "d", "text": "The lasting fix is to make the application unrestricted so that dataset changes never matter again", "why": "This trades a small maintenance step for the loss of every limit on the application, which is over-permissioning." },
+      { "id": "e", "text": "The warning clears by itself once each user has been granted access to the new dataset", "why": "User permissions and application restrictions are separate layers. Granting users access does not change what the application's token is allowed to reach." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "Resource access restrictions cover the ontology resources in the SDK and the resources those depend on. They are filled in when a resource is added, but a later change such as a new backing dataset has to be added to the restrictions as well. Developer Console detects this, shows a warning and guides the correction.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-008",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Quillhaven Library Service wants a browser-based single-page app in which staff, who all have Foundry accounts, see only the `Loan` objects that each of them is already permitted to see. Which setup fits?",
+    "options": [
+      { "id": "a", "text": "A backend service application using application permissions and the client credentials grant", "why": "Every request would run as one service user, so all staff would see the same loans, and the grant needs a client secret that a browser cannot keep." },
+      { "id": "b", "text": "A client-facing application using the client credentials grant, with the secret set at build time", "why": "Client-facing applications must use user permissions, and a secret placed in a front-end build is delivered to every browser." },
+      { "id": "c", "text": "A client-facing application using user permissions and the authorization code grant", "why": "Correct. Each member of staff signs in through Foundry and the app acts with that person's permissions, using a public client that holds no secret." },
+      { "id": "d", "text": "A page where each member of staff pastes a token generated in their own account settings", "why": "Such a token carries the user's full permissions and is meant for development, not for production applications." }
+    ],
+    "answer": ["c"],
+    "explanation": "User permissions map to the authorization code grant: the application acts on behalf of the signed-in user, so each person sees what they are allowed to see. Client-facing applications must use this option because they cannot store client credentials.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-009",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Hollin Agritech needs a nightly job on its own server that reads `SoilSample` objects and applies a `flagOutlier` action. Nobody is signed in when it runs. Which setup fits?",
+    "options": [
+      { "id": "a", "text": "A backend service application using application permissions and the generated service user", "why": "Correct. The client credentials grant is designed for non-interactive work: the server stores the client secret and receives short-lived tokens for the service user." },
+      { "id": "b", "text": "A client-facing application whose refresh token was obtained once by an engineer signing in", "why": "The job would run with one engineer's access and stop working when that account changes. It hides a personal identity behind an unattended process." },
+      { "id": "c", "text": "A client-facing application with a public client, started by the server's scheduler", "why": "A public client has no secret and relies on an interactive user going through sign-in, which an unattended job cannot do." },
+      { "id": "d", "text": "An engineer's personal token stored in the job's configuration file on the server", "why": "A personal token has the engineer's full permissions and should never be used in a production application." }
+    ],
+    "answer": ["a"],
+    "explanation": "Application permissions use the client credentials grant and a service user generated for the application. This suits services and daemons that can store a client secret securely and have no interactive user. The service user must then be granted the data access the job needs.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-010",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Vesper Parcels is building a tracking portal for customers who do not have Foundry accounts. A React front end will show each customer their own `Shipment` objects, and the company already runs a Node.js server that handles the portal's own login. A developer proposes putting the Developer Console client ID and client secret in the React build's environment variables so that the browser can call Foundry directly. What should the team do instead?",
+    "options": [
+      { "id": "a", "text": "Keep the proposal, but minify and obfuscate the bundle so that the secret is hard to find", "why": "The secret is still delivered to every browser. Obfuscation slows a reader down; it does not keep a credential confidential." },
+      { "id": "b", "text": "Keep the proposal, but restrict the application to the `Shipment` object type only", "why": "Restrictions limit which types the token reaches, but anyone who extracts the secret could still read every shipment the service user can see." },
+      { "id": "c", "text": "Register a client-facing application so that customers sign in with the authorization code grant", "why": "That grant acts on behalf of existing Foundry users, and these customers have no Foundry accounts to sign in with." },
+      { "id": "d", "text": "Keep the confidential client on the Node.js server and have the browser call that server", "why": "Correct. Only a backend can store client credentials securely. The server authenticates as the service user and returns just the signed-in customer's shipments." }
+    ],
+    "answer": ["d"],
+    "explanation": "Client-facing applications must not be used to store client credentials; only a backend service may hold them. When end users are not Foundry users, a server-side confidential client acts as the service user and the application's own backend decides what each customer may see.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-011",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Brackwell Rail created a backend service application, and Developer Console generated a service user for it. The service authenticates successfully, but its reads of `Carriage` objects come back empty and its `scheduleInspection` action is rejected. Both the object type and the action type are in the application's resources. Which steps address the cause? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Grant the service user permission to read the data behind `Carriage`", "why": "Correct. The service user starts with no access to data. It needs the permissions required to read the object types the application uses." },
+      { "id": "b", "text": "Make sure the service user satisfies the submission criteria of `scheduleInspection`", "why": "Correct. Actions applied with a service user's token are checked against that user, so it must meet the action type's submission criteria." },
+      { "id": "c", "text": "Switch the application to unrestricted so that its token is no longer limited", "why": "The restrictions already include both resources. The missing piece is the service user's own permissions, which unrestricted mode does not add." },
+      { "id": "d", "text": "Rotate the client secret and redeploy the service with the new value", "why": "Authentication already succeeds. Rotating the secret changes nothing about permissions and breaks anything still using the old value." },
+      { "id": "e", "text": "Generate a new SDK version and update the service's dependency to it", "why": "A generated package carries types and bindings, not permissions. A new version would behave the same for this service user." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "With application permissions, effective access is the intersection of the application's restrictions and the service user's permissions. The generated service user is an identity like any other: it must be granted read access to the object types' data and must pass the submission criteria of the actions it applies.",
+    "source": { "title": "Developer Console: Bootstrap a back-end TypeScript application", "url": "https://www.palantir.com/docs/foundry/developer-console/how-to-bootstrapping-server-side-typescript/" }
+  },
+  {
+    "id": "osdk-012",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Fennmoor Mobility's app must show each signed-in dispatcher only the `Vehicle` objects that this dispatcher may see. It must also show every `ChargingStation` object to all dispatchers, including those who have no access to that data themselves. Which permission configuration matches?",
+    "options": [
+      { "id": "a", "text": "Application permissions only, with the service user given access to both of the object types", "why": "Every dispatcher would then see all vehicles the service user can see, which breaks the per-dispatcher rule for `Vehicle`." },
+      { "id": "b", "text": "User permissions only, with `ChargingStation` added to the application's resources", "why": "Application resources are a maximum scope. Listing a type does not give a dispatcher access to data they cannot read themselves." },
+      { "id": "c", "text": "User permissions only, with the application switched to unrestricted", "why": "An unrestricted application still acts with the user's permissions, so dispatchers without access would still see no charging stations." },
+      { "id": "d", "text": "Both types: user permissions for `Vehicle`, application permissions for `ChargingStation`", "why": "Correct. User permissions keep vehicles per dispatcher, while the generated service user reads charging stations with permissions granted to the application." }
+    ],
+    "answer": ["d"],
+    "explanation": "An application can combine both permission types. User permissions apply what each signed-in user may read, and application permissions use a generated service user whose access is granted separately. Combining them covers data that follows the user and data that everyone using the app should see.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-013",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "At Oakhurst Insurance a reporting script has run in production for months with a token that an analyst generated in their own account settings and pasted into the script's configuration, which sits in a shared repository. A reviewer flags it. Which statements are accurate? Select TWO.",
+    "options": [
+      { "id": "a", "text": "The token has the analyst's own permissions, so it does not belong in production or shared code", "why": "Correct. A user-generated token holds the permissions of the user who created it and is intended for development, kept out of shared code." },
+      { "id": "b", "text": "The script should move to an OAuth grant, such as client credentials with a service user", "why": "Correct. Production access should use OAuth2. The client credentials grant lets the script act as a service user with short-lived access tokens." },
+      { "id": "c", "text": "The token is automatically limited to the resources of the Developer Console application the script calls", "why": "A token generated in account settings is not tied to an application's restrictions. It can do whatever the analyst can do." },
+      { "id": "d", "text": "The arrangement is acceptable as long as the repository is private to the company", "why": "The guidance covers shared repositories as well as public ones. Everyone with repository access could act as the analyst." },
+      { "id": "e", "text": "The token cannot be revoked, so the only remedy is to disable the analyst's account", "why": "User-generated tokens can be revoked by hand from the token list, and they are revoked automatically when they expire." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "Personal tokens exist to make development easy. They carry the full permissions of their creator, so they should be stored as environment variables during development and revoked when no longer needed. Production applications should obtain short-lived tokens through an OAuth2 grant configured in Developer Console.",
+    "source": { "title": "API Reference: Authentication", "url": "https://www.palantir.com/docs/foundry/api/v2/general/overview/authentication/" }
+  },
+  {
+    "id": "osdk-014",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Saltmarsh Rescue's OSDK app lists `Callout` objects in a table that shows 40 rows and has a Load more button. Which approach fits the TypeScript OSDK?",
+    "options": [
+      { "id": "a", "text": "Collect every object with `asyncIter()` into an array, then show slices of 40 rows at a time", "why": "This loads the whole object set to display 40 rows. A single page is the right choice when data is only needed for display." },
+      { "id": "b", "text": "Call `fetchPage` with `$pageSize`, passing each `nextPageToken` as `$nextPageToken`", "why": "Correct. `fetchPage` loads one page, and the token from the previous result requests the following page when the user asks for more." },
+      { "id": "c", "text": "Call `fetchOne` in a loop over a list of primary keys kept in the browser", "why": "`fetchOne` loads a single object by primary key. It needs the keys in advance and makes one request per row." },
+      { "id": "d", "text": "Call `aggregate` with `$count`, then request each row by its position in the result", "why": "Aggregations return summaries, not objects, and there is no way to ask for a row by its position." }
+    ],
+    "answer": ["b"],
+    "explanation": "The TypeScript OSDK pages with `fetchPage`: `$pageSize` sets the size of one page, and the `nextPageToken` from one result is passed as `$nextPageToken` to get the next. Loading the page that fits the view, and more as the user asks, avoids loading every object up front.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-015",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Greystone Logistics wants a tile that shows how many `Delivery` objects are in each status. There are several hundred thousand deliveries. A developer's first draft walks through all of them with `asyncIter()` and counts in the browser. What is the better design?",
+    "options": [
+      { "id": "a", "text": "Keep the loop, but add `$select: [\"status\"]` so that each object is smaller", "why": "This loads less per object but still pages through every delivery to produce a handful of numbers." },
+      { "id": "b", "text": "Call `fetchPage` with a very large `$pageSize` and count the statuses in that page", "why": "One page is not the whole object set, so the counts would be wrong as soon as there are more deliveries than fit in the page." },
+      { "id": "c", "text": "Call `aggregate` with `$count` selected and `$groupBy` on the status property", "why": "Correct. The aggregation runs in the backend and returns one row per status, without loading any objects into the app." },
+      { "id": "d", "text": "Move the loop into a scheduled job that writes the counts to a file the app reads", "why": "This adds a job, storage and staleness to answer a question that a single aggregation call answers live." }
+    ],
+    "answer": ["c"],
+    "explanation": "When the need is a count, sum or other summary, use an aggregation rather than loading objects. `aggregate` takes `$select` for the metrics and an optional `$groupBy`, and a grouped aggregation returns an array of rows computed by the backend.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-016",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Wexcombe University exports every `Enrolment` object to a finance system each night. Enrolments keep changing while the export runs, and finance has found duplicates and gaps in files produced by a hand-written loop over `fetchPage`. Each object must appear exactly once. Which change addresses this?",
+    "options": [
+      { "id": "a", "text": "Iterate with `asyncIter()`, which reads every page from one consistent snapshot", "why": "Correct. `asyncIter()` requests its own snapshot, so every page reflects the same point in time and each object is returned once." },
+      { "id": "b", "text": "Keep the loop and skip objects whose primary key has already been written", "why": "Deduplication removes repeats, but objects that were missed between pages are not recovered, so the gaps remain." },
+      { "id": "c", "text": "Keep the loop and lower the `$pageSize` so that each request returns a little sooner", "why": "Smaller pages mean more requests and a longer run, which gives the data more chances to change between pages." },
+      { "id": "d", "text": "Keep the loop and add `$orderBy` on the student name to fix the page order", "why": "Ordering decides the sequence of results. It does not freeze the data, so changes between pages still shift objects across page boundaries." }
+    ],
+    "answer": ["a"],
+    "explanation": "By default `fetchPage` loads the latest results for each page, so changes between requests can cause duplicates or omissions. `asyncIter()` fetches successive pages from a consistent snapshot until every matching object has been returned, which is what a complete export needs.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-017",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Juniper Hospitality's app works with `Restaurant` objects that have a many-multiplicity link `reviews` and a single-multiplicity link `city`. A developer needs the reviews of all restaurants with at least 100 reviews, and separately the reviews of one restaurant that is already loaded on screen. Which statements about the TypeScript OSDK are correct? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Calling `pivotTo(\"reviews\")` on the filtered restaurant object set returns an object set of reviews", "why": "Correct. `pivotTo` traverses a link from an object set and returns an object set of the linked type, which can be filtered, aggregated or traversed again." },
+      { "id": "b", "text": "On the loaded restaurant, `$link.reviews` is an object set, so it supports `fetchPage` and `asyncIter`", "why": "Correct. A many-multiplicity link under `$link` is an object set of the linked type with the same methods as any other object set." },
+      { "id": "c", "text": "On the loaded restaurant, `$link.city` is an object set that has to be paged like `reviews`", "why": "A single-multiplicity link gives an accessor with `fetchOne`, which returns the one linked object rather than pages of objects." },
+      { "id": "d", "text": "Links can only be followed from one object at a time, so each restaurant must be loaded first", "why": "Links can be traversed from a whole object set with `pivotTo`, without loading the restaurants individually." },
+      { "id": "e", "text": "A `where` filter cannot come before `pivotTo`, so filtering must be done on the reviews afterwards", "why": "A `where` filter can be applied to the starting object set and the traversal chained after it." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "Each link type appears under an object's `$link` container. A single-multiplicity link exposes `fetchOne`, and a many-multiplicity link is an object set. To traverse from a set rather than one instance, `pivotTo` returns an object set of the linked type, so filters, aggregations and further traversals can be chained.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-018",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Thistle Foods imports 300 supplier ratings by calling `batchApplyAction` once, with 300 parameter sets, for its `addSupplierRating` action. One of the sets fails. What should the developer expect?",
+    "options": [
+      { "id": "a", "text": "299 ratings are applied, and the failing one is listed in a validation section of the response", "why": "A batch does not apply partially, and the batch response contains edits only, not validation results." },
+      { "id": "b", "text": "The ratings before the failing one are applied, and processing stops at the failure", "why": "Batch application is not sequential with partial success. Either every edit in the batch applies or none does." },
+      { "id": "c", "text": "All 300 ratings are applied, and the failing one is recorded for later review", "why": "A failing action cannot be applied anyway. Its failure prevents the whole batch from applying." },
+      { "id": "d", "text": "None of the 300 ratings are applied, because a batch is all-or-nothing", "why": "Correct. If any action in the batch fails, none of the edits in the batch are applied." }
+    ],
+    "answer": ["d"],
+    "explanation": "`batchApplyAction` takes an array of parameter objects and applies them as one unit. Batch application is all-or-nothing, and the response contains only edits. An import that should tolerate individual bad rows needs to validate first or apply in smaller units.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-019",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Calder Systems sells a compliance tool to many customers, each with its own unrelated Foundry enrollment and ontology. The tool automates administrative checks, such as listing users and groups, and never reads business objects. The team is deciding how the tool should call Foundry. Which choice fits?",
+    "options": [
+      { "id": "a", "text": "Generate one OSDK in Calder's own enrollment and ship that package to every customer", "why": "An OSDK is generated from one enrollment's ontology. It would not match the customers' ontologies, and the tool does not use ontology data anyway." },
+      { "id": "b", "text": "Use the platform SDK or the REST API, which are generic across enrollments", "why": "Correct. Platform SDKs work with any enrollment and cover all Foundry APIs, which suits administrative automation that must be portable." },
+      { "id": "c", "text": "Generate a separate OSDK in each customer's enrollment and keep one build per customer", "why": "This multiplies builds for no benefit: the generated ontology types would go unused by a tool that only does administrative work." },
+      { "id": "d", "text": "Build the checks as a Workshop module and distribute it to customers as a product", "why": "Workshop is for interactive applications over ontology data inside Foundry. It is not a way to automate administrative checks from an external tool." }
+    ],
+    "answer": ["b"],
+    "explanation": "The OSDK is a specialised library generated in an enrollment for its ontology, and it is the right choice for an application that reads and writes that ontology. The platform SDKs and the REST API underneath are generic: use them when the work is not ontology data, when automating administrative or governance tasks, or when the application must be portable between unrelated enrollments.",
+    "source": { "title": "API Reference: Software development kit (SDK)", "url": "https://www.palantir.com/docs/foundry/api/v2/general/overview/sdks/" }
+  },
+  {
+    "id": "osdk-020",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Elmstead Veterinary's app has a search box over tens of thousands of `Patient` objects. As the receptionist types, the list should show patients whose name begins with the typed text. Which approach fits?",
+    "options": [
+      { "id": "a", "text": "Load all patients with `asyncIter()` on each keystroke and filter the names in the browser", "why": "This transfers the whole object set repeatedly to do work the backend can do with a filter." },
+      { "id": "b", "text": "Call `fetchOne` with the typed text and show the object that comes back", "why": "`fetchOne` looks up a single object by primary key. It does not search a name property by prefix." },
+      { "id": "c", "text": "Chain `.where({ patientName: { $startsWith: text } })` and fetch a page of the result", "why": "Correct. The `where` clause filters in the backend with a prefix match on a string property, and only one page of matches is loaded." },
+      { "id": "d", "text": "Call `aggregate` grouped by the name property and read the names from the group keys", "why": "Aggregations are for summary statistics. This returns groups rather than objects and does not apply the prefix." }
+    ],
+    "answer": ["c"],
+    "explanation": "Filters are passed to `where` as an object keyed by property name, with operators that depend on the property type; `$startsWith` does a prefix match on string properties. Filtering in the backend and then loading a page keeps the app fast however large the object type is.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-021",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Northgate Transit hosts a restricted OSDK app for its planners. A planner can open `Timetable` objects in a Workshop module, but in the OSDK app, where the same planner is signed in, requests for `Timetable` objects are refused. The app's other object types load normally. What is the most likely cause?",
+    "options": [
+      { "id": "a", "text": "The planner has no permission on the data that backs the `Timetable` object type", "why": "If that were so, the same planner could not open the objects in Workshop either." },
+      { "id": "b", "text": "`Timetable` is not in the application's resources, so its token cannot reach the type", "why": "Correct. Access through the app is the intersection of the planner's permissions and the application's restrictions, and the type is outside the restrictions." },
+      { "id": "c", "text": "The application has reached a rate limit and Foundry is throttling its requests", "why": "Throttling affects requests regardless of object type and shows as 429 or 503 responses, not as one type being refused." },
+      { "id": "d", "text": "The planner's session has expired and the app needs to send them through sign-in again", "why": "An expired session would fail every call, but the other object types still load." }
+    ],
+    "answer": ["b"],
+    "explanation": "A user must have permission on a resource, and the application's resource access restrictions must also include it. The restrictions ensure that users only reach resources approved for that application through its OAuth token, so something a user sees in Workshop can still be out of reach in an OSDK app. The fix is to add the type to the application, not to give the user more access.",
+    "source": { "title": "Developer Console: Permissions", "url": "https://www.palantir.com/docs/foundry/developer-console/permissions/" }
+  },
+  {
+    "id": "osdk-022",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Rookwood Media's restricted Developer Console application was created recently and is configured with the ontology read and write operations only. A new feature calls the platform endpoint that returns the current user's profile. The call fails with `ApiUsageDenied`, although ontology calls work for the same user. What is the right fix?",
+    "options": [
+      { "id": "a", "text": "Grant the affected users an administrator role so that they may call administrative endpoints", "why": "The error is about which endpoints the application may call. Giving users administrative roles is over-permissioning and leaves the application's limit unchanged." },
+      { "id": "b", "text": "Generate a new Ontology SDK version, because the current package predates the feature", "why": "The Ontology SDK package covers ontology resources. It does not decide which platform API namespaces the application may call." },
+      { "id": "c", "text": "Wrap the call in retries with exponential backoff until the request is accepted", "why": "Backoff is for throttling. An endpoint the token is not authorized for will be refused on every attempt." },
+      { "id": "d", "text": "Add the admin API operation to the application's operation restrictions and requested scopes", "why": "Correct. Each API namespace is isolated, so ontology scopes do not cover an endpoint in the admin namespace; it has to be allowed explicitly." }
+    ],
+    "answer": ["d"],
+    "explanation": "Restricted applications enforce API-level security: every endpoint they call must be allowed in the operation restrictions, and granting one API namespace gives no implicit access to another. `ApiUsageDenied` means the token is not authorized for that endpoint, which is fixed in the application's configuration rather than in the user's permissions.",
+    "source": { "title": "Developer Console: Application restrictions", "url": "https://www.palantir.com/docs/foundry/developer-console/application-restrictions/" }
+  },
+  {
+    "id": "osdk-023",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Lowmoor Analytics runs a backend service that fires thousands of parallel OSDK requests during a nightly reconciliation. Some of the requests now fail with HTTP 429. What should the team build into the service?",
+    "options": [
+      { "id": "a", "text": "Retries with exponential backoff, because Foundry throttles requests above its limits", "why": "Correct. Requests over the limits receive 429 or 503 responses, and the recommended handling is to retry with exponential backoff." },
+      { "id": "b", "text": "An immediate retry of every failed request, repeated in a loop until the request succeeds", "why": "Retrying at once adds load while the service is already over the limit, so the throttling continues." },
+      { "id": "c", "text": "A rotation of the client secret each time a 429 response is received", "why": "A 429 is throttling, not an authentication failure. Rotating the secret also breaks anything still using the old value." },
+      { "id": "d", "text": "A switch of the application to unrestricted before the nightly run starts", "why": "Restrictions control which resources and operations a token may use. They have nothing to do with request throughput." }
+    ],
+    "answer": ["a"],
+    "explanation": "Foundry APIs enforce a rate limit on requests per minute and a concurrency limit on simultaneous requests, and individual endpoints or internal services can throttle more strictly. Throttled requests return 429 or 503, and clients should retry with exponential backoff. High-volume or spiky workloads should be performance tested.",
+    "source": { "title": "API Reference: Limits", "url": "https://www.palantir.com/docs/foundry/api/v2/general/overview/limits/" }
+  },
+  {
+    "id": "osdk-024",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Pinecroft Dental added a `recallDate` property to the `Patient` object type last week. The OSDK app's TypeScript code that reads `patient.recallDate` does not compile, because the property does not exist on the generated type. The app still depends on an SDK version generated a month ago. What should the developer do?",
+    "options": [
+      { "id": "a", "text": "Cast the object to `any` wherever `recallDate` is read so that the compiler accepts it", "why": "This hides the error and gives up type safety, while the package the app depends on stays out of date." },
+      { "id": "b", "text": "Delete `node_modules` and install the same SDK version again from the registry", "why": "The same version contains the same generated code, which was produced before the property existed." },
+      { "id": "c", "text": "Generate a new SDK version in Developer Console and update the app's dependency to it", "why": "Correct. Generated types reflect the ontology at generation time, so a changed definition needs a newly generated version that the app then installs." },
+      { "id": "d", "text": "Ask the ontology team to re-index the `Patient` object type and then rebuild the app", "why": "Indexing concerns the object data. It does not change the code in an SDK version that has already been generated." }
+    ],
+    "answer": ["c"],
+    "explanation": "An SDK version is generated from the ontology definitions at that moment. When a definition changes or a resource is added, a new SDK has to be generated and the application's dependency updated before the code can use the change. A stale package is a common reason for a property or action that exists in the ontology but not in the app's types.",
+    "source": { "title": "Developer Console: Branching Developer Console applications", "url": "https://www.palantir.com/docs/foundry/developer-console/branching-integration/" }
+  },
+  {
+    "id": "osdk-025",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Stonebridge Estates built a Next.js app that renders its pages on a server and authenticates with a confidential client. The team now wants to move it onto Developer Console website hosting to stop running its own infrastructure, but the hosting option does not appear for the application. Which statements explain why the plan does not work as it stands? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Website hosting serves static assets only and cannot run server-side code such as server rendering", "why": "Correct. Hosting works like a static site host: it serves files to the browser and does not run a Node.js server." },
+      { "id": "b", "text": "Hosting is offered only for client-facing applications, and a backend service has a confidential client", "why": "Correct. An application that is also configured as a backend service has a confidential client meant for server-side use, so the hosting option is not shown." },
+      { "id": "c", "text": "Hosting is available only after the application has been switched to unrestricted", "why": "Hosting does not depend on the restricted or unrestricted setting. Restricted applications are the default and can be hosted." },
+      { "id": "d", "text": "Hosted sites are open to anyone on the internet, so applications with secrets are excluded", "why": "Hosted sites are only available to users with Foundry login credentials. The exclusion comes from the client type." },
+      { "id": "e", "text": "Hosting becomes available only once the application is packaged as a Marketplace product", "why": "Marketplace packaging is for moving applications between environments. It is not a precondition for hosting." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "Developer Console website hosting is for frontend-only applications: static files and single-page apps that call Foundry from the browser with a public client. Anything that needs server-side code, or that holds a client secret, has to run on infrastructure outside this feature.",
+    "source": { "title": "Developer Console: Hosting an application on Foundry", "url": "https://www.palantir.com/docs/foundry/developer-console/deploy-custom-application-on-foundry/" }
+  },
+  {
+    "id": "osdk-026",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Ferndale Couriers' developers spent the morning testing their OSDK app locally, with clients built on a personal token (`UserTokenAuth`). At lunchtime the Developer Console metrics page for the application shows no requests for today. Which explanations are consistent with how application metrics work? Select TWO.",
+    "options": [
+      { "id": "a", "text": "Calls made with a token generated outside the application's OAuth flow are not collected", "why": "Correct. Metrics are collected only for calls made through one of the application's supported OAuth flows, not for calls made with a separately generated token." },
+      { "id": "b", "text": "Metrics arrive with roughly a day's delay, so this morning's traffic would not be visible yet", "why": "Correct. Metrics are served with about a day of latency, so same-day activity does not appear straight away." },
+      { "id": "c", "text": "Metrics count failed requests only, and all of this morning's test calls succeeded", "why": "The charts cover the number of requests, the success rate and latency, so successful calls are counted." },
+      { "id": "d", "text": "Metrics are collected only for applications served from a Foundry-hosted subdomain", "why": "Collection depends on the authentication flow used for the calls, not on where the front end is hosted." },
+      { "id": "e", "text": "Metrics are recorded only after the application has been switched to unrestricted", "why": "The restriction setting controls what a token may reach. It has no bearing on whether usage is measured." }
+    ],
+    "answer": ["a", "b"],
+    "explanation": "Application metrics show request volume, success rate and latency for calls made through the application's OAuth client, with a delay of about a day. They are useful for trends rather than for live debugging, and calls made with a personal token never appear in them.",
+    "source": { "title": "Developer Console: Application metrics", "url": "https://www.palantir.com/docs/foundry/developer-console/application-metrics/" }
+  },
+  {
+    "id": "osdk-m-01",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Harcastle Museums is building an OSDK app over `Exhibit` objects with the TypeScript OSDK. Match each need to the call that serves it most directly.",
+    "left": [
+      { "id": "l1", "text": "Open the detail view for one exhibit whose primary key is in the page URL", "why": "`fetchOne` loads a single object by its primary key." },
+      { "id": "l2", "text": "Show the number of exhibits in each gallery on a summary tile", "why": "`aggregate` with `$count` and a `$groupBy` computes the summary in the backend without loading objects." },
+      { "id": "l3", "text": "Send every exhibit through a nightly catalogue export, each one exactly once", "why": "`asyncIter` reads successive pages from a consistent snapshot until every matching object has been returned." },
+      { "id": "l4", "text": "Ask a published function for exhibits similar to the one on screen", "why": "A function added to the application is run by passing it to the client and calling `executeFunction` with its parameters." }
+    ],
+    "right": [
+      { "id": "r1", "text": "`fetchOne`" },
+      { "id": "r2", "text": "`aggregate`" },
+      { "id": "r3", "text": "`asyncIter`" },
+      { "id": "r4", "text": "`executeFunction`" },
+      { "id": "r5", "text": "`applyAction`" }
+    ],
+    "answer": { "l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4" },
+    "explanation": "The TypeScript OSDK has a small set of calls with distinct purposes: `fetchOne` for one object, `fetchPage` for a page, `asyncIter` for a full traversal, `aggregate` for summaries, `executeFunction` for functions and `applyAction` for writes through action types. None of the four needs here changes data, so `applyAction` is not used.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-m-02",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Aldergrove Utilities has four application requirements on its backlog. Match each requirement to the smallest approach that satisfies it.",
+    "left": [
+      { "id": "l1", "text": "Dispatchers need a table of work orders with filters and a form to reassign a crew, built this week without custom code", "why": "Workshop is the no-code tool for object-oriented operational applications, with widgets that write decisions back through actions." },
+      { "id": "l2", "text": "An existing Workshop module needs one bespoke network diagram that no built-in widget provides", "why": "A custom widget extends Workshop with custom front-end code without building a standalone application." },
+      { "id": "l3", "text": "Field engineers with Foundry accounts need a fully custom branded interface that runs entirely in the browser", "why": "A client-facing OSDK application gives a fully custom React interface, and a front-end-only app can be served by Foundry website hosting." },
+      { "id": "l4", "text": "A billing server must read meter objects every hour with no person signed in", "why": "A backend service application uses the client credentials grant, so the server acts as a service user without an interactive sign-in." }
+    ],
+    "right": [
+      { "id": "r1", "text": "A Workshop module" },
+      { "id": "r2", "text": "A custom widget inside the Workshop module" },
+      { "id": "r3", "text": "A client-facing OSDK application with Foundry website hosting" },
+      { "id": "r4", "text": "A backend service application with a service user" },
+      { "id": "r5", "text": "An unrestricted application called with a developer's personal token" }
+    ],
+    "answer": { "l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4" },
+    "explanation": "Foundry offers a range from no-code to fully custom. Workshop covers standard operational screens, custom widgets add bespoke front-end code to a Workshop module as a hybrid, and OSDK applications give full control of the interface or serve backend processes. A personal token on an unrestricted application is never the right production design.",
+    "source": { "title": "What is an operational application?", "url": "https://www.palantir.com/docs/foundry/app-building/operational-apps/" }
+  },
+  {
+    "id": "osdk-tf-01",
+    "domain": "osdk",
+    "objective": "authentication",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "A Developer Console application that is configured only as a client-facing application uses a public OAuth client and has no client secret.",
+    "answer": true,
+    "explanation": "Client-facing applications run on devices that cannot keep a secret, so they use a public client with the authorization code grant. A client secret is issued only when the application is a backend service, and it is shown once at creation.",
+    "source": { "title": "Developer Console: Application restrictions", "url": "https://www.palantir.com/docs/foundry/developer-console/application-restrictions/" }
+  },
+  {
+    "id": "osdk-tf-02",
+    "domain": "osdk",
+    "objective": "app-registration",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Adding an object type to the resources of a restricted Developer Console application that uses user permissions lets every user of that application read the type's objects, whatever their own permissions on the data.",
+    "answer": false,
+    "correction": "Adding an object type to the resources of a restricted Developer Console application only allows the application's token to reach that type; each user still reads only the objects their own permissions allow.",
+    "explanation": "A token's scope is the intersection of the user's permissions, the application's restrictions and the operations requested in code. Application resources set a maximum; they never grant a user access to data.",
+    "source": { "title": "Developer Console: Application restrictions", "url": "https://www.palantir.com/docs/foundry/developer-console/application-restrictions/" }
+  },
+  {
+    "id": "osdk-tf-03",
+    "domain": "osdk",
+    "objective": "sdk-usage",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "In the TypeScript OSDK, passing `$select` to `fetchPage` loads only the listed properties, and the primary-key property is still returned even when it is not listed.",
+    "answer": true,
+    "explanation": "`$select` takes an array of property API names and limits what is loaded, which matters on object types with large properties. The API returns the primary-key property in any case, and the returned objects are typed to the selected properties.",
+    "source": { "title": "Ontology SDK: TypeScript OSDK", "url": "https://www.palantir.com/docs/foundry/ontology-sdk/typescript-osdk/" }
+  },
+  {
+    "id": "osdk-tf-04",
+    "domain": "osdk",
+    "objective": "troubleshooting",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "When a Developer Console application with a confidential client is packaged and installed through Marketplace, its client secret is installed with it, so the backend in the destination environment can authenticate straight away.",
+    "answer": false,
+    "correction": "When a Developer Console application with a confidential client is packaged and installed through Marketplace, the client secret is not included, so a new secret must be generated in the destination environment before the backend can authenticate.",
+    "explanation": "Secrets do not travel in a Marketplace package. After installation, a new secret is generated by rotating it in the destination environment and is then given to the backend that runs there.",
+    "source": { "title": "Developer Console: Bootstrap a back-end TypeScript application", "url": "https://www.palantir.com/docs/foundry/developer-console/how-to-bootstrapping-server-side-typescript/" }
+  }
+]

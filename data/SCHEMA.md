@@ -6,9 +6,10 @@ Every file in `data/questions/` is a JSON array of question objects. `npm run va
 
 | Field | Meaning |
 | --- | --- |
-| `id` | Stable, lower-case kebab id, never reused or renumbered (`des-014`, `imp-tf-03`). Saved attempts refer to it. |
-| `domain` | `design`, `implementation`, `ux` or `maintenance` (see `blueprint.json`). |
-| `objective` | An objective id of that domain in `blueprint.json` (e.g. `tool-selection`). |
+| `id` | Stable, lower-case kebab id, never reused or renumbered (`osdk-014`, `aip-tf-03`). Saved attempts refer to it. |
+| `domain` | One of the official Associate guide's eight domains (`ontology`, `actions`, `functions`, `workshop`, `osdk`, `automate`, `aip`, `security`), or `extended` for topics that only the earlier 2026 PDF guide lists. See `blueprint.json`. |
+| `objective` | An objective id of that domain in `blueprint.json` (e.g. `sdk-usage`). |
+| `guide` | Optional. `{ "section": "design", "objective": "tool-selection" }` places the question in the 2026 PDF guide's four-section outline (`blueprint.guide2026`). Only questions with `guide` can be used in the fixed 60-question forms. |
 | `difficulty` | `easy`, `medium` or `hard`. |
 | `format` | `single`, `multi`, `discrete`, `hotspot`, `matching` or `truefalse`. |
 | `stem` | The scenario and the question. Backticks render as code. For `truefalse` it is the single statement being judged. |
@@ -22,7 +23,7 @@ Every file in `data/questions/` is a JSON array of question objects. `npm run va
 
 `discrete` uses the same data as `single`; the simulator shows the options one at a time and asks "is this a correct answer?" for each.
 
-**`truefalse`**: `answer` is `true` or `false`. One precise statement per question. A false statement needs `correction`: the statement rewritten so it is true. Keep True and False keys balanced within each domain.
+**`truefalse`**: `answer` is `true` or `false`. One precise statement per question. A false statement needs `correction`: the statement rewritten so it is true. Keep True and False keys balanced.
 
 **`matching`**: `left` is 3-5 of `{ "id", "text", "why" }` (`why` explains that item's correct match); `right` is at least as many `{ "id", "text" }` (extra right items act as distractors). `answer` maps each left id to one right id; a right item is used at most once.
 
@@ -40,6 +41,8 @@ Every file in `data/questions/` is a JSON array of question objects. `npm run va
 
 `regions` (4-8) are the clickable areas: non-overlapping, inside the canvas, at least 90x40, with labels of a few words. `why` explains why that region is or is not the answer. `groups` are optional unclickable background panels with a title (leave ~26px at the top of a group for its label). `edges` are optional arrows between regions. `answer` is an array with the one correct region id.
 
-## Forms
+## Mock exams
 
-`data/forms.json` lists the mock-exam forms: `{ "id", "title", "questions": [60 ids], "trueFalseMix": [["des-005", "des-tf-01"], ...] }`. Each form must hold 18 / 18 / 12 / 12 questions per domain, share no question with another form, and contain every guide format. `trueFalseMix` pairs a form question with a True/False question of the same domain that replaces it when the learner switches on the optional True/False mix.
+The **Associate mock** (85 questions) has no fixed form. Each attempt draws the per-domain quota in `blueprint.exams[associate].quotas` at random from the `single` and `multi` questions of that domain, so every new multiple-choice question in an official domain joins the pool automatically.
+
+The **2026 PDF guide mock** uses the fixed forms in `data/forms.json`: `{ "id", "title", "questions": [60 ids], "trueFalseMix": [["des-005", "des-tf-01"], ...] }`. Each form must hold 18 / 18 / 12 / 12 questions per guide section (`guide.section`), share no question with another form, and contain every one of that guide's formats. `trueFalseMix` pairs a form question with a True/False question of the same section that replaces it when the learner switches on the optional True/False mix.

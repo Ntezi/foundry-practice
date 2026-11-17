@@ -1,60 +1,144 @@
 [
   {
     "id": "imp-001",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "At Harbourline Logistics, the `Shipment Exception` object type is backed by a dataset whose pipeline assigns each row a fresh random ID on every nightly build, and that column is the primary key. Dispatchers add comments through an action, but each morning the comments are gone and some links to `Carrier` objects have disappeared. What should the builder change?",
     "options": [
-      { "id": "a", "text": "Build the primary key in the pipeline from stable source columns, so that it is the same on every build", "why": "Edits are stored against the primary key value and foreign-key links match on key values. A key that is a deterministic function of stable columns survives rebuilds, so the edits and links stay attached to the right objects." },
-      { "id": "b", "text": "Set the comment property as the title key so that each object keeps its identity from one build to the next", "why": "The title key only controls the display name of an object. It plays no part in how edits or links are matched to objects after a rebuild." },
-      { "id": "c", "text": "Mark the comment property as required so that a build cannot overwrite it with an empty value", "why": "A required property only rejects null values during indexing and in actions. It does not keep an edit attached to an object whose primary key has changed." },
-      { "id": "d", "text": "Convert the comment property to a shared property so its values are kept outside the backing dataset", "why": "A shared property centralises property metadata across object types. Object data is not shared or stored differently, so the edits would still be orphaned when the key changes." }
+      {
+        "id": "a",
+        "text": "Build the primary key in the pipeline from stable source columns, so that it is the same on every build",
+        "why": "Edits are stored against the primary key value and foreign-key links match on key values. A key that is a deterministic function of stable columns survives rebuilds, so the edits and links stay attached to the right objects."
+      },
+      {
+        "id": "b",
+        "text": "Set the comment property as the title key so that each object keeps its identity from one build to the next",
+        "why": "The title key only controls the display name of an object. It plays no part in how edits or links are matched to objects after a rebuild."
+      },
+      {
+        "id": "c",
+        "text": "Mark the comment property as required so that a build cannot overwrite it with an empty value",
+        "why": "A required property only rejects null values during indexing and in actions. It does not keep an edit attached to an object whose primary key has changed."
+      },
+      {
+        "id": "d",
+        "text": "Convert the comment property to a shared property so its values are kept outside the backing dataset",
+        "why": "A shared property centralises property metadata across object types. Object data is not shared or stored differently, so the edits would still be orphaned when the key changes."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Ontology edits are associated with the primary key of the object they were made on, and foreign-key links are resolved by key values. Primary keys must therefore be unique and deterministic: row numbers or random IDs that change between builds cause edits to be lost and links to disappear. Building the key from one or more stable columns fixes both symptoms.",
-    "source": { "title": "Create an object type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/" }
+    "source": {
+      "title": "Create an object type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/"
+    }
   },
   {
     "id": "imp-002",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A builder at Northfield Clinics creates a `Practitioner` object type with the properties `practitionerId` (primary key), `fullName` and `specialty`. In Object Explorer and in Workshop tables every practitioner is labelled with a value such as `PR-004417` instead of the person's name. Which change in Ontology Manager fixes the label?",
     "options": [
-      { "id": "a", "text": "Set `fullName` as the title key of the object type", "why": "The title key is the property used as the display name of each object, so choosing `fullName` makes applications show the person's name." },
-      { "id": "b", "text": "Set `fullName` as the primary key of the object type", "why": "The primary key identifies objects uniquely. Names are not guaranteed to be unique, and changing the primary key is a breaking change that affects existing edits." },
-      { "id": "c", "text": "Rename the display name of the `practitionerId` property to 'Name'", "why": "This only changes the column header for the ID property. The objects would still be titled with their ID values." },
-      { "id": "d", "text": "Change the plural display name of the object type to 'Practitioners by name'", "why": "The plural display name labels a collection of objects of this type. It does not affect how an individual object is titled." }
+      {
+        "id": "a",
+        "text": "Set `fullName` as the title key of the object type",
+        "why": "The title key is the property used as the display name of each object, so choosing `fullName` makes applications show the person's name."
+      },
+      {
+        "id": "b",
+        "text": "Set `fullName` as the primary key of the object type",
+        "why": "The primary key identifies objects uniquely. Names are not guaranteed to be unique, and changing the primary key is a breaking change that affects existing edits."
+      },
+      {
+        "id": "c",
+        "text": "Rename the display name of the `practitionerId` property to 'Name'",
+        "why": "This only changes the column header for the ID property. The objects would still be titled with their ID values."
+      },
+      {
+        "id": "d",
+        "text": "Change the plural display name of the object type to 'Practitioners by name'",
+        "why": "The plural display name labels a collection of objects of this type. It does not affect how an individual object is titled."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Every object type needs a primary key, which uniquely identifies each object, and a title key, which acts as the display name for objects of that type. If the title key points at the ID property, applications show IDs as object names. Changing the title key to a human-readable property is a metadata change that does not affect identity.",
-    "source": { "title": "Create an object type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/" }
+    "source": {
+      "title": "Create an object type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/"
+    }
   },
   {
     "id": "imp-003",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "Tessaly Rail wants a `Field Observation` object type whose objects are only ever created by inspectors through actions; no pipeline will feed it. The builder chooses to continue without a backing datasource in the object type creation helper. Which requirements apply to this object type? Select TWO.",
     "options": [
-      { "id": "a", "text": "It must be saved in a project so that it uses the project-based permission model", "why": "With no backing datasource there is no dataset location to inherit permissions from, so the helper requires the object type to be saved in a project." },
-      { "id": "b", "text": "An object security policy must be configured to decide who can view the created objects", "why": "Datasource-backed types inherit view permissions from their datasource. Without one, a policy has to state who can see objects created through actions." },
-      { "id": "c", "text": "A join table dataset must be generated to hold the objects that inspectors create", "why": "Join table datasets back many-to-many link types. They are not where objects of an object type are stored." },
-      { "id": "d", "text": "The primary key can be left unset because Foundry assigns one when an action runs", "why": "Every object type still needs a primary key, and each object created by an action must be given a unique primary key value." },
-      { "id": "e", "text": "Each property must be attached to a shared property before it can receive edits", "why": "Shared properties are an optional way to reuse property metadata. They are not a prerequisite for populating properties through actions." }
+      {
+        "id": "a",
+        "text": "It must be saved in a project so that it uses the project-based permission model",
+        "why": "With no backing datasource there is no dataset location to inherit permissions from, so the helper requires the object type to be saved in a project."
+      },
+      {
+        "id": "b",
+        "text": "An object security policy must be configured to decide who can view the created objects",
+        "why": "Datasource-backed types inherit view permissions from their datasource. Without one, a policy has to state who can see objects created through actions."
+      },
+      {
+        "id": "c",
+        "text": "A join table dataset must be generated to hold the objects that inspectors create",
+        "why": "Join table datasets back many-to-many link types. They are not where objects of an object type are stored."
+      },
+      {
+        "id": "d",
+        "text": "The primary key can be left unset because Foundry assigns one when an action runs",
+        "why": "Every object type still needs a primary key, and each object created by an action must be given a unique primary key value."
+      },
+      {
+        "id": "e",
+        "text": "Each property must be attached to a shared property before it can receive edits",
+        "why": "Shared properties are an optional way to reuse property metadata. They are not a prerequisite for populating properties through actions."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "An object type whose properties are all populated by actions can be created without a backing datasource. Because permissions can no longer come from a datasource location, the helper requires saving the type in a project and configuring an object security policy. A primary key is still mandatory and must be unique for every object an action creates.",
-    "source": { "title": "Create an object type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/" }
+    "source": {
+      "title": "Create an object type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/"
+    }
   },
   {
     "id": "imp-004",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "medium",
     "format": "hotspot",
     "stem": "Calder Outfitters is extending its ontology with a new link type between `Order` and `Order Line`: one order has many order lines, and each order line belongs to exactly one order. The builder picks the foreign key relationship type. Select the region for the object type that must hold the foreign key property for this new link type.",
@@ -63,404 +147,1062 @@
       "height": 360,
       "alt": "Ontology diagram with six object types: Customer linked to Order, Order linked to Order Line by the new link, Order linked to Shipment, Order Line linked to Product, and Warehouse linked to Product.",
       "regions": [
-        { "id": "r1", "label": "Customer", "x": 40, "y": 70, "w": 140, "h": 54, "why": "Customer is not one of the two object types in the new link type. It sits on the 'one' side of its own existing link to Order." },
-        { "id": "r2", "label": "Order", "x": 250, "y": 70, "w": 140, "h": 54, "why": "Order is the 'one' side. Its primary key is what the foreign key refers to, so the foreign key property does not live here. A single property on Order could not point at many order lines." },
-        { "id": "r3", "label": "Order Line", "x": 460, "y": 70, "w": 140, "h": 54, "why": "Order Line is the 'many' side. Each order line stores the primary key value of its one order in a foreign key property, which is how a one-to-many link is defined." },
-        { "id": "r4", "label": "Shipment", "x": 40, "y": 220, "w": 140, "h": 54, "why": "Shipment is linked to Order by a separate link type and takes no part in the Order to Order Line relationship." },
-        { "id": "r5", "label": "Warehouse", "x": 250, "y": 220, "w": 140, "h": 54, "why": "Warehouse relates to Product only. It is not a side of the new link type." },
-        { "id": "r6", "label": "Product", "x": 460, "y": 220, "w": 140, "h": 54, "why": "Product is referenced by Order Line through a different link type. A key held on Product would say nothing about which order a line belongs to." }
+        {
+          "id": "r1",
+          "label": "Customer",
+          "x": 40,
+          "y": 70,
+          "w": 140,
+          "h": 54,
+          "why": "Customer is not one of the two object types in the new link type. It sits on the 'one' side of its own existing link to Order."
+        },
+        {
+          "id": "r2",
+          "label": "Order",
+          "x": 250,
+          "y": 70,
+          "w": 140,
+          "h": 54,
+          "why": "Order is the 'one' side. Its primary key is what the foreign key refers to, so the foreign key property does not live here. A single property on Order could not point at many order lines."
+        },
+        {
+          "id": "r3",
+          "label": "Order Line",
+          "x": 460,
+          "y": 70,
+          "w": 140,
+          "h": 54,
+          "why": "Order Line is the 'many' side. Each order line stores the primary key value of its one order in a foreign key property, which is how a one-to-many link is defined."
+        },
+        {
+          "id": "r4",
+          "label": "Shipment",
+          "x": 40,
+          "y": 220,
+          "w": 140,
+          "h": 54,
+          "why": "Shipment is linked to Order by a separate link type and takes no part in the Order to Order Line relationship."
+        },
+        {
+          "id": "r5",
+          "label": "Warehouse",
+          "x": 250,
+          "y": 220,
+          "w": 140,
+          "h": 54,
+          "why": "Warehouse relates to Product only. It is not a side of the new link type."
+        },
+        {
+          "id": "r6",
+          "label": "Product",
+          "x": 460,
+          "y": 220,
+          "w": 140,
+          "h": 54,
+          "why": "Product is referenced by Order Line through a different link type. A key held on Product would say nothing about which order a line belongs to."
+        }
       ],
       "edges": [
-        { "from": "r1", "to": "r2", "label": "places" },
-        { "from": "r2", "to": "r3", "label": "new link" },
-        { "from": "r2", "to": "r4", "label": "ships as" },
-        { "from": "r3", "to": "r6", "label": "is for" },
-        { "from": "r5", "to": "r6", "label": "stocks" }
+        {
+          "from": "r1",
+          "to": "r2",
+          "label": "places"
+        },
+        {
+          "from": "r2",
+          "to": "r3",
+          "label": "new link"
+        },
+        {
+          "from": "r2",
+          "to": "r4",
+          "label": "ships as"
+        },
+        {
+          "from": "r3",
+          "to": "r6",
+          "label": "is for"
+        },
+        {
+          "from": "r5",
+          "to": "r6",
+          "label": "stocks"
+        }
       ]
     },
-    "answer": ["r3"],
+    "answer": [
+      "r3"
+    ],
     "explanation": "In a one-to-one or one-to-many link type, a property on one object type (the foreign key) stores the primary key value of the other object type. The foreign key lives on the 'many' side, because each object there refers to exactly one object on the 'one' side. Here every Order Line carries the key of its Order.",
-    "source": { "title": "Create a link type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/" }
+    "source": {
+      "title": "Create a link type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/"
+    }
   },
   {
     "id": "imp-005",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Brightwater College models `Student` and `Course` object types. A student enrols in many courses and a course has many students, and registrars must be able to add and remove enrolments from a Workshop module. How should the builder back the `Student` to `Course` link type?",
     "options": [
-      { "id": "a", "text": "A join table dataset with one column mapped to each object type's primary key", "why": "A many-to-many link type is backed by a join table whose columns map to the two primary keys. Each row is one enrolment, and Ontology Manager can generate the join table for a new link type." },
-      { "id": "b", "text": "A foreign key property on `Student` that refers to the primary key of `Course`", "why": "A foreign key holds a single primary key value, so each student could be linked to only one course. That models one-to-many, not many-to-many." },
-      { "id": "c", "text": "Two foreign key link types, one from `Student` to `Course` and one from `Course` to `Student`", "why": "A link type is already traversable from both sides, and two one-to-many links are two separate relationships. Neither can express many enrolments per student and per course." },
-      { "id": "d", "text": "A shared property `courseCode` added to both object types and kept in sync by an action", "why": "A shared property reuses property metadata across object types. It does not create links between objects." }
+      {
+        "id": "a",
+        "text": "A join table dataset with one column mapped to each object type's primary key",
+        "why": "A many-to-many link type is backed by a join table whose columns map to the two primary keys. Each row is one enrolment, and Ontology Manager can generate the join table for a new link type."
+      },
+      {
+        "id": "b",
+        "text": "A foreign key property on `Student` that refers to the primary key of `Course`",
+        "why": "A foreign key holds a single primary key value, so each student could be linked to only one course. That models one-to-many, not many-to-many."
+      },
+      {
+        "id": "c",
+        "text": "Two foreign key link types, one from `Student` to `Course` and one from `Course` to `Student`",
+        "why": "A link type is already traversable from both sides, and two one-to-many links are two separate relationships. Neither can express many enrolments per student and per course."
+      },
+      {
+        "id": "d",
+        "text": "A shared property `courseCode` added to both object types and kept in sync by an action",
+        "why": "A shared property reuses property metadata across object types. It does not create links between objects."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Foreign key link types support one-to-one and one-to-many cardinality. Many-to-many link types need their own backing datasource, a join table containing pairs of primary keys, with each column mapped to the primary key of one of the two object types. The Generate join table option creates a dataset with the right schema when no production data exists yet.",
-    "source": { "title": "Create a link type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/" }
+    "source": {
+      "title": "Create a link type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/"
+    }
   },
   {
     "id": "imp-006",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "At Ironvale Utilities each `Work Order` is linked to one `Technician` through a foreign key property `technicianId` on `Work Order`. A builder is creating a 'Reassign work order' action type without code and adds a Create link rule, but the rule cannot be made to change the assignment. Which rule configuration reassigns the work order?",
     "options": [
-      { "id": "a", "text": "A Modify object rule on `Work Order` that sets `technicianId` from the `Technician` parameter", "why": "One-to-many links are defined by the foreign key value, so changing the link means editing that property with an object rule. The new value can come from a property of the Technician object parameter." },
-      { "id": "b", "text": "A Delete link rule for the old technician followed by a Create link rule for the newly selected one", "why": "Create link and Delete link rules operate on many-to-many links. They do not edit a foreign key property, so they cannot change this one-to-many link." },
-      { "id": "c", "text": "A Modify object rule on `Technician` that appends the work order's key to a list property", "why": "The link is defined by `technicianId` on Work Order. Writing keys to some other property on Technician leaves the foreign key, and so the link, unchanged." },
-      { "id": "d", "text": "A Create object rule that creates a new `Work Order` with the new technician's ID", "why": "This would add a second work order rather than reassign the existing one, and the original would remain linked to the old technician." }
+      {
+        "id": "a",
+        "text": "A Modify object rule on `Work Order` that sets `technicianId` from the `Technician` parameter",
+        "why": "One-to-many links are defined by the foreign key value, so changing the link means editing that property with an object rule. The new value can come from a property of the Technician object parameter."
+      },
+      {
+        "id": "b",
+        "text": "A Delete link rule for the old technician followed by a Create link rule for the newly selected one",
+        "why": "Create link and Delete link rules operate on many-to-many links. They do not edit a foreign key property, so they cannot change this one-to-many link."
+      },
+      {
+        "id": "c",
+        "text": "A Modify object rule on `Technician` that appends the work order's key to a list property",
+        "why": "The link is defined by `technicianId` on Work Order. Writing keys to some other property on Technician leaves the foreign key, and so the link, unchanged."
+      },
+      {
+        "id": "d",
+        "text": "A Create object rule that creates a new `Work Order` with the new technician's ID",
+        "why": "This would add a second work order rather than reassign the existing one, and the original would remain linked to the old technician."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "The Create link and Delete link rules only work for many-to-many links. To create, change or remove a one-to-one or one-to-many link, an action must use an object rule that modifies the foreign key property on the object type that holds it. The value can be mapped from a parameter or from a property of an object reference parameter.",
-    "source": { "title": "Action types: Rules", "url": "https://www.palantir.com/docs/foundry/action-types/rules/" }
+    "source": {
+      "title": "Action types: Rules",
+      "url": "https://www.palantir.com/docs/foundry/action-types/rules/"
+    }
   },
   {
     "id": "imp-007",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "side-effects",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "Marlowe Freight is configuring an 'Approve claim' action type. Match each requirement to the action type feature that implements it.",
     "left": [
-      { "id": "l1", "text": "Only members of the Claims Supervisors group may submit the action", "why": "Submission criteria with the Current user template can test the submitting user's group memberships and block the submission when the condition fails." },
-      { "id": "l2", "text": "The payment system must accept the approval first; if that call fails, nothing in Foundry may change", "why": "A webhook configured as a writeback runs before the other rules, and if it fails no Ontology changes are made." },
-      { "id": "l3", "text": "The claim's assigned handler receives an in-platform or email message once the edits are applied", "why": "A notification rule sends a message to Foundry users or groups, which can be taken from a property of an object parameter, after the action's edits are applied." },
-      { "id": "l4", "text": "The 'Justification' field is hidden for small claims but visible and required above a threshold", "why": "A parameter override block applies changes to visibility and requiredness when its conditions on earlier parameters are met." }
+      {
+        "id": "l1",
+        "text": "Only members of the Claims Supervisors group may submit the action",
+        "why": "Submission criteria with the Current user template can test the submitting user's group memberships and block the submission when the condition fails."
+      },
+      {
+        "id": "l2",
+        "text": "The payment system must accept the approval first; if that call fails, nothing in Foundry may change",
+        "why": "A webhook configured as a writeback runs before the other rules, and if it fails no Ontology changes are made."
+      },
+      {
+        "id": "l3",
+        "text": "The claim's assigned handler receives an in-platform or email message once the edits are applied",
+        "why": "A notification rule sends a message to Foundry users or groups, which can be taken from a property of an object parameter, after the action's edits are applied."
+      },
+      {
+        "id": "l4",
+        "text": "The 'Justification' field is hidden for small claims but visible and required above a threshold",
+        "why": "A parameter override block applies changes to visibility and requiredness when its conditions on earlier parameters are met."
+      }
     ],
     "right": [
-      { "id": "r1", "text": "Submission criteria using a Current user condition" },
-      { "id": "r2", "text": "Webhook configured as a writeback" },
-      { "id": "r3", "text": "Notification rule" },
-      { "id": "r4", "text": "Conditional override on the parameter" },
-      { "id": "r5", "text": "Webhook configured as a side effect" }
+      {
+        "id": "r1",
+        "text": "Submission criteria using a Current user condition"
+      },
+      {
+        "id": "r2",
+        "text": "Webhook configured as a writeback"
+      },
+      {
+        "id": "r3",
+        "text": "Notification rule"
+      },
+      {
+        "id": "r4",
+        "text": "Conditional override on the parameter"
+      },
+      {
+        "id": "r5",
+        "text": "Webhook configured as a side effect"
+      }
     ],
-    "answer": { "l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4" },
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
     "explanation": "Submission criteria decide whether an action can be submitted and can use the current user's groups. A writeback webhook runs before Ontology edits and stops the action if it fails, whereas a side effect webhook runs after the edits and its failure is not shown to the user. Notification rules message Foundry users, and parameter overrides change a parameter's visibility, requiredness, constraints or default under stated conditions.",
-    "source": { "title": "Action types: Webhooks", "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/" }
+    "source": {
+      "title": "Action types: Webhooks",
+      "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/"
+    }
   },
   {
     "id": "imp-008",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "An action type at Quillon Aerospace has a Modify object rule that sets an `Incident` to Closed. The builder now also needs every `Alert` linked to that incident set to Resolved, and has published an Ontology edit function that does this. How should the action type's rules be configured?",
     "options": [
-      { "id": "a", "text": "Replace the Modify object rule with a single Function rule that also closes the incident", "why": "A Function rule cannot be combined with other Ontology rules, so the function has to perform all the edits, including closing the incident." },
-      { "id": "b", "text": "Keep the Modify object rule and add the Function rule after it so that both run in order", "why": "When a Function rule is present no other Ontology rule may be configured. The two rule types cannot sit side by side." },
-      { "id": "c", "text": "Keep the Modify object rule and call the function from the action's submission criteria", "why": "Submission criteria only decide whether an action may be submitted. They compare values and cannot run edit logic." },
-      { "id": "d", "text": "Keep the Modify object rule and attach the function as the default value of a hidden parameter", "why": "Parameter defaults prefill form values. They do not apply edits returned by an Ontology edit function." }
+      {
+        "id": "a",
+        "text": "Replace the Modify object rule with a single Function rule that also closes the incident",
+        "why": "A Function rule cannot be combined with other Ontology rules, so the function has to perform all the edits, including closing the incident."
+      },
+      {
+        "id": "b",
+        "text": "Keep the Modify object rule and add the Function rule after it so that both run in order",
+        "why": "When a Function rule is present no other Ontology rule may be configured. The two rule types cannot sit side by side."
+      },
+      {
+        "id": "c",
+        "text": "Keep the Modify object rule and call the function from the action's submission criteria",
+        "why": "Submission criteria only decide whether an action may be submitted. They compare values and cannot run edit logic."
+      },
+      {
+        "id": "d",
+        "text": "Keep the Modify object rule and attach the function as the default value of a hidden parameter",
+        "why": "Parameter defaults prefill form values. They do not apply edits returned by an Ontology edit function."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Simple rules cover creating, modifying and deleting objects and many-to-many links, but editing a variable number of linked objects needs a function-backed action. A Function rule must be the only Ontology rule in the action type, because the function's code can do everything the other rules can. The existing modification therefore moves into the function.",
-    "source": { "title": "Action types: Rules", "url": "https://www.palantir.com/docs/foundry/action-types/rules/" }
+    "source": {
+      "title": "Action types: Rules",
+      "url": "https://www.palantir.com/docs/foundry/action-types/rules/"
+    }
   },
   {
     "id": "imp-009",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "side-effects",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "A 'Dispatch crew' action type at Pellham Water modifies a `Job` object, sends a notification built from a template that shows the job's status, and calls a side effect webhook that posts to a messaging tool. Which statements describe how this action behaves? Select TWO.",
     "options": [
-      { "id": "a", "text": "The status shown in the notification is the job's value from before this action's edits", "why": "Notifications are sent after the edits are applied, but their content is rendered from the state of the Ontology before those edits." },
-      { "id": "b", "text": "If the messaging tool rejects the webhook call, the user still sees success and the job stays edited", "why": "A side effect webhook runs after the Ontology changes, and its failure is not shown to the end user or rolled back." },
-      { "id": "c", "text": "If the submission criteria fail, the notification is still sent so that recipients learn of the attempt", "why": "Side effects are only triggered when the action passes its submission criteria and is applied." },
-      { "id": "d", "text": "The webhook call completes before the job is modified, so a failed call prevents the edit", "why": "That is the behaviour of a writeback webhook. A side effect webhook is executed after the other rules." },
-      { "id": "e", "text": "Adding a second side effect webhook guarantees that the two calls run in their configured order", "why": "Several side effect webhooks are allowed in one action, but they are executed in no particular order." }
+      {
+        "id": "a",
+        "text": "The status shown in the notification is the job's value from before this action's edits",
+        "why": "Notifications are sent after the edits are applied, but their content is rendered from the state of the Ontology before those edits."
+      },
+      {
+        "id": "b",
+        "text": "If the messaging tool rejects the webhook call, the user still sees success and the job stays edited",
+        "why": "A side effect webhook runs after the Ontology changes, and its failure is not shown to the end user or rolled back."
+      },
+      {
+        "id": "c",
+        "text": "If the submission criteria fail, the notification is still sent so that recipients learn of the attempt",
+        "why": "Side effects are only triggered when the action passes its submission criteria and is applied."
+      },
+      {
+        "id": "d",
+        "text": "The webhook call completes before the job is modified, so a failed call prevents the edit",
+        "why": "That is the behaviour of a writeback webhook. A side effect webhook is executed after the other rules."
+      },
+      {
+        "id": "e",
+        "text": "Adding a second side effect webhook guarantees that the two calls run in their configured order",
+        "why": "Several side effect webhooks are allowed in one action, but they are executed in no particular order."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Notification content reflects the Ontology as it was before the action's edits, even though delivery happens after the edits. Side effect webhooks run after the Ontology changes, may finish after the user sees the success message, and do not surface failures. A webhook that must succeed first has to be configured as a writeback instead.",
-    "source": { "title": "Action types: Webhooks", "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/" }
+    "source": {
+      "title": "Action types: Webhooks",
+      "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/"
+    }
   },
   {
     "id": "imp-010",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "In a TypeScript v1 functions repository, a builder at Ostrander Health writes `@Function() public escalateCase(c: Case): void { c.priority = 'High'; }` and publishes it. The function is meant to back an action type that edits `Case` objects. What must change in the declaration?",
     "options": [
-      { "id": "a", "text": "Use `@OntologyEditFunction()` on the method and declare the type with `@Edits(Case)`", "why": "Functions that back an action must use `@OntologyEditFunction()` and keep an explicit void return type. `@Edits` declares which object types the function edits." },
-      { "id": "b", "text": "Decorate the method with `@Query({ apiName: 'escalateCase' })` so that actions can call it", "why": "`@Query` publishes a read-only query for use through the API. It is not the decorator for functions that return Ontology edits." },
-      { "id": "c", "text": "Change the return type to `Case` and return the modified object to the action", "why": "An Ontology edit function must return void. The edits are captured by the functions infrastructure rather than returned by the method." },
-      { "id": "d", "text": "Mark the method `private` so that only the action type can invoke it", "why": "Only public, decorated methods are published. A private method would not be discoverable at all." }
+      {
+        "id": "a",
+        "text": "Use `@OntologyEditFunction()` on the method and declare the type with `@Edits(Case)`",
+        "why": "Functions that back an action must use `@OntologyEditFunction()` and keep an explicit void return type. `@Edits` declares which object types the function edits."
+      },
+      {
+        "id": "b",
+        "text": "Decorate the method with `@Query({ apiName: 'escalateCase' })` so that actions can call it",
+        "why": "`@Query` publishes a read-only query for use through the API. It is not the decorator for functions that return Ontology edits."
+      },
+      {
+        "id": "c",
+        "text": "Change the return type to `Case` and return the modified object to the action",
+        "why": "An Ontology edit function must return void. The edits are captured by the functions infrastructure rather than returned by the method."
+      },
+      {
+        "id": "d",
+        "text": "Mark the method `private` so that only the action type can invoke it",
+        "why": "Only public, decorated methods are published. A private method would not be discoverable at all."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "In TypeScript v1, `@Function()` declares a general function, while a function that edits the Ontology for a function-backed action must be decorated with `@OntologyEditFunction()` and have an explicit void return type. The `@Edits` decorator gives the action provenance information about which object types are edited.",
-    "source": { "title": "Functions: Decorators", "url": "https://www.palantir.com/docs/foundry/functions/decorators/" }
+    "source": {
+      "title": "Functions: Decorators",
+      "url": "https://www.palantir.com/docs/foundry/functions/decorators/"
+    }
   },
   {
     "id": "imp-011",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "medium",
     "format": "discrete",
     "stem": "An Ontology edit function at Vantry Insurance sets `claim.status = 'Approved'` on one `Claim` and, a few lines later in the same execution, runs `Objects.search().claim().filter(c => c.status.exactMatch('Approved')).count()` to decide whether a batch is complete. The count is always one lower than the developer expects. Which statement about this function is correct?",
     "options": [
-      { "id": "a", "text": "The count misses the claim just edited, as object set queries only see edits after the function ends", "why": "Filters, search arounds and aggregations run against the Ontology as it was before the function's pending edits, so the newly approved claim is not counted." },
-      { "id": "b", "text": "Reading `claim.status` again later in the same execution returns the value from before the assignment", "why": "Property reads on an object the function has already edited return the new value. Only object set queries lag behind." },
-      { "id": "c", "text": "Running the function from the Functions helper in the repository would write the approval to the live object", "why": "Running an edit function in the helper does not apply its edits. Objects only change when the function runs through an action." },
-      { "id": "d", "text": "The function could return the count to its caller alongside the edits by declaring a numeric return type", "why": "An Ontology edit function must return void, because its real output is the list of captured edits." }
+      {
+        "id": "a",
+        "text": "The count misses the claim just edited, as object set queries only see edits after the function ends",
+        "why": "Filters, search arounds and aggregations run against the Ontology as it was before the function's pending edits, so the newly approved claim is not counted."
+      },
+      {
+        "id": "b",
+        "text": "Reading `claim.status` again later in the same execution returns the value from before the assignment",
+        "why": "Property reads on an object the function has already edited return the new value. Only object set queries lag behind."
+      },
+      {
+        "id": "c",
+        "text": "Running the function from the Functions helper in the repository would write the approval to the live object",
+        "why": "Running an edit function in the helper does not apply its edits. Objects only change when the function runs through an action."
+      },
+      {
+        "id": "d",
+        "text": "The function could return the count to its caller alongside the edits by declaring a numeric return type",
+        "why": "An Ontology edit function must return void, because its real output is the list of captured edits."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Edits made in an Ontology edit function are captured and applied only after the function finishes, as part of the action. Reading a property on the edited object returns the new value, but any object search whose result depends on the edited value still uses the old data. The function has to account for its own pending edits manually.",
-    "source": { "title": "Functions: Ontology edits overview", "url": "https://www.palantir.com/docs/foundry/functions/edits-overview/" }
+    "source": {
+      "title": "Functions: Ontology edits overview",
+      "url": "https://www.palantir.com/docs/foundry/functions/edits-overview/"
+    }
   },
   {
     "id": "imp-012",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "A TypeScript v1 function at Solwyn Energy backs a Workshop numeric variable. It calls `Objects.search().meterReading().filter(r => r.siteId.exactMatch(siteId)).all()`, then averages `r.value` in a loop. For large sites, which have several hundred thousand readings, the function fails. Which change gives a correct result for every site?",
     "options": [
-      { "id": "a", "text": "Call `.average(r => r.value)` on the filtered object set instead of loading the readings", "why": "The aggregation is computed by the Ontology backend, so no reading objects are loaded into the function and the object load limit no longer applies." },
-      { "id": "b", "text": "Replace `.all()` with `.allAsync()` and await the result before running the loop", "why": "`.allAsync()` loads exactly the same objects without blocking. It is subject to the same limit on how many objects can be loaded." },
-      { "id": "c", "text": "Add `.orderBy(r => r.value.asc()).take(10000)` and average the objects returned", "why": "`take` returns only the first objects and silently drops the rest, so the average would be wrong for any site with more readings." },
-      { "id": "d", "text": "Wrap the `.all()` call in `Promise.all` together with the other queries in the function", "why": "`Promise.all` runs independent loads in parallel. It does not reduce the number of objects a single query loads into memory." }
+      {
+        "id": "a",
+        "text": "Call `.average(r => r.value)` on the filtered object set instead of loading the readings",
+        "why": "The aggregation is computed by the Ontology backend, so no reading objects are loaded into the function and the object load limit no longer applies."
+      },
+      {
+        "id": "b",
+        "text": "Replace `.all()` with `.allAsync()` and await the result before running the loop",
+        "why": "`.allAsync()` loads exactly the same objects without blocking. It is subject to the same limit on how many objects can be loaded."
+      },
+      {
+        "id": "c",
+        "text": "Add `.orderBy(r => r.value.asc()).take(10000)` and average the objects returned",
+        "why": "`take` returns only the first objects and silently drops the rest, so the average would be wrong for any site with more readings."
+      },
+      {
+        "id": "d",
+        "text": "Wrap the `.all()` call in `Promise.all` together with the other queries in the function",
+        "why": "`Promise.all` runs independent loads in parallel. It does not reduce the number of objects a single query loads into memory."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "`.all()` and `.allAsync()` load every object in the set into the function's memory and fail above the load limit, with time-outs likely well before it. When only a count, sum or average is needed, an object set aggregation such as `.average()` lets the backend compute the value without loading objects. `.take(n)` truncates the result, so it is only suitable when a partial result is acceptable.",
-    "source": { "title": "Functions API: Object sets", "url": "https://www.palantir.com/docs/foundry/functions/api-object-sets/" }
+    "source": {
+      "title": "Functions API: Object sets",
+      "url": "https://www.palantir.com/docs/foundry/functions/api-object-sets/"
+    }
   },
   {
     "id": "imp-013",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "An analyst at Greywell Retail adds the `Transaction` object type, about 400,000 objects, to a Quiver analysis and tries to convert the object set card to a transform table to derive a margin column. Quiver will not create the table. Only last week's transactions, around 12,000, matter for the analysis. What should the analyst do?",
     "options": [
-      { "id": "a", "text": "Add a Filter object set card for last week and convert the filtered set instead", "why": "A transform table holds at most 50,000 rows. Filtering the object set down to about 12,000 objects first brings the input within that limit." },
-      { "id": "b", "text": "Switch the analysis from canvas mode to graph mode before adding the transform table", "why": "Graph mode is another way to view and organise the same cards. It does not change how many rows a transform table can hold." },
-      { "id": "c", "text": "Publish the object set card to a dashboard and add the transform table in the dashboard", "why": "A dashboard presents cards that already exist in the analysis. It does not lift the transform table row limit." },
-      { "id": "d", "text": "Add a numeric parameter set to 400,000 and use it as the row limit of the transform table", "why": "Parameters feed values into card inputs. The 50,000 row maximum is fixed and cannot be raised by a parameter." }
+      {
+        "id": "a",
+        "text": "Add a Filter object set card for last week and convert the filtered set instead",
+        "why": "A transform table holds at most 50,000 rows. Filtering the object set down to about 12,000 objects first brings the input within that limit."
+      },
+      {
+        "id": "b",
+        "text": "Switch the analysis from canvas mode to graph mode before adding the transform table",
+        "why": "Graph mode is another way to view and organise the same cards. It does not change how many rows a transform table can hold."
+      },
+      {
+        "id": "c",
+        "text": "Publish the object set card to a dashboard and add the transform table in the dashboard",
+        "why": "A dashboard presents cards that already exist in the analysis. It does not lift the transform table row limit."
+      },
+      {
+        "id": "d",
+        "text": "Add a numeric parameter set to 400,000 and use it as the row limit of the transform table",
+        "why": "Parameters feed values into card inputs. The 50,000 row maximum is fixed and cannot be raised by a parameter."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Transform tables are computed in the browser and are limited to 50,000 rows, whether the rows come from the starting object set or from a join. The recommended approach for a larger object set is to reduce it with a Filter object set card before passing it into the transform table.",
-    "source": { "title": "Quiver: Transform tables", "url": "https://www.palantir.com/docs/foundry/quiver/cards-transform-table/" }
+    "source": {
+      "title": "Quiver: Transform tables",
+      "url": "https://www.palantir.com/docs/foundry/quiver/cards-transform-table/"
+    }
   },
   {
     "id": "imp-014",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "A Quiver analysis at Dunmere Foods has a bar chart and two numeric aggregations that all read from a Filter object set card on `Transaction`. The analyst wants dashboard viewers to choose a retailer from a list of the retailer names that exist in the data and have all three cards update. Which approach does this?",
     "options": [
-      { "id": "a", "text": "Create a property value select parameter on retailer name and use it as the filter variable input", "why": "This parameter offers a dropdown of the values of a chosen object set property. Used as the filter's variable input, it changes the filtered set that all three cards read from." },
-      { "id": "b", "text": "Duplicate the canvas once per retailer and hard-code a different retailer name in the filter of each copy", "why": "This multiplies cards to maintain and still gives viewers no control. New retailers would need new canvases." },
-      { "id": "c", "text": "Add a card-level tab to the bar chart for each retailer in the dashboard editor", "why": "Card-level tabs switch between different charts in one cell. They do not change the filter that the charts read from." },
-      { "id": "d", "text": "Wrap the three cards in a visual function and publish it as a separate resource", "why": "A visual function packages reusable logic for use in analyses. On its own it gives dashboard viewers nothing to select." }
+      {
+        "id": "a",
+        "text": "Create a property value select parameter on retailer name and use it as the filter variable input",
+        "why": "This parameter offers a dropdown of the values of a chosen object set property. Used as the filter's variable input, it changes the filtered set that all three cards read from."
+      },
+      {
+        "id": "b",
+        "text": "Duplicate the canvas once per retailer and hard-code a different retailer name in the filter of each copy",
+        "why": "This multiplies cards to maintain and still gives viewers no control. New retailers would need new canvases."
+      },
+      {
+        "id": "c",
+        "text": "Add a card-level tab to the bar chart for each retailer in the dashboard editor",
+        "why": "Card-level tabs switch between different charts in one cell. They do not change the filter that the charts read from."
+      },
+      {
+        "id": "d",
+        "text": "Wrap the three cards in a visual function and publish it as a separate resource",
+        "why": "A visual function packages reusable logic for use in analyses. On its own it gives dashboard viewers nothing to select."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Quiver parameters let users enter values that flow into any card accepting that type. The property value select parameter builds its dropdown from the values of an object set property, and selecting 'Use variable input' on a filter wires the parameter in. Exposing the parameter on the dashboard lets viewers change what every downstream card shows.",
-    "source": { "title": "Quiver: Parameters", "url": "https://www.palantir.com/docs/foundry/quiver/cards-parameters/" }
+    "source": {
+      "title": "Quiver: Parameters",
+      "url": "https://www.palantir.com/docs/foundry/quiver/cards-parameters/"
+    }
   },
   {
     "id": "imp-015",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "A builder at Kestor Aviation wants a Quiver dashboard of maintenance charts to appear inside a Workshop module and to recalculate for whichever `Aircraft` objects the user has filtered to in the module. Which steps are needed? Select TWO.",
     "options": [
-      { "id": "a", "text": "Publish the dashboard so that it can be selected in the Workshop Quiver dashboard widget", "why": "The Workshop widget lists published dashboards. Publishing creates the dashboard resource that Workshop embeds." },
-      { "id": "b", "text": "Add an object set input to the dashboard and map it to the module's filtered object set variable", "why": "Dashboard inputs pass data from the host application. An object set input maps to a Workshop object set variable, so the charts follow the user's filter." },
-      { "id": "c", "text": "Convert the analysis to an object set path analysis so that Workshop can read its cards", "why": "A Quiver analysis cannot be converted to the simplified types, and those types do not support dashboard building." },
-      { "id": "d", "text": "Turn each canvas into an object set canvas template and copy its identifier into the module", "why": "Canvas templates are a deprecated way of sharing content and accept only one input. Dashboards are the supported route for embedding." },
-      { "id": "e", "text": "Recreate each chart with a transform table so that it accepts a Workshop variable as input", "why": "Cards take their inputs from the analysis. The link to Workshop is made through dashboard inputs and outputs, whatever card type is used." }
+      {
+        "id": "a",
+        "text": "Publish the dashboard so that it can be selected in the Workshop Quiver dashboard widget",
+        "why": "The Workshop widget lists published dashboards. Publishing creates the dashboard resource that Workshop embeds."
+      },
+      {
+        "id": "b",
+        "text": "Add an object set input to the dashboard and map it to the module's filtered object set variable",
+        "why": "Dashboard inputs pass data from the host application. An object set input maps to a Workshop object set variable, so the charts follow the user's filter."
+      },
+      {
+        "id": "c",
+        "text": "Convert the analysis to an object set path analysis so that Workshop can read its cards",
+        "why": "A Quiver analysis cannot be converted to the simplified types, and those types do not support dashboard building."
+      },
+      {
+        "id": "d",
+        "text": "Turn each canvas into an object set canvas template and copy its identifier into the module",
+        "why": "Canvas templates are a deprecated way of sharing content and accept only one input. Dashboards are the supported route for embedding."
+      },
+      {
+        "id": "e",
+        "text": "Recreate each chart with a transform table so that it accepts a Workshop variable as input",
+        "why": "Cards take their inputs from the analysis. The link to Workshop is made through dashboard inputs and outputs, whatever card type is used."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Published Quiver dashboards can be embedded in Workshop with the Quiver dashboard widget. Inputs and outputs defined on the dashboard are mapped to Workshop variables of matching types, for example a Quiver object set to a Workshop object set variable, so the embedded charts react to selections made in the module.",
-    "source": { "title": "Quiver: Embed in a Workshop module", "url": "https://www.palantir.com/docs/foundry/quiver/dashboards-workshop/" }
+    "source": {
+      "title": "Quiver: Embed in a Workshop module",
+      "url": "https://www.palantir.com/docs/foundry/quiver/dashboards-workshop/"
+    }
   },
   {
     "id": "imp-016",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A Workshop module at Avonlea Transit has a Filter List widget and an Object Table widget, and both use the object set variable `All Alerts` as their input. Users pick 'High' in the priority filter, but the table keeps showing every alert. What should the builder change?",
     "options": [
-      { "id": "a", "text": "Feed the table an object set variable that applies the Filter List's output filter to `All Alerts`", "why": "The Filter List writes the user's choices to an object set filter variable. The table only changes when its input object set is filtered by that variable." },
-      { "id": "b", "text": "Enable multi-select on the Object Table so that it picks up the rows matched by the Filter List widget", "why": "Multi-select controls whether users can tick several rows and populates the selected objects output. It does not feed filters into the table." },
-      { "id": "c", "text": "Add a default sort on the priority property in the Object Table's column configuration", "why": "A sort changes the order of rows. All alerts would still be listed." },
-      { "id": "d", "text": "Give the `All Alerts` variable an external ID and add it to the module interface", "why": "The module interface exposes variables to parent modules and URLs. It does not connect two widgets inside the same module." }
+      {
+        "id": "a",
+        "text": "Feed the table an object set variable that applies the Filter List's output filter to `All Alerts`",
+        "why": "The Filter List writes the user's choices to an object set filter variable. The table only changes when its input object set is filtered by that variable."
+      },
+      {
+        "id": "b",
+        "text": "Enable multi-select on the Object Table so that it picks up the rows matched by the Filter List widget",
+        "why": "Multi-select controls whether users can tick several rows and populates the selected objects output. It does not feed filters into the table."
+      },
+      {
+        "id": "c",
+        "text": "Add a default sort on the priority property in the Object Table's column configuration",
+        "why": "A sort changes the order of rows. All alerts would still be listed."
+      },
+      {
+        "id": "d",
+        "text": "Give the `All Alerts` variable an external ID and add it to the module interface",
+        "why": "The module interface exposes variables to parent modules and URLs. It does not connect two widgets inside the same module."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "The Filter List's output is an object set filter variable holding the currently applied criteria. It has no effect on other widgets until that filter variable is applied to an object set variable they use. Widgets that should respond to the filter must read from the filtered object set rather than the unfiltered source.",
-    "source": { "title": "Workshop: Filter List", "url": "https://www.palantir.com/docs/foundry/workshop/widgets-filter-list/" }
+    "source": {
+      "title": "Workshop: Filter List",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-filter-list/"
+    }
   },
   {
     "id": "imp-017",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "medium",
     "format": "discrete",
     "stem": "A button in a Workshop module at Corvane Shipping has two events in this order: Recompute `riskScore`, a function-backed numeric variable, and then Set variable value, which copies `riskScore` into the static variable `savedScore`. After a click, `savedScore` often holds the score from the previous click. Which statement about this configuration is correct?",
     "options": [
-      { "id": "a", "text": "The events run in their configured order, but the copy does not wait for the recompute to finish", "why": "Events execute sequentially without waiting for computations started by earlier events, so the Set variable value event can copy the old result or a loading state." },
-      { "id": "b", "text": "Workshop runs the events of one button in an arbitrary order, so the copy may run before the recompute", "why": "Events execute in the order in which they are configured. The stale value comes from not waiting, not from reordering." },
-      { "id": "c", "text": "A Set variable value event waits until every upstream variable of its source has finished computing", "why": "The source value is copied immediately when the event fires. There is no option to force events to wait for pending updates." },
-      { "id": "d", "text": "A Recompute event has no effect on function-backed variables and applies only to static variables", "why": "Recompute events are offered for non-static variables such as function-backed ones. Static variables get a Reset event instead." }
+      {
+        "id": "a",
+        "text": "The events run in their configured order, but the copy does not wait for the recompute to finish",
+        "why": "Events execute sequentially without waiting for computations started by earlier events, so the Set variable value event can copy the old result or a loading state."
+      },
+      {
+        "id": "b",
+        "text": "Workshop runs the events of one button in an arbitrary order, so the copy may run before the recompute",
+        "why": "Events execute in the order in which they are configured. The stale value comes from not waiting, not from reordering."
+      },
+      {
+        "id": "c",
+        "text": "A Set variable value event waits until every upstream variable of its source has finished computing",
+        "why": "The source value is copied immediately when the event fires. There is no option to force events to wait for pending updates."
+      },
+      {
+        "id": "d",
+        "text": "A Recompute event has no effect on function-backed variables and applies only to static variables",
+        "why": "Recompute events are offered for non-static variables such as function-backed ones. Static variables get a Reset event instead."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Workshop events on a widget execute sequentially in their configured order, but they do not wait for dependent computations from earlier events to complete. A Set variable value event copies whatever the source holds at that moment. When a step needs the finished result of a previous one, the steps should be split across separate user-triggered interactions.",
-    "source": { "title": "Workshop: Events", "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/" }
+    "source": {
+      "title": "Workshop: Events",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/"
+    }
   },
   {
     "id": "imp-018",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "At Hollin Mining a parent Workshop module embeds a child module and maps its own `selectedSite` object set variable to the child's interface variable `site`. In the child module, `site` is defined with a function and a default value, and a table in the child writes the clicked row to `site`. Which statements describe the behaviour of the embedded child? Select TWO.",
     "options": [
-      { "id": "a", "text": "The child's function-backed definition and default for `site` are not used while the variable is mapped", "why": "For a mapped interface variable Workshop uses the parent's variable definition, so the child's own default and recalculation logic are ignored." },
-      { "id": "b", "text": "A row click in the child updates `selectedSite` in the parent and anything in the parent that reads it", "why": "A mapped variable is fully shared, so a change made in either module is reflected everywhere the variable is mapped." },
-      { "id": "c", "text": "The parent passes a one-off copy when the child loads, and later changes stay local to each module", "why": "Mapped interface variables are shared state, not a copy taken at load time. Changes flow in both directions." },
-      { "id": "d", "text": "The embedded widget shows the child's latest saved draft, so unpublished edits appear in the parent", "why": "The published version of the child module is always the one used when embedding." },
-      { "id": "e", "text": "The mapping works for any child variable, including ones without an external ID or interface setting", "why": "Only variables added to the module interface, which requires an external ID and the interface toggle, are offered for mapping." }
+      {
+        "id": "a",
+        "text": "The child's function-backed definition and default for `site` are not used while the variable is mapped",
+        "why": "For a mapped interface variable Workshop uses the parent's variable definition, so the child's own default and recalculation logic are ignored."
+      },
+      {
+        "id": "b",
+        "text": "A row click in the child updates `selectedSite` in the parent and anything in the parent that reads it",
+        "why": "A mapped variable is fully shared, so a change made in either module is reflected everywhere the variable is mapped."
+      },
+      {
+        "id": "c",
+        "text": "The parent passes a one-off copy when the child loads, and later changes stay local to each module",
+        "why": "Mapped interface variables are shared state, not a copy taken at load time. Changes flow in both directions."
+      },
+      {
+        "id": "d",
+        "text": "The embedded widget shows the child's latest saved draft, so unpublished edits appear in the parent",
+        "why": "The published version of the child module is always the one used when embedding."
+      },
+      {
+        "id": "e",
+        "text": "The mapping works for any child variable, including ones without an external ID or interface setting",
+        "why": "Only variables added to the module interface, which requires an external ID and the interface toggle, are offered for mapping."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "The module interface is the set of variables a module exposes for mapping when embedded. When a parent variable is mapped to a child interface variable, the parent's definition backs the shared variable, and the child's default value and recompute behaviour are not used. Value changes from either side, such as a widget output or a Set variable value event, are seen by both modules.",
-    "source": { "title": "Workshop: Embedded module widget", "url": "https://www.palantir.com/docs/foundry/workshop/embedded-modules/" }
+    "source": {
+      "title": "Workshop: Embedded module widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/embedded-modules/"
+    }
   },
   {
     "id": "imp-019",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Wexcombe Staffing has `Employee` and `Contractor` object types that each have a `start date` property. The display name, description and formatting of the two properties keep drifting apart because they are edited separately. The ontology owner wants to manage this metadata in one place while each object type keeps its own data. Which feature should be used?",
     "options": [
-      { "id": "a", "text": "A shared property used by the `start date` property on both object types", "why": "A shared property holds property metadata centrally for several object types. The underlying object data of each type remains separate." },
-      { "id": "b", "text": "A one-to-one link type between `Employee` and `Contractor` on `start date`", "why": "A link type relates objects to each other. It does not align the metadata of two properties." },
-      { "id": "c", "text": "An edit-only property named `start date` added to each of the object types", "why": "An edit-only property is one that is not mapped to a backing column. It does nothing to keep metadata consistent across object types." },
-      { "id": "d", "text": "A single backing dataset that is mapped to both of the object types", "why": "A datasource can back only one object type, and merging the data is not what the owner asked for." }
+      {
+        "id": "a",
+        "text": "A shared property used by the `start date` property on both object types",
+        "why": "A shared property holds property metadata centrally for several object types. The underlying object data of each type remains separate."
+      },
+      {
+        "id": "b",
+        "text": "A one-to-one link type between `Employee` and `Contractor` on `start date`",
+        "why": "A link type relates objects to each other. It does not align the metadata of two properties."
+      },
+      {
+        "id": "c",
+        "text": "An edit-only property named `start date` added to each of the object types",
+        "why": "An edit-only property is one that is not mapped to a backing column. It does nothing to keep metadata consistent across object types."
+      },
+      {
+        "id": "d",
+        "text": "A single backing dataset that is mapped to both of the object types",
+        "why": "A datasource can back only one object type, and merging the data is not what the owner asked for."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "A shared property can be used on multiple object types so that property metadata is modelled consistently and managed centrally. Only the metadata is shared; object data is not. An existing property can be attached to a shared property, and its property ID and API name stay unchanged so downstream workflows keep working.",
-    "source": { "title": "Shared properties", "url": "https://www.palantir.com/docs/foundry/object-link-types/shared-property-overview/" }
+    "source": {
+      "title": "Shared properties",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/shared-property-overview/"
+    }
   },
   {
     "id": "imp-020",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "The `Depot` object type at Farrowgate Haulage uses Object Storage v2. A builder switches on the Required setting for its `region` property and saves the ontology change, unaware that a few rows in the backing dataset have a null region. Which statement describes what happens?",
     "options": [
-      { "id": "a", "text": "The ontology change saves, but the reindex fails until the nulls are fixed or the setting is removed", "why": "Null checks happen when the datasource is indexed, not when the ontology is modified. The save succeeds and the reindex fails while null values remain." },
-      { "id": "b", "text": "Ontology Manager refuses to save the change because it scans the backing dataset for nulls first", "why": "The modification itself succeeds even when the backing column contains nulls. Validation happens at indexing time." },
-      { "id": "c", "text": "The depots with a null region are left out of the index without any error and the rest load normally", "why": "Rows are not silently dropped. A null in a required property makes the reindex fail." },
-      { "id": "d", "text": "Only action edits are checked, so the datasource rows with a null region index without any problem", "why": "The validation applies both to data from the backing datasource and to edits made through actions." }
+      {
+        "id": "a",
+        "text": "The ontology change saves, but the reindex fails until the nulls are fixed or the setting is removed",
+        "why": "Null checks happen when the datasource is indexed, not when the ontology is modified. The save succeeds and the reindex fails while null values remain."
+      },
+      {
+        "id": "b",
+        "text": "Ontology Manager refuses to save the change because it scans the backing dataset for nulls first",
+        "why": "The modification itself succeeds even when the backing column contains nulls. Validation happens at indexing time."
+      },
+      {
+        "id": "c",
+        "text": "The depots with a null region are left out of the index without any error and the rest load normally",
+        "why": "Rows are not silently dropped. A null in a required property makes the reindex fail."
+      },
+      {
+        "id": "d",
+        "text": "Only action edits are checked, so the datasource rows with a null region index without any problem",
+        "why": "The validation applies both to data from the backing datasource and to edits made through actions."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "A required property must always have a value. The check for nulls runs as backing datasources are indexed into Object Storage v2, so the ontology change itself saves, and the reindex fails if the column still holds nulls. Actions that try to write a null to a required property fail when they are applied.",
-    "source": { "title": "Required properties", "url": "https://www.palantir.com/docs/foundry/object-link-types/required-properties/" }
+    "source": {
+      "title": "Required properties",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/required-properties/"
+    }
   },
   {
     "id": "imp-021",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "The `Asset` object type at Lindqvist Rail is backed by a dataset from the maintenance system and uses Object Storage v2. Inspectors need a new `inspector comment` property that only they fill in from a Workshop module; the pipeline team will not add a column for it. Which steps implement this? Select TWO.",
     "options": [
-      { "id": "a", "text": "Add `inspector comment` to `Asset` as an edit-only property, with no mapped backing column", "why": "An edit-only property is defined in the Ontology without a column in the backing dataset, so no pipeline change is needed." },
-      { "id": "b", "text": "Create an action type that modifies `Asset` and sets `inspector comment` from a parameter", "why": "Action types are the supported way for users to edit property values, and the action can then be exposed in the Workshop module." },
-      { "id": "c", "text": "Recreate `Asset` as an object type with no backing datasource so that it can accept user input", "why": "That would discard the maintenance data feeding every other property. It is meant for types populated entirely by actions." },
-      { "id": "d", "text": "Define `inspector comment` as a derived property in Workshop that is calculated from linked objects", "why": "A Workshop derived property is computed at query time from other properties or links. It cannot store text typed by a user." },
-      { "id": "e", "text": "Change the title key of `Asset` to `inspector comment` so that the value is stored on the object", "why": "The title key selects which existing property is shown as the object's name. It does not create storage for a new property." }
+      {
+        "id": "a",
+        "text": "Add `inspector comment` to `Asset` as an edit-only property, with no mapped backing column",
+        "why": "An edit-only property is defined in the Ontology without a column in the backing dataset, so no pipeline change is needed."
+      },
+      {
+        "id": "b",
+        "text": "Create an action type that modifies `Asset` and sets `inspector comment` from a parameter",
+        "why": "Action types are the supported way for users to edit property values, and the action can then be exposed in the Workshop module."
+      },
+      {
+        "id": "c",
+        "text": "Recreate `Asset` as an object type with no backing datasource so that it can accept user input",
+        "why": "That would discard the maintenance data feeding every other property. It is meant for types populated entirely by actions."
+      },
+      {
+        "id": "d",
+        "text": "Define `inspector comment` as a derived property in Workshop that is calculated from linked objects",
+        "why": "A Workshop derived property is computed at query time from other properties or links. It cannot store text typed by a user."
+      },
+      {
+        "id": "e",
+        "text": "Change the title key of `Asset` to `inspector comment` so that the value is stored on the object",
+        "why": "The title key selects which existing property is shown as the object's name. It does not create storage for a new property."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Edit-only properties let a datasource-backed object type carry properties that are not mapped to any column and are populated only through Ontology edits. Users make those edits through action types configured in Ontology Manager. Creating a type without a backing datasource is the alternative only when every property is filled by actions.",
-    "source": { "title": "Edit-only properties", "url": "https://www.palantir.com/docs/foundry/object-link-types/edit-only-properties/" }
+    "source": {
+      "title": "Edit-only properties",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/edit-only-properties/"
+    }
   },
   {
     "id": "imp-022",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Redmoor Studios links `Crew Member` and `Production` objects. A crew member works on many productions and a production has many crew members, and each assignment must record a role and a day rate that users can view when they select the link. Which link configuration supports this?",
     "options": [
-      { "id": "a", "text": "An object-backed link type using an `Assignment` object type that has a many-to-one link to each side", "why": "An object-backed link type stores the relationship in an intermediary object type, whose properties such as role and day rate act as metadata on the link." },
-      { "id": "b", "text": "A foreign key property on `Crew Member` that refers to the primary key of `Production`", "why": "A foreign key gives each crew member a single production and has nowhere to hold a role or day rate for the relationship." },
-      { "id": "c", "text": "A join table link type with only the two primary key columns, plus a shared property for role", "why": "A shared property reuses metadata between object types. It would not attach a role or day rate to one specific assignment." },
-      { "id": "d", "text": "Two separate link types between the same object types, one named after role and one after day rate", "why": "Separate link types represent separate relationships. They do not add property values to a single link instance." }
+      {
+        "id": "a",
+        "text": "An object-backed link type using an `Assignment` object type that has a many-to-one link to each side",
+        "why": "An object-backed link type stores the relationship in an intermediary object type, whose properties such as role and day rate act as metadata on the link."
+      },
+      {
+        "id": "b",
+        "text": "A foreign key property on `Crew Member` that refers to the primary key of `Production`",
+        "why": "A foreign key gives each crew member a single production and has nowhere to hold a role or day rate for the relationship."
+      },
+      {
+        "id": "c",
+        "text": "A join table link type with only the two primary key columns, plus a shared property for role",
+        "why": "A shared property reuses metadata between object types. It would not attach a role or day rate to one specific assignment."
+      },
+      {
+        "id": "d",
+        "text": "Two separate link types between the same object types, one named after role and one after day rate",
+        "why": "Separate link types represent separate relationships. They do not add property values to a single link instance."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Object-backed link types use an object type as the storage for a link, which allows additional metadata on the relationship. The prerequisites are the two object types being linked, the backing object type, and a many-to-one link type from each side to the backing object type. Foreign key and join table links carry only the keys.",
-    "source": { "title": "Create a link type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/" }
+    "source": {
+      "title": "Create a link type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/"
+    }
   },
   {
     "id": "imp-023",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A builder at Skerry Air has created a foreign key link type between `Flight` and `Aircraft`, with the Aircraft side named 'Assigned Aircraft'. A function developer now needs to get all flights for a given aircraft, and the builder is about to create a second link type from `Aircraft` to `Flight`. What should the builder do instead?",
     "options": [
-      { "id": "a", "text": "Nothing new: use the Flight side of the existing link type, which has its own API name", "why": "A link type always has two sides and can be traversed from either object type. Each side has its own display name and API name." },
-      { "id": "b", "text": "Create the second link type, because a link type can only be traversed from its foreign key side", "why": "A single link type already supports traversal in both directions. A second one would model a separate relationship." },
-      { "id": "c", "text": "Change the existing link type to many-to-many so that it gains a reverse direction", "why": "Cardinality describes how many objects sit on each side. Foreign key links are already traversable both ways." },
-      { "id": "d", "text": "Add a list property of flight IDs on `Aircraft` and keep it up to date with an action", "why": "This duplicates information the link already holds and would need constant maintenance to stay correct." }
+      {
+        "id": "a",
+        "text": "Nothing new: use the Flight side of the existing link type, which has its own API name",
+        "why": "A link type always has two sides and can be traversed from either object type. Each side has its own display name and API name."
+      },
+      {
+        "id": "b",
+        "text": "Create the second link type, because a link type can only be traversed from its foreign key side",
+        "why": "A single link type already supports traversal in both directions. A second one would model a separate relationship."
+      },
+      {
+        "id": "c",
+        "text": "Change the existing link type to many-to-many so that it gains a reverse direction",
+        "why": "Cardinality describes how many objects sit on each side. Foreign key links are already traversable both ways."
+      },
+      {
+        "id": "d",
+        "text": "Add a list property of flight IDs on `Aircraft` and keep it up to date with an action",
+        "why": "This duplicates information the link already holds and would need constant maintenance to stay correct."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "A link type is bidirectional: it has exactly two sides, one per object type, and each side has its own display name and API name. Creating one link type does not require a second one for the reverse direction. Multiple link types between the same two object types are only for genuinely different relationships.",
-    "source": { "title": "Link types overview", "url": "https://www.palantir.com/docs/foundry/object-link-types/link-types-overview/" }
+    "source": {
+      "title": "Link types overview",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/link-types-overview/"
+    }
   },
   {
     "id": "imp-024",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "An ontology builder at Thornbury Group is defining four link types. Match each relationship to the way the link type should be defined.",
     "left": [
-      { "id": "l1", "text": "Each `Invoice` belongs to one `Customer`; a customer has many invoices", "why": "A one-to-many link is defined by a foreign key on the 'many' side, Invoice, that refers to the primary key of the 'one' side, Customer." },
-      { "id": "l2", "text": "A `Doctor` treats many `Patient` objects and a patient sees many doctors; nothing else is recorded", "why": "Many-to-many cardinality with no extra information is backed by a join table holding pairs of the two primary keys." },
-      { "id": "l3", "text": "A `Player` signs for many `Team` objects over time, and each signing has a start date and a fee", "why": "Properties that belong to the relationship itself need an object-backed link type, where a backing object type carries the metadata." },
-      { "id": "l4", "text": "Each `Employee` reports to one manager, who is also an `Employee`", "why": "A link type can relate an object type to itself. A foreign key on Employee holding the manager's primary key gives one manager with many reports." }
+      {
+        "id": "l1",
+        "text": "Each `Invoice` belongs to one `Customer`; a customer has many invoices",
+        "why": "A one-to-many link is defined by a foreign key on the 'many' side, Invoice, that refers to the primary key of the 'one' side, Customer."
+      },
+      {
+        "id": "l2",
+        "text": "A `Doctor` treats many `Patient` objects and a patient sees many doctors; nothing else is recorded",
+        "why": "Many-to-many cardinality with no extra information is backed by a join table holding pairs of the two primary keys."
+      },
+      {
+        "id": "l3",
+        "text": "A `Player` signs for many `Team` objects over time, and each signing has a start date and a fee",
+        "why": "Properties that belong to the relationship itself need an object-backed link type, where a backing object type carries the metadata."
+      },
+      {
+        "id": "l4",
+        "text": "Each `Employee` reports to one manager, who is also an `Employee`",
+        "why": "A link type can relate an object type to itself. A foreign key on Employee holding the manager's primary key gives one manager with many reports."
+      }
     ],
     "right": [
-      { "id": "r1", "text": "Foreign key on `Invoice` referring to the `Customer` primary key" },
-      { "id": "r2", "text": "Join table dataset with a column for each primary key" },
-      { "id": "r3", "text": "Object-backed link type with a `Contract` backing object type" },
-      { "id": "r4", "text": "Foreign key on `Employee` referring to the `Employee` primary key" },
-      { "id": "r5", "text": "Foreign key on `Customer` referring to the `Invoice` primary key" }
+      {
+        "id": "r1",
+        "text": "Foreign key on `Invoice` referring to the `Customer` primary key"
+      },
+      {
+        "id": "r2",
+        "text": "Join table dataset with a column for each primary key"
+      },
+      {
+        "id": "r3",
+        "text": "Object-backed link type with a `Contract` backing object type"
+      },
+      {
+        "id": "r4",
+        "text": "Foreign key on `Employee` referring to the `Employee` primary key"
+      },
+      {
+        "id": "r5",
+        "text": "Foreign key on `Customer` referring to the `Invoice` primary key"
+      }
     ],
-    "answer": { "l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4" },
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
     "explanation": "Foreign key link types cover one-to-one and one-to-many cardinality, with the foreign key held on the 'many' side and referring to the other side's primary key. Many-to-many link types are backed by a join table dataset. Object-backed link types add metadata to the relationship, and a link type may also relate an object type to itself.",
-    "source": { "title": "Create a link type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/" }
+    "source": {
+      "title": "Create a link type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/"
+    }
   },
   {
     "id": "imp-025",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "parameters-validation",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "The 'Create ticket' action type at Ellersby Telecom has a static default of 'Medium' on its `priority` parameter. In Object Explorer the form opens with 'Medium', but in one Workshop module the same form always opens with 'High'. Nothing else about the action differs. What is the most likely cause?",
     "options": [
-      { "id": "a", "text": "The module's button maps a Workshop variable to `priority`, and a local default takes precedence", "why": "A value passed from a Workshop variable overrides the default configured on the action type parameter, so the form opens with the module's value." },
-      { "id": "b", "text": "Workshop ignores defaults set on the action type and always prefills forms from the object's title key", "why": "Action type defaults are supported in Workshop. They are only replaced when the module supplies its own value." },
-      { "id": "c", "text": "The submission criteria of the action force `priority` to 'High' for users of that module", "why": "Submission criteria evaluate conditions to allow or block submission. They do not set parameter values." },
-      { "id": "d", "text": "A notification rule on the action rewrites `priority` after the form has been opened", "why": "A notification is a side effect sent after the edits are applied. It cannot change the values shown in the form." }
+      {
+        "id": "a",
+        "text": "The module's button maps a Workshop variable to `priority`, and a local default takes precedence",
+        "why": "A value passed from a Workshop variable overrides the default configured on the action type parameter, so the form opens with the module's value."
+      },
+      {
+        "id": "b",
+        "text": "Workshop ignores defaults set on the action type and always prefills forms from the object's title key",
+        "why": "Action type defaults are supported in Workshop. They are only replaced when the module supplies its own value."
+      },
+      {
+        "id": "c",
+        "text": "The submission criteria of the action force `priority` to 'High' for users of that module",
+        "why": "Submission criteria evaluate conditions to allow or block submission. They do not set parameter values."
+      },
+      {
+        "id": "d",
+        "text": "A notification rule on the action rewrites `priority` after the form has been opened",
+        "why": "A notification is a side effect sent after the edits are applied. It cannot change the values shown in the form."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Default values configured on an action type parameter prefill the form wherever the action is used. Local defaults, such as a Workshop variable passed to the parameter in a widget's configuration, always take precedence over these global defaults. Standardising on the action type default means removing the local override.",
-    "source": { "title": "Action types: Set parameter default value", "url": "https://www.palantir.com/docs/foundry/action-types/parameters-default-value/" }
+    "source": {
+      "title": "Action types: Set parameter default value",
+      "url": "https://www.palantir.com/docs/foundry/action-types/parameters-default-value/"
+    }
   },
   {
     "id": "imp-026",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "hard",
     "format": "hotspot",
     "stem": "The 'Close incident' action type at Brackwell Rail is backed by an Ontology edit function, and auto upgrades are not enabled. A developer fixes a bug in the function and tags version 1.3.0 in the repository, yet the Workshop button that runs the action still shows the old behaviour. Select the region where a change is needed for the fix to take effect.",
@@ -469,311 +1211,714 @@
       "height": 360,
       "alt": "Diagram of an action type containing parameters, a function rule pinned to version 1.2.0, submission criteria and a notification rule, with a functions repository tag 1.3.0 and a Workshop button outside it.",
       "groups": [
-        { "x": 20, "y": 30, "w": 400, "h": 300, "label": "Action type: Close incident" }
+        {
+          "x": 20,
+          "y": 30,
+          "w": 400,
+          "h": 300,
+          "label": "Action type: Close incident"
+        }
       ],
       "regions": [
-        { "id": "r1", "label": "Parameters", "x": 40, "y": 80, "w": 160, "h": 60, "why": "The function's inputs have not changed, so the parameters that feed it need no edits." },
-        { "id": "r2", "label": "Function rule v1.2.0", "x": 236, "y": 80, "w": 164, "h": 60, "why": "The rule references a specific function version. Without auto upgrades, the builder must upgrade the version selected in the rule to 1.3.0." },
-        { "id": "r3", "label": "Submission criteria", "x": 40, "y": 220, "w": 160, "h": 60, "why": "Submission criteria decide who may submit and when. They do not select which function version runs." },
-        { "id": "r4", "label": "Notification rule", "x": 236, "y": 220, "w": 164, "h": 60, "why": "The notification is a side effect sent after the edits. It has no bearing on the version of the edit logic." },
-        { "id": "r5", "label": "Repo tag 1.3.0", "x": 456, "y": 80, "w": 160, "h": 60, "why": "The fixed version is already tagged and published. Publishing alone does not change what the action references." },
-        { "id": "r6", "label": "Workshop button", "x": 456, "y": 220, "w": 160, "h": 60, "why": "The button runs the action type as it is configured in the Ontology. It holds no function version of its own." }
+        {
+          "id": "r1",
+          "label": "Parameters",
+          "x": 40,
+          "y": 80,
+          "w": 160,
+          "h": 60,
+          "why": "The function's inputs have not changed, so the parameters that feed it need no edits."
+        },
+        {
+          "id": "r2",
+          "label": "Function rule v1.2.0",
+          "x": 236,
+          "y": 80,
+          "w": 164,
+          "h": 60,
+          "why": "The rule references a specific function version. Without auto upgrades, the builder must upgrade the version selected in the rule to 1.3.0."
+        },
+        {
+          "id": "r3",
+          "label": "Submission criteria",
+          "x": 40,
+          "y": 220,
+          "w": 160,
+          "h": 60,
+          "why": "Submission criteria decide who may submit and when. They do not select which function version runs."
+        },
+        {
+          "id": "r4",
+          "label": "Notification rule",
+          "x": 236,
+          "y": 220,
+          "w": 164,
+          "h": 60,
+          "why": "The notification is a side effect sent after the edits. It has no bearing on the version of the edit logic."
+        },
+        {
+          "id": "r5",
+          "label": "Repo tag 1.3.0",
+          "x": 456,
+          "y": 80,
+          "w": 160,
+          "h": 60,
+          "why": "The fixed version is already tagged and published. Publishing alone does not change what the action references."
+        },
+        {
+          "id": "r6",
+          "label": "Workshop button",
+          "x": 456,
+          "y": 220,
+          "w": 160,
+          "h": 60,
+          "why": "The button runs the action type as it is configured in the Ontology. It holds no function version of its own."
+        }
       ],
       "edges": [
-        { "from": "r1", "to": "r2", "label": "inputs" },
-        { "from": "r5", "to": "r2", "label": "published" }
+        {
+          "from": "r1",
+          "to": "r2",
+          "label": "inputs"
+        },
+        {
+          "from": "r5",
+          "to": "r2",
+          "label": "published"
+        }
       ]
     },
-    "answer": ["r2"],
+    "answer": [
+      "r2"
+    ],
     "explanation": "By default a function-backed action does not follow changes to its function. The Function rule references a particular published version, and the builder must return to the Rules section and upgrade it. Auto upgrades, when enabled, make the action resolve a compatible version at run time, but they are not available for 0.y.z versions.",
-    "source": { "title": "Function-backed actions: Getting started", "url": "https://www.palantir.com/docs/foundry/action-types/function-actions-getting-started/" }
+    "source": {
+      "title": "Function-backed actions: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/action-types/function-actions-getting-started/"
+    }
   },
   {
     "id": "imp-027",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "parameters-validation",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "A builder at Maristow Airways is adding submission criteria to a 'Swap aircraft' action type so that only flight controllers can submit it and only for aircraft that are in operation. Which statements about submission criteria are correct? Select TWO.",
     "options": [
-      { "id": "a", "text": "A Current user condition can test whether the submitting user belongs to a given group", "why": "The Current user template can check the user's ID, group memberships, including inherited ones, and other user attributes." },
-      { "id": "b", "text": "A failure message can be set so that blocked users see why the action cannot be submitted", "why": "Root-level conditions and logical operators each carry a failure message, which is displayed to the end user wherever the action is used." },
-      { "id": "c", "text": "A condition can compare the contents of an object set parameter with a static list of values", "why": "Object set and attachment parameters are not supported in submission criteria and are not offered for selection." },
-      { "id": "d", "text": "A user who passes the criteria also gains permission to edit the action type's configuration", "why": "Submission criteria are independent of the permissions that govern who can edit the action type itself." },
-      { "id": "e", "text": "The criteria are checked only in Workshop, so the same action in Object Explorer skips them", "why": "Criteria belong to the action type and apply wherever the action is submitted, with the failure message shown across applications." }
+      {
+        "id": "a",
+        "text": "A Current user condition can test whether the submitting user belongs to a given group",
+        "why": "The Current user template can check the user's ID, group memberships, including inherited ones, and other user attributes."
+      },
+      {
+        "id": "b",
+        "text": "A failure message can be set so that blocked users see why the action cannot be submitted",
+        "why": "Root-level conditions and logical operators each carry a failure message, which is displayed to the end user wherever the action is used."
+      },
+      {
+        "id": "c",
+        "text": "A condition can compare the contents of an object set parameter with a static list of values",
+        "why": "Object set and attachment parameters are not supported in submission criteria and are not offered for selection."
+      },
+      {
+        "id": "d",
+        "text": "A user who passes the criteria also gains permission to edit the action type's configuration",
+        "why": "Submission criteria are independent of the permissions that govern who can edit the action type itself."
+      },
+      {
+        "id": "e",
+        "text": "The criteria are checked only in Workshop, so the same action in Object Explorer skips them",
+        "why": "Criteria belong to the action type and apply wherever the action is submitted, with the failure message shown across applications."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Submission criteria combine conditions on the current user, on parameters and on the execution context with logical operators, and an action can only be submitted when all criteria are met. Each root-level condition has a failure message that tells the user why they are blocked. Object set and attachment parameters cannot be used in conditions.",
-    "source": { "title": "Action types: Submission criteria", "url": "https://www.palantir.com/docs/foundry/action-types/submission-criteria/" }
+    "source": {
+      "title": "Action types: Submission criteria",
+      "url": "https://www.palantir.com/docs/foundry/action-types/submission-criteria/"
+    }
   },
   {
     "id": "imp-028",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "A Workshop Object Table at Penhallow Freight lists `Delivery` objects. The builder wants an 'Urgency' column computed in a TypeScript v1 function from each delivery's delay. Which function signature fits a function-backed column and follows the recommended input type?",
     "options": [
-      { "id": "a", "text": "`urgency(deliveries: ObjectSet<Delivery>): FunctionsMap<Delivery, string>`", "why": "A function-backed column takes the objects shown in the table, ideally as an object set, and returns a map from each object to its column value." },
-      { "id": "b", "text": "`urgency(delivery: Delivery, thresholdHours: Double): string`", "why": "A function for a single object does not return the map from objects to values that the Object Table needs for a column." },
-      { "id": "c", "text": "`urgency(deliveries: ObjectSet<Delivery>): string[]`", "why": "A plain array does not say which value belongs to which row. The table expects a map keyed by object." },
-      { "id": "d", "text": "`urgency(deliveries: ObjectSet<Delivery>): Promise<ObjectSet<Delivery>>`", "why": "Returning an object set suits a function-backed object set variable. It provides no values for a column." }
+      {
+        "id": "a",
+        "text": "`urgency(deliveries: ObjectSet<Delivery>): FunctionsMap<Delivery, string>`",
+        "why": "A function-backed column takes the objects shown in the table, ideally as an object set, and returns a map from each object to its column value."
+      },
+      {
+        "id": "b",
+        "text": "`urgency(delivery: Delivery, thresholdHours: Double): string`",
+        "why": "A function for a single object does not return the map from objects to values that the Object Table needs for a column."
+      },
+      {
+        "id": "c",
+        "text": "`urgency(deliveries: ObjectSet<Delivery>): string[]`",
+        "why": "A plain array does not say which value belongs to which row. The table expects a map keyed by object."
+      },
+      {
+        "id": "d",
+        "text": "`urgency(deliveries: ObjectSet<Delivery>): Promise<ObjectSet<Delivery>>`",
+        "why": "Returning an object set suits a function-backed object set variable. It provides no values for a column."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "To back an Object Table column, a function's inputs must include an `ObjectSet<ObjectType>` parameter (an object array also works but is less performant), and in TypeScript v1 it returns a `FunctionsMap` from the object type to the column's value type. Workshop can pass only the rows currently displayed as a runtime input, which keeps the column fast.",
-    "source": { "title": "Workshop: Object Table", "url": "https://www.palantir.com/docs/foundry/workshop/widgets-object-table/" }
+    "source": {
+      "title": "Workshop: Object Table",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-object-table/"
+    }
   },
   {
     "id": "imp-029",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A developer at Glenrowan Energy writes a new TypeScript v1 function, tests it successfully in live preview and commits it to the master branch of the repository. A Workshop builder then tries to back a numeric variable with it but cannot find it in the function picker. What is the missing step?",
     "options": [
-      { "id": "a", "text": "Tag a version on the repository so that the functions are released and published", "why": "Functions appear in consuming applications only after a version has been tagged and released. A commit alone does not publish them." },
-      { "id": "b", "text": "Import the Workshop module as a resource into the project that holds the repository", "why": "Object and link types are imported into a repository's project. The function becomes selectable in Workshop by being published, not by importing the module." },
-      { "id": "c", "text": "Change the decorator to `@OntologyEditFunction()` so that Workshop can read the result", "why": "That decorator is for functions that back actions and return void. A variable needs a function that returns a value." },
-      { "id": "d", "text": "Run the function once more in live preview so that the result is cached for Workshop", "why": "Live preview tests the code in the repository. It does not publish the function or make it visible elsewhere." }
+      {
+        "id": "a",
+        "text": "Tag a version on the repository so that the functions are released and published",
+        "why": "Functions appear in consuming applications only after a version has been tagged and released. A commit alone does not publish them."
+      },
+      {
+        "id": "b",
+        "text": "Import the Workshop module as a resource into the project that holds the repository",
+        "why": "Object and link types are imported into a repository's project. The function becomes selectable in Workshop by being published, not by importing the module."
+      },
+      {
+        "id": "c",
+        "text": "Change the decorator to `@OntologyEditFunction()` so that Workshop can read the result",
+        "why": "That decorator is for functions that back actions and return void. A variable needs a function that returns a value."
+      },
+      {
+        "id": "d",
+        "text": "Run the function once more in live preview so that the result is cached for Workshop",
+        "why": "Live preview tests the code in the repository. It does not publish the function or make it visible elsewhere."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Committing code makes the Tag version option available in the repository. Tagging and releasing a version publishes all functions in the repository to the function registry. Workshop's function picker only lists functions that have been tagged with a release version.",
-    "source": { "title": "Getting started with TypeScript v1 functions", "url": "https://www.palantir.com/docs/foundry/functions/typescript-v1-getting-started/" }
+    "source": {
+      "title": "Getting started with TypeScript v1 functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v1-getting-started/"
+    }
   },
   {
     "id": "imp-030",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "A developer at Ashdown Biotech adds a class `SampleFunctions` in a new file of a TypeScript v1 functions repository. After a version is tagged and released, one of its methods is missing from the function registry while methods of other classes appear. Which conditions must hold for the method to be discovered and published? Select THREE.",
     "options": [
-      { "id": "a", "text": "The method is declared `public` on its class", "why": "Private methods are treated as helpers and are never published to the registry." },
-      { "id": "b", "text": "The class is exported from the repository's `index.ts` file", "why": "A class in a separate file is only discovered if `index.ts` exports it." },
-      { "id": "c", "text": "The method has a decorator such as `@Function()` or `@OntologyEditFunction()`", "why": "Only methods decorated with one of the functions decorators are registered. Undecorated methods are ignored." },
-      { "id": "d", "text": "The method is declared `async` and returns a `Promise`", "why": "Synchronous functions are published too. Asynchronous code is a choice made for loading data, not a publishing requirement." },
-      { "id": "e", "text": "The method carries an `@Edits` decorator listing every object type that it reads", "why": "`@Edits` is optional provenance for Ontology edit functions and lists edited types. It is not needed for a function to be published." }
+      {
+        "id": "a",
+        "text": "The method is declared `public` on its class",
+        "why": "Private methods are treated as helpers and are never published to the registry."
+      },
+      {
+        "id": "b",
+        "text": "The class is exported from the repository's `index.ts` file",
+        "why": "A class in a separate file is only discovered if `index.ts` exports it."
+      },
+      {
+        "id": "c",
+        "text": "The method has a decorator such as `@Function()` or `@OntologyEditFunction()`",
+        "why": "Only methods decorated with one of the functions decorators are registered. Undecorated methods are ignored."
+      },
+      {
+        "id": "d",
+        "text": "The method is declared `async` and returns a `Promise`",
+        "why": "Synchronous functions are published too. Asynchronous code is a choice made for loading data, not a publishing requirement."
+      },
+      {
+        "id": "e",
+        "text": "The method carries an `@Edits` decorator listing every object type that it reads",
+        "why": "`@Edits` is optional provenance for Ontology edit functions and lists edited types. It is not needed for a function to be published."
+      }
     ],
-    "answer": ["a", "b", "c"],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
     "explanation": "TypeScript v1 functions are methods of a class. For a method to be discovered and published it must be public, its class must be exported from `functions-typescript/src/index.ts`, and it must carry `@Function()`, `@OntologyEditFunction()` or `@Query()`. Anything private or undecorated is left unpublished, which is how helper methods are written.",
-    "source": { "title": "Functions: Decorators", "url": "https://www.palantir.com/docs/foundry/functions/decorators/" }
+    "source": {
+      "title": "Functions: Decorators",
+      "url": "https://www.palantir.com/docs/foundry/functions/decorators/"
+    }
   },
   {
     "id": "imp-031",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "An engineer at Tarnwick Water has plotted a pump's vibration time series property in Quiver. The raw series is noisy, and she wants a second plot on the same chart in which every point is the average of the preceding seven days, so the trend is easier to see. Which transformation should she add?",
     "options": [
-      { "id": "a", "text": "A rolling aggregate with a seven-day window and the average method", "why": "A rolling aggregate computes, for each point of the series, an aggregate over the window that ends at that point, which gives a smoothed series." },
-      { "id": "b", "text": "A periodic aggregate with a seven-day window and the average method", "why": "A periodic aggregate cuts the series into fixed consecutive windows and returns one value per window, giving a weekly series rather than a value at every point." },
-      { "id": "c", "text": "A cumulative aggregate using the average method", "why": "A cumulative aggregate uses a window that runs from the start of the series to each point, so it averages the whole history rather than seven days." },
-      { "id": "d", "text": "A transform table created from the time series plot", "why": "A transform table turns the series into tabular rows for batch work. It does not add a smoothed plot to the chart." }
+      {
+        "id": "a",
+        "text": "A rolling aggregate with a seven-day window and the average method",
+        "why": "A rolling aggregate computes, for each point of the series, an aggregate over the window that ends at that point, which gives a smoothed series."
+      },
+      {
+        "id": "b",
+        "text": "A periodic aggregate with a seven-day window and the average method",
+        "why": "A periodic aggregate cuts the series into fixed consecutive windows and returns one value per window, giving a weekly series rather than a value at every point."
+      },
+      {
+        "id": "c",
+        "text": "A cumulative aggregate using the average method",
+        "why": "A cumulative aggregate uses a window that runs from the start of the series to each point, so it averages the whole history rather than seven days."
+      },
+      {
+        "id": "d",
+        "text": "A transform table created from the time series plot",
+        "why": "A transform table turns the series into tabular rows for batch work. It does not add a smoothed plot to the chart."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Quiver time series transformations take a series as input and add a new plot. The rolling aggregate is the usual way to smooth a series: for each point it applies the chosen method over a window of previous values up to and including that point. Periodic and cumulative aggregates use fixed windows and an ever-growing window respectively.",
-    "source": { "title": "Quiver: Rolling aggregate", "url": "https://www.palantir.com/docs/foundry/quiver/card-rolling-aggregate/" }
+    "source": {
+      "title": "Quiver: Rolling aggregate",
+      "url": "https://www.palantir.com/docs/foundry/quiver/card-rolling-aggregate/"
+    }
   },
   {
     "id": "imp-032",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "A Quiver analysis at Oakhaven Tea starts from 8,000 `Tea Tasting` objects, each linked to one `Tea Batch`. The analyst needs one table in which every tasting row also shows its batch's origin and harvest date, so that a formula can use the tasting score and the batch properties together. Which card should be added?",
     "options": [
-      { "id": "a", "text": "Join to linked objects, which adds the linked batch's properties to each tasting row", "why": "This transform performs a join across the link in a transform table, so each row keeps the tasting's properties and gains the linked batch's properties." },
-      { "id": "b", "text": "Switch to linked object set, which traverses the link from the tastings to their batches", "why": "A search around returns the linked Tea Batch objects only. The tasting information is not kept in the same row." },
-      { "id": "c", "text": "Filter object set with a linked property filter on the batch's origin", "why": "A linked property filter narrows the tastings by a batch property. It does not bring batch properties into the table as columns." },
-      { "id": "d", "text": "Object selector, with the batch's properties displayed in an object view", "why": "An object selector picks a single object for inspection. It does not produce a combined row per tasting." }
+      {
+        "id": "a",
+        "text": "Join to linked objects, which adds the linked batch's properties to each tasting row",
+        "why": "This transform performs a join across the link in a transform table, so each row keeps the tasting's properties and gains the linked batch's properties."
+      },
+      {
+        "id": "b",
+        "text": "Switch to linked object set, which traverses the link from the tastings to their batches",
+        "why": "A search around returns the linked Tea Batch objects only. The tasting information is not kept in the same row."
+      },
+      {
+        "id": "c",
+        "text": "Filter object set with a linked property filter on the batch's origin",
+        "why": "A linked property filter narrows the tastings by a batch property. It does not bring batch properties into the table as columns."
+      },
+      {
+        "id": "d",
+        "text": "Object selector, with the batch's properties displayed in an object view",
+        "why": "An object selector picks a single object for inspection. It does not produce a combined row per tasting."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "Quiver offers two ways across a link. Switch to linked object set performs a search around and outputs the linked objects, dropping the original rows. Join to linked objects is a transform table transformation that joins each row with its linked object's properties, and it is available when the input is within the transform table row limit.",
-    "source": { "title": "Quiver: Search around to linked objects", "url": "https://www.palantir.com/docs/foundry/quiver/objects-import-linked/" }
+    "source": {
+      "title": "Quiver: Search around to linked objects",
+      "url": "https://www.palantir.com/docs/foundry/quiver/objects-import-linked/"
+    }
   },
   {
     "id": "imp-033",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "easy",
     "format": "discrete",
     "stem": "Before a review meeting, an analyst at Fenmoor Logistics drags the cards on a Quiver canvas into a new order, placing the summary charts above the filter cards that feed them. A colleague used to Contour worries that this will change the results. Which statement about the canvas is correct?",
     "options": [
-      { "id": "a", "text": "Rearranging cards changes only the display; each card still computes from the inputs configured on it", "why": "A canvas is for display and organisation. The sequence of transformations is set by each card's inputs, not by its position." },
-      { "id": "b", "text": "Cards are evaluated from top to bottom, so a chart placed above its filter shows unfiltered data", "why": "That describes a Contour path. In Quiver, position on the canvas has no effect on the underlying data flow." },
-      { "id": "c", "text": "Taking a card off the canvas always deletes it from the analysis, together with the cards that use it", "why": "A card can be removed from a canvas without deleting it from the analysis, and it can be added back later." },
-      { "id": "d", "text": "An analysis has exactly one canvas, so every card must be arranged on the same page", "why": "An analysis can contain multiple canvases, and cards can be moved between them." }
+      {
+        "id": "a",
+        "text": "Rearranging cards changes only the display; each card still computes from the inputs configured on it",
+        "why": "A canvas is for display and organisation. The sequence of transformations is set by each card's inputs, not by its position."
+      },
+      {
+        "id": "b",
+        "text": "Cards are evaluated from top to bottom, so a chart placed above its filter shows unfiltered data",
+        "why": "That describes a Contour path. In Quiver, position on the canvas has no effect on the underlying data flow."
+      },
+      {
+        "id": "c",
+        "text": "Taking a card off the canvas always deletes it from the analysis, together with the cards that use it",
+        "why": "A card can be removed from a canvas without deleting it from the analysis, and it can be added back later."
+      },
+      {
+        "id": "d",
+        "text": "An analysis has exactly one canvas, so every card must be arranged on the same page",
+        "why": "An analysis can contain multiple canvases, and cards can be moved between them."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "In Quiver, every card takes inputs and produces a typed output, and those connections define the analysis. A canvas is only a page for displaying, arranging and resizing cards, so reordering them does not affect the underlying sequence of data transformations. Graph mode shows the actual dependencies between cards.",
-    "source": { "title": "Quiver: Core concepts", "url": "https://www.palantir.com/docs/foundry/quiver/core-concepts/" }
+    "source": {
+      "title": "Quiver: Core concepts",
+      "url": "https://www.palantir.com/docs/foundry/quiver/core-concepts/"
+    }
   },
   {
     "id": "imp-034",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "A Workshop module at Ravensdale Ports has an Object Table of `Vessel` objects with multi-select enabled, and a Property List beside it that should show details of the row the user has just clicked. The Property List reads the table's Selected objects variable and stays empty until a checkbox is ticked. What should the builder change?",
     "options": [
-      { "id": "a", "text": "Point the Property List at the table's Active object output variable", "why": "The Active object output is an object set holding the currently highlighted row, so it updates as soon as the user clicks a row." },
-      { "id": "b", "text": "Turn off multi-select so that Selected objects is filled by a row click", "why": "Selected objects is only populated when multi-select is enabled, and then by checked rows. Turning the setting off leaves the variable unused." },
-      { "id": "c", "text": "Add a Filter List whose output filter is applied to the Selected objects variable", "why": "A filter narrows an object set by property values. It does not capture which row the user clicked." },
-      { "id": "d", "text": "Create a function-backed column that returns the clicked vessel for each row", "why": "A function-backed column computes a displayed value per row. It is not an output of the user's selection." }
+      {
+        "id": "a",
+        "text": "Point the Property List at the table's Active object output variable",
+        "why": "The Active object output is an object set holding the currently highlighted row, so it updates as soon as the user clicks a row."
+      },
+      {
+        "id": "b",
+        "text": "Turn off multi-select so that Selected objects is filled by a row click",
+        "why": "Selected objects is only populated when multi-select is enabled, and then by checked rows. Turning the setting off leaves the variable unused."
+      },
+      {
+        "id": "c",
+        "text": "Add a Filter List whose output filter is applied to the Selected objects variable",
+        "why": "A filter narrows an object set by property values. It does not capture which row the user clicked."
+      },
+      {
+        "id": "d",
+        "text": "Create a function-backed column that returns the clicked vessel for each row",
+        "why": "A function-backed column computes a displayed value per row. It is not an output of the user's selection."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "The Object Table has two output variables. Active object is an object set containing the currently active, highlighted row. Selected objects holds the checked rows and is only populated when multi-select is enabled. A detail panel that follows the clicked row should use the active object output.",
-    "source": { "title": "Workshop: Object Table", "url": "https://www.palantir.com/docs/foundry/workshop/widgets-object-table/" }
+    "source": {
+      "title": "Workshop: Object Table",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-object-table/"
+    }
   },
   {
     "id": "imp-035",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "An action notification at Stonebridge Care should link to a Workshop module with a region already chosen, using a URL that ends in `?selectedRegion=North`. The module has a static string variable named 'Selected Region' that drives its filters, but when the link is opened the variable keeps its default value. What should the builder configure?",
     "options": [
-      { "id": "a", "text": "Give the variable the external ID `selectedRegion` and enable it for the module interface", "why": "A query parameter whose key matches the external ID of a module interface variable is used as that variable's initial value when the module loads." },
-      { "id": "b", "text": "Enable state saving for the module and switch it on for the 'Selected Region' variable", "why": "State saving stores variable values when a user explicitly saves a state and reloads it. It does not read values from URL parameters." },
-      { "id": "c", "text": "Rename the variable's display name so that it reads exactly `selectedRegion`", "why": "URL parameters are matched to the external ID of a module interface variable, not to its display name." },
-      { "id": "d", "text": "Set the variable to recompute only when triggered by an event, and add an event on load", "why": "Recompute settings apply to computed definitions such as functions. They do not make a static variable read a URL parameter." }
+      {
+        "id": "a",
+        "text": "Give the variable the external ID `selectedRegion` and enable it for the module interface",
+        "why": "A query parameter whose key matches the external ID of a module interface variable is used as that variable's initial value when the module loads."
+      },
+      {
+        "id": "b",
+        "text": "Enable state saving for the module and switch it on for the 'Selected Region' variable",
+        "why": "State saving stores variable values when a user explicitly saves a state and reloads it. It does not read values from URL parameters."
+      },
+      {
+        "id": "c",
+        "text": "Rename the variable's display name so that it reads exactly `selectedRegion`",
+        "why": "URL parameters are matched to the external ID of a module interface variable, not to its display name."
+      },
+      {
+        "id": "d",
+        "text": "Set the variable to recompute only when triggered by an event, and add an event on load",
+        "why": "Recompute settings apply to computed definitions such as functions. They do not make a static variable read a URL parameter."
+      }
     ],
-    "answer": ["a"],
+    "answer": [
+      "a"
+    ],
     "explanation": "The module interface is the set of variables that can be mapped from a parent module or initialised from the URL. A variable joins the interface when it has an external ID and the module interface toggle is enabled. A URL query parameter keyed by that external ID then sets the variable's initial value when the module first loads.",
-    "source": { "title": "Workshop: Module interface", "url": "https://www.palantir.com/docs/foundry/workshop/module-interface/" }
+    "source": {
+      "title": "Workshop: Module interface",
+      "url": "https://www.palantir.com/docs/foundry/workshop/module-interface/"
+    }
   },
   {
     "id": "imp-036",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "A Workshop module at Calloway Grid has a function-backed variable `forecast` that takes three user inputs and is slow to compute. The builder sets its recompute behaviour to 'Only when triggered by an event' and adds a 'Run forecast' button. Which statements describe how `forecast` now behaves? Select TWO.",
     "options": [
-      { "id": "a", "text": "Changing one of the three inputs no longer recomputes `forecast` on its own", "why": "With this option, input changes do not trigger computation. The variable waits for an explicit recompute event." },
-      { "id": "b", "text": "A Recompute `forecast` event on the button computes it from the current input values", "why": "The recompute event requests a new value using the variable's definition and whatever its inputs hold at that moment." },
-      { "id": "c", "text": "`forecast` still computes once when the module loads and afterwards waits for the button", "why": "That is the separate option 'On module load, and when triggered by an event'. The event-only option has no initial computation." },
-      { "id": "d", "text": "A Set variable value event placed after the recompute on the button reliably copies the new result", "why": "Events do not wait for calculations to finish, so the copy can pick up the previous value or a loading state." },
-      { "id": "e", "text": "The same setting could be applied to an object set variable that uses an Object set definition", "why": "The Object set definition type does not support recompute behaviour directly. Its inputs or a function would have to be controlled instead." }
+      {
+        "id": "a",
+        "text": "Changing one of the three inputs no longer recomputes `forecast` on its own",
+        "why": "With this option, input changes do not trigger computation. The variable waits for an explicit recompute event."
+      },
+      {
+        "id": "b",
+        "text": "A Recompute `forecast` event on the button computes it from the current input values",
+        "why": "The recompute event requests a new value using the variable's definition and whatever its inputs hold at that moment."
+      },
+      {
+        "id": "c",
+        "text": "`forecast` still computes once when the module loads and afterwards waits for the button",
+        "why": "That is the separate option 'On module load, and when triggered by an event'. The event-only option has no initial computation."
+      },
+      {
+        "id": "d",
+        "text": "A Set variable value event placed after the recompute on the button reliably copies the new result",
+        "why": "Events do not wait for calculations to finish, so the copy can pick up the previous value or a loading state."
+      },
+      {
+        "id": "e",
+        "text": "The same setting could be applied to an object set variable that uses an Object set definition",
+        "why": "The Object set definition type does not support recompute behaviour directly. Its inputs or a function would have to be controlled instead."
+      }
     ],
-    "answer": ["a", "b"],
+    "answer": [
+      "a",
+      "b"
+    ],
     "explanation": "Recompute behaviour controls when Workshop recalculates a variable from its definition. With 'Only when triggered by an event', input changes do not recompute the value; a Recompute event, typically on a Button Group, does so with the current inputs. A second option also computes once on load, and events never wait for a calculation to complete before the next event runs.",
-    "source": { "title": "Workshop: Variable recompute behavior", "url": "https://www.palantir.com/docs/foundry/workshop/variable-recompute/" }
+    "source": {
+      "title": "Workshop: Variable recompute behavior",
+      "url": "https://www.palantir.com/docs/foundry/workshop/variable-recompute/"
+    }
   },
   {
     "id": "imp-tf-01",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "In Ontology Manager, a single datasource can be used as the backing datasource of only one object type.",
     "answer": true,
     "explanation": "A datasource can back just one object type. Trying to save a second object type on a datasource that is already registered fails with an error saying the dataset and branch are already registered.",
-    "source": { "title": "Create an object type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/" }
+    "source": {
+      "title": "Create an object type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-object-type/"
+    }
   },
   {
     "id": "imp-tf-02",
-    "domain": "implementation",
-    "objective": "object-types",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "implementation",
+      "objective": "object-types"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "A property with the base type Double is a valid choice for the primary key of an object type.",
     "answer": false,
     "correction": "A property with the base type Double is not valid as a primary key; String and Integer properties are the usual choices for the primary key of an object type.",
     "explanation": "Float-like base types (Float, Double and Decimal) can be title keys but cannot be primary keys. String, Integer and Short are the commonly used primary key types, and time-based and Long types are discouraged.",
-    "source": { "title": "Properties overview", "url": "https://www.palantir.com/docs/foundry/object-link-types/properties-overview/" }
+    "source": {
+      "title": "Properties overview",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/properties-overview/"
+    }
   },
   {
     "id": "imp-tf-03",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "When a link type is given one-to-one cardinality, the Ontology enforces it, so an object can never be linked to more than one object on the other side.",
     "answer": false,
     "correction": "One-to-one cardinality on a link type indicates the intended relationship but is not enforced, so the data can still link an object to more than one object on the other side.",
     "explanation": "One-to-one cardinality serves as an indicator of the intended relationship between the two object types. It is not enforced, so the uniqueness has to be guaranteed by the data itself.",
-    "source": { "title": "Create a link type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/" }
+    "source": {
+      "title": "Create a link type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/"
+    }
   },
   {
     "id": "imp-tf-04",
-    "domain": "implementation",
-    "objective": "link-types",
+    "domain": "ontology",
+    "objective": "identity-links",
+    "guide": {
+      "section": "implementation",
+      "objective": "link-types"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "In a one-to-many link type defined with a foreign key, the foreign key property on one object type must refer to the primary key property of the other object type.",
     "answer": true,
     "explanation": "A foreign key link is defined by a property on one object type that stores the primary key value of the other. Because each object type has a single primary key, that key is selected automatically when the link is configured.",
-    "source": { "title": "Create a link type", "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/" }
+    "source": {
+      "title": "Create a link type",
+      "url": "https://www.palantir.com/docs/foundry/object-link-types/create-link-type/"
+    }
   },
   {
     "id": "imp-tf-05",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "side-effects",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "A single action type can be configured with several writeback webhooks, all of which run before the Ontology edits are applied.",
     "answer": false,
     "correction": "A single action type can be configured with only one writeback webhook, which runs before the Ontology edits are applied; several webhooks are only possible as side effects.",
     "explanation": "Because the action stops when a writeback webhook fails, only one webhook can be configured as a writeback. Multiple webhooks are allowed as side effects, which run after the edits in no particular order.",
-    "source": { "title": "Action types: Webhooks", "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/" }
+    "source": {
+      "title": "Action types: Webhooks",
+      "url": "https://www.palantir.com/docs/foundry/action-types/webhooks/"
+    }
   },
   {
     "id": "imp-tf-06",
-    "domain": "implementation",
-    "objective": "actions",
+    "domain": "actions",
+    "objective": "security-troubleshooting",
+    "guide": {
+      "section": "implementation",
+      "objective": "actions"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "If an action's submission criteria fail, the notifications and other side effects configured on the action type are not triggered.",
     "answer": true,
     "explanation": "Side effects depend on the action being applied. Submission criteria must pass as normal, and when they fail the action is not submitted and no side effects are triggered.",
-    "source": { "title": "Action types: Permissions", "url": "https://www.palantir.com/docs/foundry/action-types/permissions/" }
+    "source": {
+      "title": "Action types: Permissions",
+      "url": "https://www.palantir.com/docs/foundry/action-types/permissions/"
+    }
   },
   {
     "id": "imp-tf-07",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Running an `@OntologyEditFunction` from the Functions helper in a code repository applies its edits to the real objects in the Ontology.",
     "answer": false,
     "correction": "Running an `@OntologyEditFunction` from the Functions helper does not apply its edits to real objects; edits are only applied when the function runs through a function-backed action.",
     "explanation": "The helper executes the function and shows its result without applying edits, so edit functions can be tested freely on different inputs. The only way to update objects with a function is to configure an action that uses it.",
-    "source": { "title": "Functions: Ontology edits overview", "url": "https://www.palantir.com/docs/foundry/functions/edits-overview/" }
+    "source": {
+      "title": "Functions: Ontology edits overview",
+      "url": "https://www.palantir.com/docs/foundry/functions/edits-overview/"
+    }
   },
   {
     "id": "imp-tf-08",
-    "domain": "implementation",
-    "objective": "typescript-functions",
+    "domain": "functions",
+    "objective": "query-edit",
+    "guide": {
+      "section": "implementation",
+      "objective": "typescript-functions"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "In a TypeScript v1 function, calling `.all()` on the many side of a link, such as `employee.reports.all()`, returns an empty array when no objects are linked.",
     "answer": true,
     "explanation": "The many side of a link is generated as a `MultiLink`, and `.all()` or `.allAsync()` return an array that is empty when there are no linked objects. The one side is a `SingleLink`, whose `.get()` may return undefined instead.",
-    "source": { "title": "Functions API: Objects and links", "url": "https://www.palantir.com/docs/foundry/functions/api-objects-links/" }
+    "source": {
+      "title": "Functions API: Objects and links",
+      "url": "https://www.palantir.com/docs/foundry/functions/api-objects-links/"
+    }
   },
   {
     "id": "imp-tf-09",
-    "domain": "implementation",
+    "domain": "extended",
     "objective": "quiver",
+    "guide": {
+      "section": "implementation",
+      "objective": "quiver"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "A Quiver dashboard can define only one input, and that input must be an object or an object set.",
     "answer": false,
     "correction": "A Quiver dashboard can define multiple inputs and outputs of several types, such as object sets, objects, time series and other values.",
     "explanation": "Dashboards support multiple inputs and outputs of different data types, which are mapped to variables of the application that embeds them. The single object or object set input was a limitation of the deprecated canvas templates.",
-    "source": { "title": "Quiver: Create a dashboard", "url": "https://www.palantir.com/docs/foundry/quiver/dashboards-create/" }
+    "source": {
+      "title": "Quiver: Create a dashboard",
+      "url": "https://www.palantir.com/docs/foundry/quiver/dashboards-create/"
+    }
   },
   {
     "id": "imp-tf-10",
-    "domain": "implementation",
-    "objective": "workshop",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
+    "guide": {
+      "section": "implementation",
+      "objective": "workshop"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "The Selected objects output variable of the Workshop Object Table widget is only populated when the Enable multi-select option is turned on.",
     "answer": true,
     "explanation": "The Object Table has two outputs. Active object holds the highlighted row, while Selected objects holds the checked rows and is only in use when multi-select is enabled.",
-    "source": { "title": "Workshop: Object Table", "url": "https://www.palantir.com/docs/foundry/workshop/widgets-object-table/" }
+    "source": {
+      "title": "Workshop: Object Table",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-object-table/"
+    }
   }
 ]

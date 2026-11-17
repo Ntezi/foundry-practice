@@ -8,16 +8,24 @@
     "title": "Palantir certifications are getting a refresh (Palantir Developer Community, 27 July 2026, updated 3 August 2026)",
     "url": "https://community.palantir.com/t/palantir-certifications-are-getting-a-refresh-with-a-brand-new-ai-engineer-exam-launching-3-august/7022"
   },
-  "summary": "This simulator follows the 2026 Application Developer Certification Guide its author studied from (60 questions, 120 minutes, four weighted sections). Palantir refreshed its Associate exams on 3 August 2026, and the current official Associate guide describes a different exam. Treat a pass here as evidence of topic knowledge, not as a prediction of the live exam result.",
-  "rows": [
-    { "topic": "Questions", "simulator": "60", "official": "85" },
-    { "topic": "Duration", "simulator": "120 minutes", "official": "3 hours" },
-    { "topic": "Passing score", "simulator": "70% (42 of 60)", "official": "70%" },
-    { "topic": "Navigation", "simulator": "Forward-only: no return to a question after advancing", "official": "\"Questions are sequential\"" },
-    { "topic": "Question formats", "simulator": "Single-select, multi-select, discrete options, hotspot, matching", "official": "The launch announcement describes the Associate exams as multiple-choice. Hotspot, matching and discrete options are not mentioned." },
-    { "topic": "True/False", "simulator": "Practice only, plus an optional mix in mock forms labelled as a practice variation", "official": "Not mentioned in the official guide or the announcement" },
-    { "topic": "Content outline", "simulator": "Four sections: Application Design 30%, Application Implementation 30%, UX and Cross-Application Workflows 20%, Application Maintenance 20%", "official": "Eight domains, no published weights: Ontology Schema Design and Workflow Assembly; Action Types and Write-Back Patterns; Ontology Functions; Workshop Application Development; OSDK, APIs, and External Applications; Automate and Operational Workflows; AIP Logic and AI-Powered Applications; Application Security, Governance, and Operations" },
-    { "topic": "Topics the simulator does not cover", "simulator": "Quiver, Scenarios, Foundry Rules, Object Views and Carbon are covered because the baseline guide lists them", "official": "OSDK and external applications, Automate, AIP Logic, Python functions, and security and governance are exam domains that this question bank covers only in passing or not at all" },
-    { "topic": "Conditions", "simulator": "Runs in your browser, no proctoring", "official": "Timed and open-book per the announcement, valid for two years" }
-  ]
+  "summary": "The default mock exam follows the current official Application Developer Associate exam guide, which Palantir published when it refreshed its Associate exams on 3 August 2026. The guide fixes the size, length, pass mark and content outline of the exam but leaves some details open; those are listed below so you know what is official and what is this site's assumption. A pass here shows topic knowledge. It does not predict a result on the live exam.",
+  "follows": [
+    "85 questions.",
+    "3 hours (180 minutes).",
+    "A passing score of 70%, which is 60 of 85 with equal question weights.",
+    "\"Questions are sequential\": the mock shows one question at a time and does not let you go back.",
+    "Multiple-choice questions, as the launch announcement describes the Associate exams: the mock uses single-select and multi-select only.",
+    "The eight exam domains and what each covers: Ontology Schema Design and Workflow Assembly; Action Types and Write-Back Patterns; Ontology Functions; Workshop Application Development; OSDK, APIs, and External Applications; Automate and Operational Workflows; AIP Logic and AI-Powered Applications; Application Security, Governance, and Operations.",
+    "Results by domain, like the official score report, which the guide says shows how many questions you answered correctly in each domain.",
+    "The guide's emphasis on judgement: choosing the smallest safe design, diagnosing failures from evidence, and not fixing problems by over-permissioning or removing validation."
+  ],
+  "assumptions": [
+    "Domain weights are not published. The simulator spreads the 85 questions as evenly as it can: 11 for each of the first five domains and 10 for each of the last three.",
+    "The guide does not say whether questions are weighted equally or whether multi-select earns partial credit. The simulator uses one point per question and no partial credit.",
+    "The guide does not say whether a question can be skipped. The simulator lets you skip, and scores a skipped question as unanswered.",
+    "The live exam is open-book. The simulator does not stop you looking things up, and does not help you do it.",
+    "The guide lists TypeScript v2 and Python functions. Some older questions in this bank use the TypeScript v1 API and say so in the question.",
+    "True/False, hotspot, matching and discrete-options questions are not mentioned in the official material. They are offered in Practice only, not in the Associate mock."
+  ],
+  "pdfGuide": "This site was first built on a 2026 Application Developer Certification Guide PDF that describes an earlier exam: 60 questions, 120 minutes, 70% to pass, four weighted sections, and hotspot, matching and discrete-options questions alongside multiple choice. It remains available as a second mock blueprint with two fixed forms. Its Quiver, Scenarios, Foundry Rules, Object Views and Carbon topics are not in the current official outline, so in Practice they are grouped as earlier-guide topics. The PDF itself is not redistributed here."
 }

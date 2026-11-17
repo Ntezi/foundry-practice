@@ -1,8 +1,12 @@
 [
   {
     "id": "ux-001",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Harbourline Freight's dispatch team works in a Workshop module that lists delayed Shipment objects. Analysts occasionally want to take the currently filtered shipments, slice them with ad hoc charts and filters, and save the result to revisit later. The builders do not want to add and maintain more chart widgets for these one-off questions. What should they add to the module?",
@@ -39,8 +43,12 @@
   },
   {
     "id": "ux-002",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "At Calder Water, a supervisor filters Incident objects in Object Explorer down to open, high-severity incidents and arranges a few charts. She wants her team to reopen this view every Monday and see whichever incidents match at that time. Which TWO statements describe what she should do or expect? Select TWO.",
@@ -83,8 +91,12 @@
   },
   {
     "id": "ux-003",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "Vantor Logistics is reviewing its Workshop and Quiver workflows and wants to send users to the tool that already does what they need instead of rebuilding it. Match each user need to the hand-off that serves it best.",
@@ -146,8 +158,12 @@
   },
   {
     "id": "ux-004",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Tessera Rail shows the same 'wheel wear trend' chart in a Workshop module, in the Locomotive Object View and in a Carbon workspace. Each copy was built separately and they have drifted apart. The team wants one definition of the chart that stays consistent everywhere. Which approach fits best?",
@@ -184,8 +200,12 @@
   },
   {
     "id": "ux-005",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Brightwell Clinics splits a large Workshop application into a parent module and an embedded 'Appointment detail' child module. In the child, the interface variable `selectedStatus` has a default value of 'Open', but when the child runs inside the parent that default is never applied. The variable is mapped to a parent variable in the Embedded Module widget. What explains this, and what is the fix?",
@@ -222,8 +242,12 @@
   },
   {
     "id": "ux-006",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "hard",
     "format": "hotspot",
     "stem": "Operators at Norvale Energy work every alert in a Workshop triage module. The diagram shows where they go from it: for every single alert they open the sensor trend dashboard in a new tab, compare, and switch back, while the other destinations are used only as labelled. The team wants to remove the most disruptive context switch while keeping one maintained definition of the content. Select the region whose content should be embedded in the triage module instead of being opened separately.",
@@ -312,8 +336,12 @@
   },
   {
     "id": "ux-007",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Planners at Osprey Airways use a Workshop module to reassign aircraft to flights through an Action. They want to try several reassignments and see the effect in the module's table before anything is written to the Ontology. What should the builder configure?",
@@ -350,8 +378,12 @@
   },
   {
     "id": "ux-008",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "A Workshop module at Marlow Logistics lets planners edit delivery routes inside a scenario. The Object Table shows the scenario's values, but a Metric Card showing total planned distance still shows the Ontology's figure. The Metric Card has no scenario setting of its own. How should the builder make it reflect the scenario?",
@@ -388,8 +420,12 @@
   },
   {
     "id": "ux-009",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "Planners at Fenwick Foods build a scenario in Workshop that contains three Actions plus a demand forecast produced by a model. A button with an Apply scenario event lets an approver commit the scenario. At apply time, one of the three Actions fails its validation. Which statement correctly describes the outcome?",
@@ -426,8 +462,12 @@
   },
   {
     "id": "ux-010",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Compliance analysts at Arden Mutual maintain the thresholds that flag suspicious transactions. Today each threshold change is a ticket for a data engineer, who edits transform code. The analysts should author and change this logic themselves in a point-and-click editor, and every change must be reviewed before it takes effect. Which approach fits best?",
@@ -464,8 +504,12 @@
   },
   {
     "id": "ux-011",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "Quillon Mining deployed Foundry Rules from the standard workflow template. An engineer authors a new vibration rule in the Rule Editor and selects Submit changes, yet the alerts output dataset shows no rows from the rule. Which TWO steps are needed before the rule's results appear? Select TWO.",
@@ -508,8 +552,12 @@
   },
   {
     "id": "ux-012",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "At Pinecrest Utilities, rule authors write Foundry Rules that raise equipment alerts. A downstream alert inbox expects every row to carry a severity, an assignee and a machine ID with the right types, but authors keep producing inconsistent columns. The workflow owner wants this enforced at authoring time rather than cleaned up afterwards. What should the owner do?",
@@ -546,8 +594,12 @@
   },
   {
     "id": "ux-013",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Account managers at Lindqvist Supply select a Customer in a Workshop module and need a formatted account summary as a PDF, built from a standard layout that the reporting team maintains. Which addition to the module meets this need?",
@@ -584,8 +636,12 @@
   },
   {
     "id": "ux-014",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Redfern Rail runs its 'Depot overview' Workshop module as a tab in a Carbon workspace. A button in the module uses an Open Object view event for the selected Wagon. Users ask what will happen to their place in the depot overview when they click it. What is the behaviour?",
@@ -622,8 +678,12 @@
   },
   {
     "id": "ux-015",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "Saltmarsh Retail has an 'Orders' Workshop module and a separate 'Order investigation' module. From a selected order, users should jump to the investigation module with that order already loaded. The builder is deciding how to pass the selection across. Which statement about passing values into the target module is correct?",
@@ -660,8 +720,12 @@
   },
   {
     "id": "ux-016",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Halden Aerospace built a 'Maintenance history' Workshop module. It should appear as a tab in the Object Views of both the Aircraft and the Engine object types, and the team wants to maintain it in one place. Which tab type should they use?",
@@ -698,8 +762,12 @@
   },
   {
     "id": "ux-017",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "Ostrava Health embeds a 'Patient vitals' child module in several parent Workshop modules through the Embedded Module widget. After rollout, some users see a 'failed to load module' error where the child should be, and the child's data no longer refreshes on its own even though auto-refresh is enabled in the child's settings. Which TWO statements explain these observations? Select TWO.",
@@ -742,8 +810,12 @@
   },
   {
     "id": "ux-018",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "Ironbridge Manufacturing is consolidating several tools into one Workshop application and wants to reuse existing content rather than rebuild it. Match each requirement to the Workshop feature that embeds the right content.",
@@ -805,8 +877,12 @@
   },
   {
     "id": "ux-019",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Schedulers at Dunmore Transit apply several Actions to a scenario in a Workshop module. Before deciding anything, they want to see exactly which Actions the selected scenario contains and drop one that was added by mistake. Which widget provides this?",
@@ -843,8 +919,12 @@
   },
   {
     "id": "ux-020",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Wexford Port stores approved berth-plan scenarios as objects. In a review module, managers must choose one or more of these saved scenarios to compare in a table, but they must not be able to create new scenarios there. How should the builder set this up?",
@@ -881,8 +961,12 @@
   },
   {
     "id": "ux-021",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "Planners at Corran Steel build what-if scenarios in a Workshop module but lose them whenever they close the browser. They also want each scenario they keep to carry a description and its author so colleagues can find it. Which TWO statements describe how to meet these needs? Select TWO.",
@@ -925,8 +1009,12 @@
   },
   {
     "id": "ux-022",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "medium",
     "format": "hotspot",
     "stem": "Stanmoor Grid uses Foundry Rules to raise equipment alerts, which its operators work in an alert inbox module. The diagram shows the flow from authoring a rule to the inbox. An engineer wants to know where approved rules are actually evaluated against the sensor data. Select the region where rule logic is applied to the workflow inputs.",
@@ -1040,8 +1128,12 @@
   },
   {
     "id": "ux-023",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Rule authors at Thornbury Insurance write Foundry Rules over the Claim object type. They now need to join claims to the linked Policy objects inside their rules, but Policy does not appear as an option in the Rule Editor. Who makes it available, and where?",
@@ -1078,8 +1170,12 @@
   },
   {
     "id": "ux-024",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "Greyfell Bank runs Foundry Rules for transaction monitoring. Policy states that a change to a rule may only be approved by that rule's author or by a small superuser group, while anyone on the team may still propose changes. How should this be enforced?",
@@ -1116,8 +1212,12 @@
   },
   {
     "id": "ux-tf-01",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "A list saved from Object Explorer is a static set of objects that does not change unless it is updated manually.",
@@ -1130,8 +1230,12 @@
   },
   {
     "id": "ux-tf-02",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Sharing a saved Object Explorer exploration also gives its viewers access to the underlying objects.",
@@ -1145,8 +1249,12 @@
   },
   {
     "id": "ux-tf-03",
-    "domain": "ux",
-    "objective": "redirects",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "redirects"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Selecting Open in Quiver from Workshop's Free-form Analysis widget creates a duplicate analysis, so later changes made in Quiver are not reflected back in the widget.",
@@ -1159,8 +1267,12 @@
   },
   {
     "id": "ux-tf-04",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "The Embedded Module widget in Workshop displays the child module's most recently saved version, even if that version has not been published.",
@@ -1174,8 +1286,12 @@
   },
   {
     "id": "ux-tf-05",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "An existing Workshop module added as an Object View tab can be used in more than one Object View, whereas a managed Workshop module tab cannot be reused.",
@@ -1188,8 +1304,12 @@
   },
   {
     "id": "ux-tf-06",
-    "domain": "ux",
-    "objective": "embedding",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "ux",
+      "objective": "embedding"
+    },
     "difficulty": "hard",
     "format": "truefalse",
     "stem": "When a variable changes inside an embedded Workshop child module, the parent module's variables update automatically even if they are not mapped through the module interface.",
@@ -1203,8 +1323,12 @@
   },
   {
     "id": "ux-tf-07",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "To use a model as part of a Workshop scenario, the model is wrapped in a Function and invoked through a function-backed Action.",
@@ -1217,8 +1341,12 @@
   },
   {
     "id": "ux-tf-08",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "scenarios",
+    "guide": {
+      "section": "ux",
+      "objective": "scenarios"
+    },
     "difficulty": "hard",
     "format": "truefalse",
     "stem": "When a Workshop scenario is applied, the values estimated by its models are written to the Ontology together with the edits made by its Actions.",
@@ -1232,8 +1360,12 @@
   },
   {
     "id": "ux-tf-09",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "In Foundry Rules, each rule is stored as a standard object whose properties include rule metadata and the rule's logic.",
@@ -1246,8 +1378,12 @@
   },
   {
     "id": "ux-tf-10",
-    "domain": "ux",
+    "domain": "extended",
     "objective": "foundry-rules",
+    "guide": {
+      "section": "ux",
+      "objective": "foundry-rules"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Rule proposals are mandatory in Foundry Rules: a workflow cannot be used without a proposal review step.",

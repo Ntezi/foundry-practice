@@ -1,8 +1,12 @@
 [
   {
     "id": "des-001",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Harrowgate Mutual wants an inbox where claims handlers, who are not technical, triage incoming warranty claims and record an outcome on each one with a button. One builder with no front-end coding background will build and maintain it. Which Foundry tool is the best fit?",
@@ -39,8 +43,12 @@
   },
   {
     "id": "des-002",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Reliability engineers at Tidewater Pumps want to explore vibration readings stored as time series on `Pump` objects: rolling averages, comparing pumps, and following links to maintenance events. Each engineer follows their own line of enquiry, and nobody wants to wait for a builder to configure an application first. Which tool should they use?",
@@ -77,8 +85,12 @@
   },
   {
     "id": "des-003",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "The brand team at Lumen & Vale insists that an internal store-performance application matches the corporate identity exactly, with fonts, button radii and backgrounds controlled through CSS. The builder is comfortable with HTML, CSS and JavaScript and accepts a higher maintenance cost in exchange. Which application builder matches this requirement?",
@@ -115,8 +127,12 @@
   },
   {
     "id": "des-004",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "Northmoor Procurement has a `Supplier` object type. Buyers open suppliers from Object Explorer, from several Workshop modules and from other Foundry applications, and they should always land on the same curated page showing key properties, linked contracts and a risk summary. For each option, decide whether it is the appropriate way to deliver this.",
@@ -153,8 +169,12 @@
   },
   {
     "id": "des-005",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "An analytics team at Castellan Freight is deciding between Contour and Quiver for a new piece of analysis. Which characteristics of the work would point towards Contour? Select TWO.",
@@ -197,8 +217,12 @@
   },
   {
     "id": "des-006",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Brightwell Facilities receives a maintenance export with one row per inspection. Each row also carries the inspector's name and badge number, the asset's tag and model, and the site code. The team is about to turn the dataset into Ontology object types. Which model follows Palantir's ontology design guidance?",
@@ -235,8 +259,12 @@
   },
   {
     "id": "des-007",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "An `Employee` object type needs a `fullName` property built from `firstName` and `lastName`. Both inputs sit on the same record and change only when the HR pipeline ingests new data. Where should `fullName` be computed?",
@@ -273,8 +301,12 @@
   },
   {
     "id": "des-008",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "At Orrin Logistics, dispatchers reassign `WorkOrder` objects between `Crew` objects many times a day through actions. Crew leads want an `openWorkOrderCount` on each crew that is always correct, and screens rarely load more than a few hundred crews at once. Which design does the ontology guidance recommend?",
@@ -311,8 +343,12 @@
   },
   {
     "id": "des-009",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "Pallas Rail holds staff records in an HR system, a badge-access system and a project tool. A first draft of the ontology has three object types: `HrEmployee`, `BadgeHolder` and `ProjectMember`. Which steps does the ontology design guidance recommend instead? Select TWO.",
@@ -355,8 +391,12 @@
   },
   {
     "id": "des-010",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "medium",
     "format": "discrete",
     "stem": "Verdant Utilities assigns engineers to capital projects. Each assignment has a role, a start date and a percentage allocation, and an engineer can work on several projects at once. For each option, decide whether it models this correctly.",
@@ -393,8 +433,12 @@
   },
   {
     "id": "des-011",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "ontology",
+    "objective": "workflow-assembly",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A Quiver dashboard at Castellan Freight flags late shipments. Coordinators read it, decide whether to re-route, and email their decision to planners, so the choice is never recorded in Foundry. What should the team add to turn this into an operational workflow?",
@@ -431,8 +475,12 @@
   },
   {
     "id": "des-012",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "The compliance team at Harrowgate Mutual wants to analyse refund approvals as data: who approved each one, when, and which parameter values they submitted. Approvals are made through an `Approve refund` action type. Which capability should be enabled?",
@@ -469,8 +517,12 @@
   },
   {
     "id": "des-013",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "ontology",
+    "objective": "workflow-assembly",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "When a supervisor at Orrin Logistics submits the `Re-route shipment` action, customer service must receive an email and the external transport management system must be updated, with no extra step for the supervisor. Which features of the action type achieve this? Select TWO.",
@@ -513,8 +565,12 @@
   },
   {
     "id": "des-014",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "The `Approve discount` action at Lumen & Vale is used from a Workshop module, from Object Explorer and from a custom application built for partners. Only members of the finance group may approve, and only while the order is still open. Where should this rule be enforced so that it holds everywhere?",
@@ -551,8 +607,12 @@
   },
   {
     "id": "des-015",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A Workshop module shows an Object Table of work orders. Planners want to read extra detail about the selected work order while still scanning the rest of the table. What does the Workshop design guidance recommend?",
@@ -589,8 +649,12 @@
   },
   {
     "id": "des-016",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "A review of a Workshop module at Pallas Rail finds seven primary actions in the top-level navigation and eighteen widgets visible on one screen with almost no space between them. Which changes follow the Workshop design guidance? Select TWO.",
@@ -633,8 +697,12 @@
   },
   {
     "id": "des-017",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "hotspot",
     "stem": "A builder is laying out a Workshop page for dispatchers with a set of filters, a results table and a detail area. The page should follow the F-shaped reading pattern described in the Workshop design guidance. Select the region where the filter widgets should be anchored.",
@@ -702,8 +770,12 @@
   },
   {
     "id": "des-018",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "A builder at Brightwell Facilities is choosing Workshop layout elements for a new module. Match each need to the layout element designed for it.",
@@ -765,8 +837,12 @@
   },
   {
     "id": "des-019",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Maintenance controllers at Pallas Rail use a Workshop inbox, two configured Object Views and a Quiver dashboard every day. They are not technical and find the rest of Foundry distracting. The team wants one curated entry point that shows only these resources. Which tool provides this?",
@@ -803,8 +879,12 @@
   },
   {
     "id": "des-020",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Each month Verdant Utilities sends its regulator a written status report for each treatment plant: narrative text with embedded charts and object data, exported as a document. The structure is the same every month; only the selected plant and the figures change. Which tool fits best?",
@@ -841,8 +921,12 @@
   },
   {
     "id": "des-021",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "hard",
     "format": "discrete",
     "stem": "Harrowgate Mutual runs a Workshop module for claims adjusters with tables, filters and several actions. One thing is missing: a bespoke vehicle-damage diagram that no built-in widget can draw. One builder maintains the module, with occasional help from a front-end developer. For each option, decide whether it is the proportionate way to add the diagram.",
@@ -879,8 +963,12 @@
   },
   {
     "id": "des-022",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "medium",
     "format": "matching",
     "stem": "A platform team is advising four groups on which Ontology-aware application to start with. Match each requirement to the application that Palantir's documentation positions for it.",
@@ -942,8 +1030,12 @@
   },
   {
     "id": "des-023",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "At Lumen & Vale, sales, support and finance have each built their own customer object type. Nobody can answer 'show every interaction with this customer', and the three copies disagree on addresses. Which redesign does the ontology guidance recommend?",
@@ -980,8 +1072,12 @@
   },
   {
     "id": "des-024",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "Northmoor Procurement stores every revision of a contract as a new `Contract` object, using `version` and `isCurrent` properties to tell them apart. Links to vendors are repeated on every copy and users are unsure which object to open. Which model should replace it?",
@@ -1018,8 +1114,12 @@
   },
   {
     "id": "des-025",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "A `Customer` object type at Castellan Freight is backed by a CRM extract with sixty columns, including batch identifiers, extraction timestamps and internal record IDs. Users complain that the properties they need are hard to find. Which steps follow the ontology design guidance? Select TWO.",
@@ -1062,8 +1162,12 @@
   },
   {
     "id": "des-026",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "hard",
     "format": "hotspot",
     "stem": "Orrin Logistics has the architecture shown. When a `Shipment` object's status changes to Delayed, the account manager must be notified and a follow-up action submitted, with no user involved and without waiting for the next scheduled build. Select the region where this reaction should be implemented.",
@@ -1165,8 +1269,12 @@
   },
   {
     "id": "des-027",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "ontology",
+    "objective": "workflow-assembly",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "Planners at Brightwell Facilities open a Workshop module that charts overdue inspections. To reschedule one, they log in to a separate scheduling system. Judged against Palantir's description of an operational application, what is the main gap?",
@@ -1203,8 +1311,12 @@
   },
   {
     "id": "des-028",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "extended",
+    "objective": "quiver",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Engineers at Tidewater Pumps use a Quiver analysis to identify pumps that need recalibration. Today they paste the list into a chat channel. They want each conclusion captured so that maintenance planners see it straight away in their own applications. What should they do?",
@@ -1241,8 +1353,12 @@
   },
   {
     "id": "des-029",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "ontology",
+    "objective": "workflow-assembly",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "hard",
     "format": "multi",
     "stem": "The `WorkOrder` object type at Verdant Utilities has fourteen action types such as `Set status`, `Set crew` and `Set scheduled date`. Reassigning a job takes three submissions in a row. According to the ontology design guidance, which problems does this design cause? Select TWO.",
@@ -1285,8 +1401,12 @@
   },
   {
     "id": "des-030",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "ontology",
+    "objective": "workflow-assembly",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "medium",
     "format": "discrete",
     "stem": "Warehouse clerks at Castellan Freight correct stock quantities for several hundred `InventoryItem` objects at a time, often starting from a CSV file. An `Update quantity` action type already exists. For each option, decide whether it is the appropriate way to support this in Workshop.",
@@ -1323,8 +1443,12 @@
   },
   {
     "id": "des-031",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "hard",
     "format": "single",
     "stem": "Auditors at Northmoor Procurement want reviewers to see, inside a Workshop module, the complete list of user edits to a `Contract` object's properties, whichever action type made them, including action types added later. Which approach meets this?",
@@ -1361,8 +1485,12 @@
   },
   {
     "id": "des-032",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "easy",
     "format": "single",
     "stem": "A Workshop page for site supervisors shows today's deliveries. Each delivery needs only its reference and status, supervisors review them quickly one by one, and the only interaction is confirming a single delivery. Which widget does the Workshop design guidance suggest?",
@@ -1399,8 +1527,12 @@
   },
   {
     "id": "des-033",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Inspectors at Pallas Rail will use a Workshop module on their phones. The desktop version has a collapsible filter sidebar and small buttons in a section header. Which change follows the mobile design best practices?",
@@ -1437,8 +1569,12 @@
   },
   {
     "id": "des-034",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "Tidewater Pumps has four Workshop modules for one maintenance team, built by different people. Users say they feel like four unrelated tools. Which steps follow the guidance on building unified applications? Select TWO.",
@@ -1481,8 +1617,12 @@
   },
   {
     "id": "des-035",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "extended",
+    "objective": "cross-application",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "single",
     "stem": "Call-centre agents at Harrowgate Mutual work in a Carbon workspace. Team leads want agents to stay inside it: links to other Foundry applications should disappear from the navigation menu, while navigation between the workspace's own modules keeps working. What should the workspace editor do?",
@@ -1519,8 +1659,12 @@
   },
   {
     "id": "des-036",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "multi",
     "stem": "Reviewers at Northmoor Procurement must read a long contract clause and enter an assessment against it. The builder plans to put the assessment inputs in a dialog opened from the clause page. Which statements reflect the Workshop guidance on overlays? Select TWO.",
@@ -1563,8 +1707,12 @@
   },
   {
     "id": "des-tf-01",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "A Slate application can be made accessible on the public internet so that people without Foundry accounts can submit data into Foundry.",
@@ -1577,8 +1725,12 @@
   },
   {
     "id": "des-tf-02",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Notepad is the recommended tool for building dashboards in which charts filter dynamically in response to user inputs and chart selections.",
@@ -1592,8 +1744,12 @@
   },
   {
     "id": "des-tf-03",
-    "domain": "design",
+    "domain": "extended",
     "objective": "tool-selection",
+    "guide": {
+      "section": "design",
+      "objective": "tool-selection"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "When a configured Object View is created for an object type, it becomes the default view, and users can still switch back to the standard Object View.",
@@ -1606,8 +1762,12 @@
   },
   {
     "id": "des-tf-04",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "Palantir's ontology design guidance recommends creating a separate object type for each source system when the same real-world entity appears in several systems.",
@@ -1621,8 +1781,12 @@
   },
   {
     "id": "des-tf-05",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "hard",
     "format": "truefalse",
     "stem": "According to the ontology structural guidance, derived properties are evaluated at runtime, so at high scale (above roughly 10,000 objects per query) a deliberate, documented denormalization can be an appropriate trade-off.",
@@ -1635,8 +1799,12 @@
   },
   {
     "id": "des-tf-06",
-    "domain": "design",
-    "objective": "ontology-pipeline-design",
+    "domain": "ontology",
+    "objective": "modeling",
+    "guide": {
+      "section": "design",
+      "objective": "ontology-pipeline-design"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "The four core ontology design principles carry equal weight, so when two of them conflict a team may follow whichever it prefers.",
@@ -1650,8 +1818,12 @@
   },
   {
     "id": "des-tf-07",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "The action log records successful action submissions only; a failed submission does not produce an action log object.",
@@ -1664,8 +1836,12 @@
   },
   {
     "id": "des-tf-08",
-    "domain": "design",
-    "objective": "operational-workflows",
+    "domain": "actions",
+    "objective": "rules-design",
+    "guide": {
+      "section": "design",
+      "objective": "operational-workflows"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "An edit submitted through an Action is visible only in the application where it was submitted until the next pipeline build of the object type's backing dataset.",
@@ -1679,8 +1855,12 @@
   },
   {
     "id": "des-tf-09",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "medium",
     "format": "truefalse",
     "stem": "Workshop design guidance recommends applying an outer drop shadow to every section of a page so that all content appears equally important.",
@@ -1694,8 +1874,12 @@
   },
   {
     "id": "des-tf-10",
-    "domain": "design",
-    "objective": "ux-design",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "guide": {
+      "section": "design",
+      "objective": "ux-design"
+    },
     "difficulty": "easy",
     "format": "truefalse",
     "stem": "Workshop design guidance suggests keeping whitespace at roughly 30 to 40 percent of the screen and showing no more than ten visible components in a single view.",
