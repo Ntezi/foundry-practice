@@ -1,0 +1,1709 @@
+[
+  {
+    "id": "des-001",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Harrowgate Mutual wants an inbox where claims handlers, who are not technical, triage incoming warranty claims and record an outcome on each one with a button. One builder with no front-end coding background will build and maintain it. Which Foundry tool is the best fit?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Quiver dashboard mode",
+        "why": "A Quiver dashboard presents the results of an analysis for others to explore. It is not the tool for a guided, per-claim triage workflow that a builder shapes around a decision."
+      },
+      {
+        "id": "b",
+        "text": "Contour dashboard",
+        "why": "Contour analyses tabular datasets. It does not work on claim objects and gives handlers no Action-based way to record an outcome on each claim."
+      },
+      {
+        "id": "c",
+        "text": "Slate",
+        "why": "Slate can build the inbox, but it needs more technical configuration and code than Workshop and more skill to maintain, which this single builder does not have."
+      },
+      {
+        "id": "d",
+        "text": "Workshop",
+        "why": "Workshop is the no-code, object-based builder for operational applications. Inbox and task triage is one of its standard patterns, and it writes outcomes back through Actions."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Workshop builds interactive applications for operational users on top of object data, using Actions for writeback, without code. Inbox-style alert and task management is a pattern the documentation names for it. Tools that need code, or that are aimed at analysis, cost more to build and maintain here.",
+    "source": {
+      "title": "Workshop: Overview",
+      "url": "https://www.palantir.com/docs/foundry/workshop/overview/"
+    }
+  },
+  {
+    "id": "des-002",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Reliability engineers at Tidewater Pumps want to explore vibration readings stored as time series on `Pump` objects: rolling averages, comparing pumps, and following links to maintenance events. Each engineer follows their own line of enquiry, and nobody wants to wait for a builder to configure an application first. Which tool should they use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Quiver",
+        "why": "Quiver is the point-and-click analysis tool for object and time series data. It has a time series library and follows links between object types without joins."
+      },
+      {
+        "id": "b",
+        "text": "Workshop",
+        "why": "Workshop is workflow-specific: a builder has to configure a module before anyone can use it, which is what the engineers want to avoid for open-ended analysis."
+      },
+      {
+        "id": "c",
+        "text": "Object Explorer",
+        "why": "Object Explorer suits search, filtering and simple charts over object sets. It is not designed for transforming and comparing time series."
+      },
+      {
+        "id": "d",
+        "text": "Contour",
+        "why": "Contour is built for tabular datasets, especially data that is not in the Ontology or is very large. It has no native handling of links or of time series held on objects."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Foundry's analysis tools are split by data type: Contour for tabular data, Quiver for Ontology objects and time series. Quiver is optimised for time series and uses links instead of joins, and analysts can start as soon as the data is modelled.",
+    "source": {
+      "title": "Types of analysis",
+      "url": "https://www.palantir.com/docs/foundry/analytics/types-of-analysis/"
+    }
+  },
+  {
+    "id": "des-003",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "The brand team at Lumen & Vale insists that an internal store-performance application matches the corporate identity exactly, with fonts, button radii and backgrounds controlled through CSS. The builder is comfortable with HTML, CSS and JavaScript and accepts a higher maintenance cost in exchange. Which application builder matches this requirement?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Carbon",
+        "why": "Carbon packages existing applications into a workspace for a user group. It does not build or restyle the application itself."
+      },
+      {
+        "id": "b",
+        "text": "Workshop",
+        "why": "Workshop components follow one unified design system. Its style options cover colours, borders and padding, not arbitrary CSS on every element."
+      },
+      {
+        "id": "c",
+        "text": "Quiver",
+        "why": "Quiver dashboards present analysis cards in Quiver's own styles. They are not a builder for a custom-styled application."
+      },
+      {
+        "id": "d",
+        "text": "Slate",
+        "why": "Slate lets the builder restyle everything on the canvas with CSS, at the price of more code and more technical maintenance than Workshop."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Slate is the builder for applications with a custom design: anything visible can be changed with CSS, using web development skills. Workshop trades that freedom for a consistent design system and lower maintenance, so it is the wrong choice when exact visual control is the requirement.",
+    "source": {
+      "title": "Slate: Overview",
+      "url": "https://www.palantir.com/docs/foundry/slate/overview/"
+    }
+  },
+  {
+    "id": "des-004",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "hard",
+    "format": "discrete",
+    "stem": "Northmoor Procurement has a `Supplier` object type. Buyers open suppliers from Object Explorer, from several Workshop modules and from other Foundry applications, and they should always land on the same curated page showing key properties, linked contracts and a risk summary. For each option, decide whether it is the appropriate way to deliver this.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Publish a Quiver dashboard filtered to one supplier",
+        "why": "A dashboard presents an analysis. It is not what Foundry opens when a user selects a supplier, so the curated page would not appear consistently."
+      },
+      {
+        "id": "b",
+        "text": "Create a standalone Workshop module and share its URL",
+        "why": "A standalone module is only reached through its own link. Opening a supplier from Object Explorer or another application would still show the Object View, not this module."
+      },
+      {
+        "id": "c",
+        "text": "Save a public exploration of all suppliers",
+        "why": "A saved exploration stores a filtered set of objects in Object Explorer. It is not a curated page for a single supplier."
+      },
+      {
+        "id": "d",
+        "text": "Build a configured Object View for `Supplier`",
+        "why": "A configured Object View is a reusable representation of the object type, built in Workshop. Once created it becomes the default view of a supplier across the platform."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Object Views are the central hub for one object and are reused wherever that object is opened. A configured Object View is built with Workshop, comes in full and panel form factors, and becomes the default view for the object type, so every entry point shows the same page.",
+    "source": {
+      "title": "Configured Object View overview",
+      "url": "https://www.palantir.com/docs/foundry/object-views/config-overview/"
+    }
+  },
+  {
+    "id": "des-005",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "An analytics team at Castellan Freight is deciding between Contour and Quiver for a new piece of analysis. Which characteristics of the work would point towards Contour? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The conclusion must be written back to objects through an Action",
+        "why": "Writing an analytical decision back to the Ontology with an Action is described as a reason to use Quiver."
+      },
+      {
+        "id": "b",
+        "text": "The data is sensor time series held on objects",
+        "why": "Time series on objects is where Quiver is strongest, with its own time series library."
+      },
+      {
+        "id": "c",
+        "text": "The input is a one-off uploaded table that is not mapped to the Ontology",
+        "why": "Contour works directly on tabular datasets, so it fits data that has not been, and will not be, modelled as objects."
+      },
+      {
+        "id": "d",
+        "text": "Analysts need to follow links between object types without joins",
+        "why": "Following Ontology links instead of writing joins is a reason to choose Quiver, which works on object data."
+      },
+      {
+        "id": "e",
+        "text": "The result must be saved as a new dataset for other Foundry tools",
+        "why": "Saving analysis results as a dataset is a Contour capability that the documentation lists as a reason to choose it."
+      }
+    ],
+    "answer": [
+      "c",
+      "e"
+    ],
+    "explanation": "Contour is the point-and-click tool for tables: use it when data is not in the Ontology, when the dataset is very large, or when the output should be a new dataset. Quiver is the choice for object data, links, time series and Action-based writeback.",
+    "source": {
+      "title": "Contour: Overview",
+      "url": "https://www.palantir.com/docs/foundry/contour/overview/"
+    }
+  },
+  {
+    "id": "des-006",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Brightwell Facilities receives a maintenance export with one row per inspection. Each row also carries the inspector's name and badge number, the asset's tag and model, and the site code. The team is about to turn the dataset into Ontology object types. Which model follows Palantir's ontology design guidance?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A single `Asset` object type that stores each inspection as another copy of the asset",
+        "why": "An inspection is an observation about an asset, not a new asset. Copying the asset per inspection multiplies objects and blurs which one is current."
+      },
+      {
+        "id": "b",
+        "text": "Separate `Inspection`, `Inspector`, `Asset` and `Site` object types joined by links",
+        "why": "The row describes an event and three real-world entities. Modelling each one lets users link, search and reason about inspectors, assets and sites in their own right."
+      },
+      {
+        "id": "c",
+        "text": "One `InspectionRow` object type with a property for every column of the export",
+        "why": "Mapping columns one-to-one mirrors the source file. The inspector, asset and site stay buried in columns and cannot be linked or searched independently."
+      },
+      {
+        "id": "d",
+        "text": "One object type per source file, each named after the system that produced it",
+        "why": "Object types should represent real-world entities, not source systems. This couples the model to how the data happens to arrive."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "The first design principle is to model the real world, not the source data. One dataset often describes several entities, and a row that records an event about an entity should be split into the entity and the observation, connected by links.",
+    "source": {
+      "title": "Ontology design: Best practices",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-best-practices/"
+    }
+  },
+  {
+    "id": "des-007",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "An `Employee` object type needs a `fullName` property built from `firstName` and `lastName`. Both inputs sit on the same record and change only when the HR pipeline ingests new data. Where should `fullName` be computed?",
+    "options": [
+      {
+        "id": "a",
+        "text": "In an action that users run when a name looks out of date",
+        "why": "Actions capture human decisions. A deterministic transformation with no judgement involved belongs in the pipeline."
+      },
+      {
+        "id": "b",
+        "text": "In a derived property evaluated when the object is queried",
+        "why": "Derived properties are meant for values that depend on linked objects or on edits made through actions. Here they would add runtime work for no benefit."
+      },
+      {
+        "id": "c",
+        "text": "In a function-backed column in each Workshop table that shows it",
+        "why": "A function recalculates at runtime in every application that needs the name. The guidance calls using functions for values that can be pre-computed an anti-pattern."
+      },
+      {
+        "id": "d",
+        "text": "In the pipeline transform that produces the backing dataset",
+        "why": "The inputs are on the same object and only change through the pipeline, so the value can be pre-computed safely with no runtime cost."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "The structural guidance separates pre-computed values from dynamically derived ones. A value built from properties of the same object, whose inputs change only through pipeline ingestion, should be computed in a pipeline transform. Derived properties are for values that must follow live Ontology changes.",
+    "source": {
+      "title": "Ontology design: Structural guidance",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-structural-guidance/"
+    }
+  },
+  {
+    "id": "des-008",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "At Orrin Logistics, dispatchers reassign `WorkOrder` objects between `Crew` objects many times a day through actions. Crew leads want an `openWorkOrderCount` on each crew that is always correct, and screens rarely load more than a few hundred crews at once. Which design does the ontology guidance recommend?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A `Recalculate counts` action that crew leads submit before reading the number",
+        "why": "This uses an action for a calculation rather than a decision, and the number is still wrong whenever nobody has pressed the button."
+      },
+      {
+        "id": "b",
+        "text": "A count column calculated in the nightly pipeline that builds the crew dataset",
+        "why": "A nightly value is out of date as soon as a dispatcher reassigns a work order, which happens many times a day."
+      },
+      {
+        "id": "c",
+        "text": "A derived property on `Crew` that counts linked open work orders at query time",
+        "why": "The count depends on linked objects that change through actions. A derived property is computed from the links when queried, so it stays correct, and this query scale is well within its comfortable range."
+      },
+      {
+        "id": "d",
+        "text": "An integer property on `Crew` that every reassignment action also updates",
+        "why": "Every action that can affect the count would have to maintain it. If one misses, the stored number stays wrong until someone notices."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Values that depend on linked objects or on edits made through actions should be derived properties, because they are evaluated at runtime from the current links. Stored copies go stale. The guidance suggests reconsidering only at high scale, above roughly 10,000 objects per query, and then as a documented decision.",
+    "source": {
+      "title": "Ontology design: Structural guidance",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-structural-guidance/"
+    }
+  },
+  {
+    "id": "des-009",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Pallas Rail holds staff records in an HR system, a badge-access system and a project tool. A first draft of the ontology has three object types: `HrEmployee`, `BadgeHolder` and `ProjectMember`. Which steps does the ontology design guidance recommend instead? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Keep the three object types and connect them with `same person` link types",
+        "why": "Linking the copies leaves three representations of one entity, so actions, applications and fixes still have to be built three times."
+      },
+      {
+        "id": "b",
+        "text": "Expose every column from all three systems as properties so that nothing is lost",
+        "why": "Mapping everything clutters the model with technical fields. Properties should be curated for business meaning."
+      },
+      {
+        "id": "c",
+        "text": "Join the three sources in a pipeline and back one `Employee` object type with the result",
+        "why": "An employee is one real-world entity. Merging the sources upstream gives a single object type that every action, link and application can share."
+      },
+      {
+        "id": "d",
+        "text": "Agree precedence rules stating which system is authoritative for each conflicting value",
+        "why": "When sources disagree, the merged type needs a defined source of truth per field, for example HR for job title."
+      },
+      {
+        "id": "e",
+        "text": "Split the object types further so that each department maintains its own copy",
+        "why": "This adds department silos on top of system silos and moves further from a single view of the employee."
+      }
+    ],
+    "answer": [
+      "c",
+      "d"
+    ],
+    "explanation": "Creating one object type per source system for the same entity is the System Silos anti-pattern. The recommended fix is to find the shared key, join the sources in a pipeline, define precedence rules for conflicting values, and back a single object type with the merged dataset.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-010",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "medium",
+    "format": "discrete",
+    "stem": "Verdant Utilities assigns engineers to capital projects. Each assignment has a role, a start date and a percentage allocation, and an engineer can work on several projects at once. For each option, decide whether it models this correctly.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A linking `Assignment` object type that holds role, start date and allocation",
+        "why": "The relationship has metadata of its own, so it should be an object-backed link. Workflows can use the assignment details or just the engineer-to-project connection."
+      },
+      {
+        "id": "b",
+        "text": "A direct link between `Engineer` and `Project`, with role and allocation stored on `Project`",
+        "why": "A project has many engineers, so one role and one allocation on the project cannot describe each of them."
+      },
+      {
+        "id": "c",
+        "text": "A direct link between `Engineer` and `Project`, with `projectRole` stored on `Engineer`",
+        "why": "A role stored on the engineer becomes ambiguous as soon as the engineer has two projects with different roles."
+      },
+      {
+        "id": "d",
+        "text": "One `Engineer` object per assignment, told apart by a `projectId` property",
+        "why": "This duplicates the engineer, a single real-world entity, once per project and makes it unclear which object is the person."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "A direct link fits a relationship with no attributes of its own. When the relationship carries dates, roles, status or allocation, the guidance recommends an object-backed link, where a linking object holds that metadata.",
+    "source": {
+      "title": "Ontology design: Structural guidance",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-structural-guidance/"
+    }
+  },
+  {
+    "id": "des-011",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Quiver dashboard at Castellan Freight flags late shipments. Coordinators read it, decide whether to re-route, and email their decision to planners, so the choice is never recorded in Foundry. What should the team add to turn this into an operational workflow?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A scheduled email that sends the dashboard to planners at the start of each shift",
+        "why": "Wider distribution keeps the workflow read-only. The decision is still made and stored somewhere else."
+      },
+      {
+        "id": "b",
+        "text": "An Excel export so that coordinators can log each decision in a shared spreadsheet",
+        "why": "A spreadsheet keeps decisions outside the Ontology, where other applications and users cannot see or build on them."
+      },
+      {
+        "id": "c",
+        "text": "Extra charts that break late shipments down by carrier, by region and by customer",
+        "why": "More information may help the coordinator decide, but the decision still leaves Foundry by email."
+      },
+      {
+        "id": "d",
+        "text": "Action types that let coordinators record the re-route decision on the shipment",
+        "why": "Actions are the governed way to write a decision back to the Ontology. Once submitted, the decision is visible to every other user and application."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "A dashboard stops at presenting information. An operational application lets the user make the decision in the same place through an Action, which commits the change to the Ontology and reflects it across other applications. An interface where nothing is written back is still a dashboard.",
+    "source": {
+      "title": "What is an operational application?",
+      "url": "https://www.palantir.com/docs/foundry/app-building/operational-apps/"
+    }
+  },
+  {
+    "id": "des-012",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "The compliance team at Harrowgate Mutual wants to analyse refund approvals as data: who approved each one, when, and which parameter values they submitted. Approvals are made through an `Approve refund` action type. Which capability should be enabled?",
+    "options": [
+      {
+        "id": "a",
+        "text": "User edit history on the `Refund` object type",
+        "why": "Edit history lists every edit to an object whatever made it. It does not model each approval as a decision object with its submitted parameters."
+      },
+      {
+        "id": "b",
+        "text": "A nightly schedule that snapshots the refund dataset",
+        "why": "Snapshots show that values changed between builds. They do not capture the approver, the moment or the submitted parameters."
+      },
+      {
+        "id": "c",
+        "text": "Action metrics for the `Approve refund` action type",
+        "why": "Action metrics answer how often an action succeeds or fails and how long it takes, not who decided what."
+      },
+      {
+        "id": "d",
+        "text": "The action log on the `Approve refund` action type",
+        "why": "The action log creates an object for each successful submission, recording who, when and the context, so decisions can be analysed in object-aware tools."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "The action log models successful action submissions as objects of a log object type, linked to the objects that were edited. It is the capability for the question of what decision was made, by whom, when and in what context. Edit history and action metrics answer different questions.",
+    "source": {
+      "title": "Action types: Action log",
+      "url": "https://www.palantir.com/docs/foundry/action-types/action-log/"
+    }
+  },
+  {
+    "id": "des-013",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "When a supervisor at Orrin Logistics submits the `Re-route shipment` action, customer service must receive an email and the external transport management system must be updated, with no extra step for the supervisor. Which features of the action type achieve this? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A webhook on the action type that calls the external system",
+        "why": "A webhook lets the action call an external API, so the decision captured in Foundry also updates the system of record."
+      },
+      {
+        "id": "b",
+        "text": "A notification side effect on the action type",
+        "why": "A notification side effect sends a message, including by email, to chosen recipients whenever the action is submitted."
+      },
+      {
+        "id": "c",
+        "text": "A saved list in Object Explorer shared with customer service",
+        "why": "A saved list is a static set of objects. It neither alerts anyone nor reaches the external system."
+      },
+      {
+        "id": "d",
+        "text": "A Quiver dashboard that customer service checks each hour",
+        "why": "This relies on people polling a screen and does nothing to update the external system."
+      },
+      {
+        "id": "e",
+        "text": "A CSV export that an operator uploads to the external system",
+        "why": "A manual export is an extra step that can be forgotten, which is what the requirement rules out."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "An action type defines its side effects as well as its edits. Notifications inform people and webhooks call external systems as part of the same submission, so one decision drives its downstream effects without anyone repeating it elsewhere.",
+    "source": {
+      "title": "What is an operational application?",
+      "url": "https://www.palantir.com/docs/foundry/app-building/operational-apps/"
+    }
+  },
+  {
+    "id": "des-014",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "The `Approve discount` action at Lumen & Vale is used from a Workshop module, from Object Explorer and from a custom application built for partners. Only members of the finance group may approve, and only while the order is still open. Where should this rule be enforced so that it holds everywhere?",
+    "options": [
+      {
+        "id": "a",
+        "text": "In a filter that hides closed orders in each application",
+        "why": "Per-application filters have to be repeated and kept in step, and they do nothing about who is allowed to approve."
+      },
+      {
+        "id": "b",
+        "text": "In conditional visibility on the Workshop button",
+        "why": "Hiding a button covers one module only. The same action stays available, unchecked, in Object Explorer and the partner application."
+      },
+      {
+        "id": "c",
+        "text": "In submission criteria on the action type",
+        "why": "Submission criteria travel with the action type. Conditions on the current user's groups and on the order parameter are checked wherever the action is applied."
+      },
+      {
+        "id": "d",
+        "text": "In a written procedure linked from the module header",
+        "why": "A procedure relies on people following it. Nothing stops an approval that breaks the rule."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Submission criteria are conditions on the current user and on parameters that must pass before an action can be submitted. Because they belong to the action type, the same validation applies in every application that uses the action, so the Ontology changes only in line with the organisation's rules.",
+    "source": {
+      "title": "Action types: Submission criteria",
+      "url": "https://www.palantir.com/docs/foundry/action-types/submission-criteria/"
+    }
+  },
+  {
+    "id": "des-015",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Workshop module shows an Object Table of work orders. Planners want to read extra detail about the selected work order while still scanning the rest of the table. What does the Workshop design guidance recommend?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A modal overlay opened from the selected row",
+        "why": "An overlay sits on top of the table and obstructs the base layer the planners want to keep scanning."
+      },
+      {
+        "id": "b",
+        "text": "A second page opened with a layout event",
+        "why": "Switching page replaces the table entirely, so planners lose their place in the list."
+      },
+      {
+        "id": "c",
+        "text": "A collapsible detail panel next to the table",
+        "why": "The guidance recommends collapsible detail panels for additional data, because the table stays in view while the detail is read."
+      },
+      {
+        "id": "d",
+        "text": "A wider table that scrolls horizontally",
+        "why": "The guidance says to avoid horizontal scrolling where possible, and extra columns do not give a focused detail view."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "For tables and lists, the component guidance says each section should show enough to select a row, with further data in collapsible detail panels rather than overlays, which can hide the underlying information.",
+    "source": {
+      "title": "Workshop: Component-specific best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-components/"
+    }
+  },
+  {
+    "id": "des-016",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "A review of a Workshop module at Pallas Rail finds seven primary actions in the top-level navigation and eighteen widgets visible on one screen with almost no space between them. Which changes follow the Workshop design guidance? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Give each button its own colour so that the actions are easy to tell apart",
+        "why": "Distinct colours on every button add clutter. Colour should mark the primary action according to its intent."
+      },
+      {
+        "id": "b",
+        "text": "Remove all padding so that the eighteen widgets fit more comfortably",
+        "why": "The guidance asks for 30 to 40 percent whitespace. Removing padding makes the crowding worse."
+      },
+      {
+        "id": "c",
+        "text": "Limit each view to about ten visible components and move the rest elsewhere",
+        "why": "To avoid overcrowding, the guidance sets a limit of ten visible components in a single view, counting buttons, panels and widgets."
+      },
+      {
+        "id": "d",
+        "text": "Apply an outer drop shadow to every section so that each one stands out",
+        "why": "Shaded styles should be used once per page, on the main content. Applied everywhere, they flatten the visual hierarchy."
+      },
+      {
+        "id": "e",
+        "text": "Reduce the top-level navigation to five primary actions or fewer",
+        "why": "To avoid overload, the guidance advises against showing more than five primary actions in the top-level navigation."
+      }
+    ],
+    "answer": [
+      "c",
+      "e"
+    ],
+    "explanation": "The core design principles put clarity before complexity. The guidance gives concrete limits: at most five primary actions in top-level navigation, at most ten visible components per view, and whitespace of roughly 30 to 40 percent of the screen.",
+    "source": {
+      "title": "Workshop: Application design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices/"
+    }
+  },
+  {
+    "id": "des-017",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "hotspot",
+    "stem": "A builder is laying out a Workshop page for dispatchers with a set of filters, a results table and a detail area. The page should follow the F-shaped reading pattern described in the Workshop design guidance. Select the region where the filter widgets should be anchored.",
+    "figure": {
+      "width": 640,
+      "height": 360,
+      "alt": "Wireframe of a Workshop page: a module header across the top, and below it a left section, a top strip above a centre section, and a right section.",
+      "regions": [
+        {
+          "id": "header",
+          "label": "Module header",
+          "x": 24,
+          "y": 24,
+          "w": 592,
+          "h": 48,
+          "why": "The header is a persistent toolbar for titles, tabs and buttons across all pages. It is for navigation, not for the filters of one page."
+        },
+        {
+          "id": "left",
+          "label": "Left section",
+          "x": 24,
+          "y": 96,
+          "w": 136,
+          "h": 240,
+          "why": "Correct. The guidance anchors filters in the left-most section, so configuration sits where the eye starts and content flows to the right."
+        },
+        {
+          "id": "strip",
+          "label": "Top strip",
+          "x": 184,
+          "y": 96,
+          "w": 272,
+          "h": 48,
+          "why": "A strip above the content suits summary items such as Metric Cards that give an overview of key data, not the main filter set."
+        },
+        {
+          "id": "centre",
+          "label": "Centre section",
+          "x": 184,
+          "y": 168,
+          "w": 272,
+          "h": 168,
+          "why": "The centre is the content area, where the results table belongs. Filters placed here would push the content out of the main reading path."
+        },
+        {
+          "id": "right",
+          "label": "Right section",
+          "x": 480,
+          "y": 96,
+          "w": 136,
+          "h": 240,
+          "why": "The right side is the end of the reading path and suits detail about the selected row. Filters here would sit after the content they control."
+        }
+      ],
+      "edges": []
+    },
+    "answer": [
+      "left"
+    ],
+    "explanation": "The guidance recommends an F-shaped hierarchy: users scan across the top and down the left side. In a row-and-column layout, filters are anchored in the left-most section so that the content they control flows to the right.",
+    "source": {
+      "title": "Workshop: Application design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices/"
+    }
+  },
+  {
+    "id": "des-018",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "A builder at Brightwell Facilities is choosing Workshop layout elements for a new module. Match each need to the layout element designed for it.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "Tabs and buttons that stay available on every page of the module",
+        "why": "The module header is a persistent toolbar. It is the only element that stays in place when the user switches page."
+      },
+      {
+        "id": "l2",
+        "text": "An action form for a critical decision that needs the user's full attention",
+        "why": "A modal appears in the centre of the screen and is recommended for confirmations, alerts and action forms."
+      },
+      {
+        "id": "l3",
+        "text": "Supplementary details shown while the main content stays visible",
+        "why": "A drawer slides in from the side and is recommended for secondary tasks, because the main content can still be seen."
+      },
+      {
+        "id": "l4",
+        "text": "A section whose widgets run past the bottom of the screen and scroll vertically",
+        "why": "The Flow layout turns a section into a vertically scrolling container for widgets that extend beyond the visible area."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Module header"
+      },
+      {
+        "id": "r2",
+        "text": "Modal overlay"
+      },
+      {
+        "id": "r3",
+        "text": "Drawer overlay"
+      },
+      {
+        "id": "r4",
+        "text": "Flow layout"
+      },
+      {
+        "id": "r5",
+        "text": "Loop layout"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Workshop layouts are made of a header, pages, sections and overlays. The header persists across pages; overlays appear on top of a page as a centred modal or a side drawer; a Flow section layout scrolls vertically. The design FAQs advise a modal for tasks needing full attention and a drawer for secondary tasks.",
+    "source": {
+      "title": "Workshop: Layouts",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-layouts/"
+    }
+  },
+  {
+    "id": "des-019",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Maintenance controllers at Pallas Rail use a Workshop inbox, two configured Object Views and a Quiver dashboard every day. They are not technical and find the rest of Foundry distracting. The team wants one curated entry point that shows only these resources. Which tool provides this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A Notepad document",
+        "why": "A document can list links, but it is a rich-text editor for notes and reports, not a way to curate what the platform shows a user group."
+      },
+      {
+        "id": "b",
+        "text": "A saved exploration",
+        "why": "A saved exploration reopens one filtered object set in Object Explorer. It cannot bring modules, object views and dashboards together."
+      },
+      {
+        "id": "c",
+        "text": "A Carbon workspace",
+        "why": "Carbon combines existing applications, dashboards and object views into a workspace for a user group and can hide the rest of the platform."
+      },
+      {
+        "id": "d",
+        "text": "A Slate landing page",
+        "why": "A Slate page could link to the resources, but it is a new application to code and maintain, and it does not replace the platform navigation around it."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Carbon configures custom platform experiences, called workspaces, for specific user groups. A workspace has its own landing page and a chosen set of modules, so less technical users see only the applications and resources their workflow needs.",
+    "source": {
+      "title": "Carbon: Overview",
+      "url": "https://www.palantir.com/docs/foundry/carbon/overview/"
+    }
+  },
+  {
+    "id": "des-020",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Each month Verdant Utilities sends its regulator a written status report for each treatment plant: narrative text with embedded charts and object data, exported as a document. The structure is the same every month; only the selected plant and the figures change. Which tool fits best?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A Contour dashboard",
+        "why": "Contour dashboards present tabular analysis interactively. They do not give a templated rich-text document with embedded object data."
+      },
+      {
+        "id": "b",
+        "text": "A Notepad template",
+        "why": "Notepad is a rich-text editor that embeds charts and objects and exports documents. A template generates a new copy from inputs such as the selected plant."
+      },
+      {
+        "id": "c",
+        "text": "A Workshop module",
+        "why": "Workshop builds interactive applications. A recurring written report with page layout and export is not what it is designed for."
+      },
+      {
+        "id": "d",
+        "text": "A Quiver dashboard",
+        "why": "A dashboard is an interactive view for exploring analysis. It is not a narrative document produced and exported for each plant."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Notepad is Foundry's object-aware rich-text editor. Periodic reporting and templated exports are named use cases: a published template accepts inputs such as objects and produces a new document, which can be exported or printed. It is not suited to interactive dashboards.",
+    "source": {
+      "title": "Notepad: Overview",
+      "url": "https://www.palantir.com/docs/foundry/notepad/overview/"
+    }
+  },
+  {
+    "id": "des-021",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "hard",
+    "format": "discrete",
+    "stem": "Harrowgate Mutual runs a Workshop module for claims adjusters with tables, filters and several actions. One thing is missing: a bespoke vehicle-damage diagram that no built-in widget can draw. One builder maintains the module, with occasional help from a front-end developer. For each option, decide whether it is the proportionate way to add the diagram.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Replace the module with a Quiver dashboard",
+        "why": "A Quiver dashboard is for presenting analysis. It would not replace the adjusters' workflow and it does not supply the diagram either."
+      },
+      {
+        "id": "b",
+        "text": "Rebuild the application as a standalone OSDK React application",
+        "why": "A full React application means re-creating every table, filter and action in code and maintaining it, to gain a single visual."
+      },
+      {
+        "id": "c",
+        "text": "Migrate the module to Slate and draw the diagram in HTML",
+        "why": "Moving to Slate swaps Workshop's ready-made widgets for hand-built ones and raises the maintenance load for one builder."
+      },
+      {
+        "id": "d",
+        "text": "Add a custom widget to the existing Workshop module",
+        "why": "A custom widget adds one code-based component inside Workshop, so the rest of the module and its actions stay as they are."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Custom widgets let technical builders extend Workshop with front-end code without building a standalone application. When the built-in widgets cover everything except one piece, extending the module costs far less to build and maintain than moving to OSDK React or Slate.",
+    "source": {
+      "title": "Use case development: Overview",
+      "url": "https://www.palantir.com/docs/foundry/app-building/overview/"
+    }
+  },
+  {
+    "id": "des-022",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "A platform team is advising four groups on which Ontology-aware application to start with. Match each requirement to the application that Palantir's documentation positions for it.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "A central hub for one aircraft: key properties, linked flights and related applications",
+        "why": "Object Views are the hub for everything about a particular object, including its links and related workflows."
+      },
+      {
+        "id": "l2",
+        "text": "Less technical users search, filter and chart any object type with no set-up",
+        "why": "Object Explorer is a search and analysis tool that needs no pre-configuration and is aimed at less technical users."
+      },
+      {
+        "id": "l3",
+        "text": "Existing applications and dashboards combined into a curated workspace for one user group",
+        "why": "Carbon does the last mile of tailoring by combining applications, dashboards and Object Views into a workspace."
+      },
+      {
+        "id": "l4",
+        "text": "An application with deep visual customisation in web code that also queries datasets directly",
+        "why": "Slate needs more code than Workshop, allows significant visual customisation and can interact directly with datasets."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Object Views"
+      },
+      {
+        "id": "r2",
+        "text": "Object Explorer"
+      },
+      {
+        "id": "r3",
+        "text": "Carbon"
+      },
+      {
+        "id": "r4",
+        "text": "Slate"
+      },
+      {
+        "id": "r5",
+        "text": "Quiver"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "The documentation compares Ontology-aware applications by use case. Object Views are hubs for one object, Object Explorer is walk-up search and analysis, Slate is the more technical builder that can also read datasets directly, and Carbon combines existing resources into workspaces.",
+    "source": {
+      "title": "Ontology-aware applications",
+      "url": "https://www.palantir.com/docs/foundry/ontology/applications/"
+    }
+  },
+  {
+    "id": "des-023",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "At Lumen & Vale, sales, support and finance have each built their own customer object type. Nobody can answer 'show every interaction with this customer', and the three copies disagree on addresses. Which redesign does the ontology guidance recommend?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A fourth object type that copies the best values from the other three every night",
+        "why": "This adds another copy to keep in step and leaves the three conflicting types in place."
+      },
+      {
+        "id": "b",
+        "text": "One shared `Customer` object type, with department data as properties and links",
+        "why": "A customer is one entity. Department-specific attributes become properties and department records such as tickets or invoices become linked types."
+      },
+      {
+        "id": "c",
+        "text": "A `Customer` interface implemented by each of the three existing object types",
+        "why": "Interfaces suit different entities that share a shape. Here the three types are the same entity, so the duplicates and their conflicts would remain."
+      },
+      {
+        "id": "d",
+        "text": "A Workshop module that queries the three object types and shows them side by side",
+        "why": "The application would hide the duplication from one group of users without fixing the model for anyone else."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Department Silos arise when each department models its own version of a shared entity. The fix is a shared object type that serves all departments, with properties and links for department-specific information, and object views or curated applications where departments need different views.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-024",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Northmoor Procurement stores every revision of a contract as a new `Contract` object, using `version` and `isCurrent` properties to tell them apart. Links to vendors are repeated on every copy and users are unsure which object to open. Which model should replace it?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The same objects as now, with the version number added to the primary key and the title",
+        "why": "Clearer labels do not change the fact that one contract exists as many objects with repeated links."
+      },
+      {
+        "id": "b",
+        "text": "The same objects as now, with every application filtered to `isCurrent` equal to true",
+        "why": "Each application would have to remember the filter, and links from vendors would still point at several copies."
+      },
+      {
+        "id": "c",
+        "text": "A separate object type for each year of contracts, such as `Contract2025` and `Contract2026`",
+        "why": "Splitting versions across object types multiplies the duplication and makes reporting across periods harder still."
+      },
+      {
+        "id": "d",
+        "text": "One `Contract` object per contract, with a linked `ContractAmendment` type for changes",
+        "why": "A single object per real-world contract removes the ambiguity, and a linked history type records each change without duplicating the contract and its links."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Modelling historical versions as separate objects or object types is the Time Machine anti-pattern. The guidance is one object per entity holding the current state, with history in a linked amendment or history type, in edit history, or in time series properties.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-025",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "A `Customer` object type at Castellan Freight is backed by a CRM extract with sixty columns, including batch identifiers, extraction timestamps and internal record IDs. Users complain that the properties they need are hard to find. Which steps follow the ontology design guidance? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Create a second `CustomerTechnical` object type to hold the metadata columns",
+        "why": "A technical twin of the customer is not a real-world entity and puts the same noise elsewhere in the Ontology."
+      },
+      {
+        "id": "b",
+        "text": "Give the technical properties friendlier display names and descriptions",
+        "why": "Better labels still leave users sorting through properties that have no business use."
+      },
+      {
+        "id": "c",
+        "text": "Expose only the columns with clear business meaning as properties",
+        "why": "Properties should be curated: include what someone would need to see, search or filter by."
+      },
+      {
+        "id": "d",
+        "text": "Keep pipeline metadata in the backing dataset without mapping it to properties",
+        "why": "Technical columns stay available for debugging in the dataset without cluttering the object type."
+      },
+      {
+        "id": "e",
+        "text": "Map every column to a property in case a future workflow needs it",
+        "why": "Mapping everything 'just in case' is the cause of the problem. It buries the useful properties and adds scale and index cost."
+      }
+    ],
+    "answer": [
+      "c",
+      "d"
+    ],
+    "explanation": "Exposing unneeded source columns as properties is the Kitchen Sink anti-pattern, which confuses users and degrades performance. The guidance is to curate properties intentionally, keep technical metadata in the backing dataset, and hide any borderline properties that must exist.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-026",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "hard",
+    "format": "hotspot",
+    "stem": "Orrin Logistics has the architecture shown. When a `Shipment` object's status changes to Delayed, the account manager must be notified and a follow-up action submitted, with no user involved and without waiting for the next scheduled build. Select the region where this reaction should be implemented.",
+    "figure": {
+      "width": 640,
+      "height": 360,
+      "alt": "Architecture diagram: a carrier feed flows into a batch pipeline, which backs the Shipment object type; below, a change to the object type triggers an automation, and both the automation and a Workshop module submit an action type.",
+      "regions": [
+        {
+          "id": "feed",
+          "label": "Carrier feed",
+          "x": 24,
+          "y": 56,
+          "w": 160,
+          "h": 56,
+          "why": "The feed supplies source data. It has no knowledge of Ontology objects or of who the account manager is."
+        },
+        {
+          "id": "pipe",
+          "label": "Batch pipeline",
+          "x": 240,
+          "y": 56,
+          "w": 160,
+          "h": 56,
+          "why": "Pipelines cleanse, aggregate and enrich data. Putting notification and assignment logic here means polling on a schedule, which the guidance calls out as the wrong tool."
+        },
+        {
+          "id": "obj",
+          "label": "Shipment object type",
+          "x": 456,
+          "y": 56,
+          "w": 160,
+          "h": 56,
+          "why": "The object type holds the status that changes. It is what the reaction watches, not where the reaction is defined."
+        },
+        {
+          "id": "auto",
+          "label": "Automation",
+          "x": 456,
+          "y": 232,
+          "w": 160,
+          "h": 56,
+          "why": "Correct. An automation reacts to the Ontology change directly and can send notifications and submit actions with no user involved."
+        },
+        {
+          "id": "act",
+          "label": "Action type",
+          "x": 240,
+          "y": 232,
+          "w": 160,
+          "h": 56,
+          "why": "The action type defines the follow-up edit, but something has to submit it. Left alone, it waits for a person."
+        },
+        {
+          "id": "app",
+          "label": "Workshop module",
+          "x": 24,
+          "y": 232,
+          "w": 160,
+          "h": 56,
+          "why": "A module only reacts while someone is looking at it. The requirement is that nobody has to watch a screen."
+        }
+      ],
+      "edges": [
+        {
+          "from": "feed",
+          "to": "pipe"
+        },
+        {
+          "from": "pipe",
+          "to": "obj",
+          "label": "backs"
+        },
+        {
+          "from": "auto",
+          "to": "act",
+          "label": "submits"
+        },
+        {
+          "from": "app",
+          "to": "act",
+          "label": "submits"
+        },
+        {
+          "from": "obj",
+          "to": "auto",
+          "label": "change"
+        }
+      ]
+    },
+    "answer": [
+      "auto"
+    ],
+    "explanation": "The guidance on choosing the right tool assigns event-driven reactions to Ontology changes, such as an updated property, to automations, which orchestrate actions and notifications without user involvement. Pipelines are for data processing, and actions on their own are for human decisions.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-027",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Planners at Brightwell Facilities open a Workshop module that charts overdue inspections. To reschedule one, they log in to a separate scheduling system. Judged against Palantir's description of an operational application, what is the main gap?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The module shows too few charts for planners to be confident in their decision",
+        "why": "More charts would add information, but the planner would still have to leave to act on it."
+      },
+      {
+        "id": "b",
+        "text": "The module has not yet been added to a Carbon workspace for the planning team",
+        "why": "Carbon changes how users reach the module. It does not let them reschedule from it."
+      },
+      {
+        "id": "c",
+        "text": "The inspection data reaches the Ontology by batch pipeline instead of by stream",
+        "why": "Faster data may help, but the decision would still be taken and stored outside Foundry."
+      },
+      {
+        "id": "d",
+        "text": "The decision is made in another system and never written back to Foundry",
+        "why": "An operational application lets the user act where they decide. Here the module only reads, so it is still a dashboard."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Two of the documented signs that an interface is a dashboard and not an operational application are that nothing is written back and that the user has to act somewhere else. Closing the gap means capturing the decision through an Action in the same application.",
+    "source": {
+      "title": "What is an operational application?",
+      "url": "https://www.palantir.com/docs/foundry/app-building/operational-apps/"
+    }
+  },
+  {
+    "id": "des-028",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Engineers at Tidewater Pumps use a Quiver analysis to identify pumps that need recalibration. Today they paste the list into a chat channel. They want each conclusion captured so that maintenance planners see it straight away in their own applications. What should they do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Embed the charts from the analysis in a shared Notepad document",
+        "why": "A document reports the finding to readers. It does not change any object, so planners' applications show nothing new."
+      },
+      {
+        "id": "b",
+        "text": "Export the list each week and upload it to Foundry as a new dataset",
+        "why": "A weekly upload is delayed and manual, and a loose dataset is not reflected on the `Pump` objects."
+      },
+      {
+        "id": "c",
+        "text": "Share the saved Quiver analysis with the maintenance planners group",
+        "why": "Planners could open the analysis, but the conclusion would still not be data on the pump that their own applications can use."
+      },
+      {
+        "id": "d",
+        "text": "Submit an Action from Quiver that writes the result to each pump",
+        "why": "Quiver can write analytical decisions back to the Ontology with an Action, so the result is available at once to other users and applications."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Writing back to the Ontology is one of the documented reasons to use Quiver: an analytical decision can be captured with an Action and is then available to others immediately. That turns an analysis into part of an operational workflow.",
+    "source": {
+      "title": "Quiver: Overview",
+      "url": "https://www.palantir.com/docs/foundry/quiver/overview/"
+    }
+  },
+  {
+    "id": "des-029",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "The `WorkOrder` object type at Verdant Utilities has fourteen action types such as `Set status`, `Set crew` and `Set scheduled date`. Reassigning a job takes three submissions in a row. According to the ontology design guidance, which problems does this design cause? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A single business task needs several action submissions to complete",
+        "why": "Fragmented workflows are a named cost: users take several steps for what the business sees as one operation."
+      },
+      {
+        "id": "b",
+        "text": "Action types that edit one property cannot have submission criteria",
+        "why": "Submission criteria can be configured on any action type, however narrow."
+      },
+      {
+        "id": "c",
+        "text": "The audit trail is fragmented, so it is hard to see what happened and why",
+        "why": "The history of a reassignment is scattered across several small actions with nothing to show they were one decision."
+      },
+      {
+        "id": "d",
+        "text": "Edits from single-property actions are not reflected in other applications",
+        "why": "Every submitted action commits its edits to the Ontology, whatever the number of properties it changes."
+      },
+      {
+        "id": "e",
+        "text": "Single-property actions cannot be triggered from Workshop button groups",
+        "why": "Workshop can trigger any action type the user is allowed to apply. The issue is the design, not availability."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Many narrow action types that each change one property are the Action Sprawl anti-pattern; more than ten action types on one object type is a listed indicator. The fix is to design actions around business operations, such as one reassignment action that bundles the related changes.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-030",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "medium",
+    "format": "discrete",
+    "stem": "Warehouse clerks at Castellan Freight correct stock quantities for several hundred `InventoryItem` objects at a time, often starting from a CSV file. An `Update quantity` action type already exists. For each option, decide whether it is the appropriate way to support this in Workshop.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A Button Group that opens the action form for one item at a time",
+        "why": "The form triggers one action at a time and is recommended for small numbers of objects, not hundreds of rows."
+      },
+      {
+        "id": "b",
+        "text": "A CSV export that clerks edit offline for a pipeline to ingest",
+        "why": "This bypasses the action type and its validation, and the corrections wait for a pipeline instead of applying at once."
+      },
+      {
+        "id": "c",
+        "text": "An Inline Action widget using the action table layout",
+        "why": "The action table is recommended for large-scale edits and data from CSV files, with live editing, keyboard navigation and CSV upload."
+      },
+      {
+        "id": "d",
+        "text": "An embedded Quiver dashboard that lists the items to correct",
+        "why": "A dashboard would show which items need attention but gives clerks no bulk way to submit the corrections."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "The Inline Action widget offers two layouts for an existing action type. The action form runs one action at a time for a small number of objects. The action table is meant for bulk updates and CSV-sourced data, such as managing warehouse inventory.",
+    "source": {
+      "title": "Workshop: Inline Action widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-inline-action-form/"
+    }
+  },
+  {
+    "id": "des-031",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Auditors at Northmoor Procurement want reviewers to see, inside a Workshop module, the complete list of user edits to a `Contract` object's properties, whichever action type made them, including action types added later. Which approach meets this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Open action metrics for each of the action types that edit contracts",
+        "why": "Metrics show success and failure rates and durations. They do not list the edits made to a given contract."
+      },
+      {
+        "id": "b",
+        "text": "Enable the action log on each current action type and add a timeline of the logs",
+        "why": "Action logs record decisions per action type. Any action type added later would be missing until it had its own log and was added to the display."
+      },
+      {
+        "id": "c",
+        "text": "Enable user edit history on `Contract` and add the Edit History widget",
+        "why": "Edit history records every user edit to the object regardless of how it was made, and the widget displays it in a module."
+      },
+      {
+        "id": "d",
+        "text": "Compare nightly snapshots of the backing dataset in a Contour analysis",
+        "why": "Snapshots catch only the difference between builds, outside the module, and miss intermediate edits and who made them."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Edit history and the action log answer different questions. Edit history, enabled per object type, covers the full history of every edit to an object however it was made, and the Edit History widget shows it in Workshop. The action log captures the decision behind one action type's submissions.",
+    "source": {
+      "title": "Enable user edit history",
+      "url": "https://www.palantir.com/docs/foundry/object-edits/user-edit-history/"
+    }
+  },
+  {
+    "id": "des-032",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Workshop page for site supervisors shows today's deliveries. Each delivery needs only its reference and status, supervisors review them quickly one by one, and the only interaction is confirming a single delivery. Which widget does the Workshop design guidance suggest?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Pivot Table",
+        "why": "A Pivot Table aggregates data across row and column groupings. It is not for reviewing individual deliveries."
+      },
+      {
+        "id": "b",
+        "text": "Object Table",
+        "why": "An Object Table is for data with many attributes where users compare, sort and take bulk actions, which is more than this page needs."
+      },
+      {
+        "id": "c",
+        "text": "Object List",
+        "why": "An Object List suits simple, linear content with few attributes, fast review and single-item actions."
+      },
+      {
+        "id": "d",
+        "text": "Metric Card",
+        "why": "A Metric Card shows a headline value such as a count. It cannot list deliveries for review."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "The design FAQs distinguish the two: an Object Table for multiple attributes, comparison, sorting and bulk actions; an Object List for simpler content with few attributes, quick review and single-item actions.",
+    "source": {
+      "title": "Workshop: Application design FAQs",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-faqs/"
+    }
+  },
+  {
+    "id": "des-033",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Inspectors at Pallas Rail will use a Workshop module on their phones. The desktop version has a collapsible filter sidebar and small buttons in a section header. Which change follows the mobile design best practices?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The same collapsible sidebar, set to open by default when the module loads",
+        "why": "Collapsible sections are discouraged on mobile: the toggle is hard to tap and there is too little screen space."
+      },
+      {
+        "id": "b",
+        "text": "The same small buttons, grouped more tightly so that more fit on one row",
+        "why": "Buttons sized for a mouse are hard to hit on a touchscreen. The guidance recommends the large style."
+      },
+      {
+        "id": "c",
+        "text": "A single screen that shows every filter and input at once with no scrolling",
+        "why": "A phone screen cannot hold everything at once. The guidance splits work into scrolling content, drawers and subpages."
+      },
+      {
+        "id": "d",
+        "text": "A scrolling Flow layout, large buttons, and a drawer for the filters",
+        "why": "The guidance favours vertical scrolling over collapsible sections, large buttons as tap targets, and drawers for focused multi-field input."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Mobile design guidance for Workshop says to avoid collapsible sections and let users scroll, use large buttons for touch, use drawers for complex data entry, and navigate to subpages for multi-step interactions.",
+    "source": {
+      "title": "Workshop mobile: Design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/mobile-design/"
+    }
+  },
+  {
+    "id": "des-034",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Tidewater Pumps has four Workshop modules for one maintenance team, built by different people. Users say they feel like four unrelated tools. Which steps follow the guidance on building unified applications? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Move the logo and settings control to a different corner in each module",
+        "why": "The guidance calls for a consistent primary header, usually with the logo top-left and settings top-right."
+      },
+      {
+        "id": "b",
+        "text": "Give each module its own colour scheme so that users can tell them apart",
+        "why": "Different styling per module works against a cohesive experience across applications."
+      },
+      {
+        "id": "c",
+        "text": "Create a landing page that centralises navigation to the modules",
+        "why": "A landing page that centralises navigation and gives an overview of the embedded modules is the first of the three principles."
+      },
+      {
+        "id": "d",
+        "text": "Put the navigation tabs inside the scrolling content of each page",
+        "why": "Navigation bars and tabs belong in the primary header so that they stay in view while content scrolls."
+      },
+      {
+        "id": "e",
+        "text": "Place filters, tabs and buttons in the same positions and styles in every module",
+        "why": "Standardised layout elements, such as filters always on the left, make the modules feel like one suite."
+      }
+    ],
+    "answer": [
+      "c",
+      "e"
+    ],
+    "explanation": "A unified application follows three principles: a landing page that centralises navigation, a primary header with consistent logo and global settings, and standardised layout elements for high-touch components such as filters, tabs, Metric Cards and buttons.",
+    "source": {
+      "title": "Workshop: Application design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices/"
+    }
+  },
+  {
+    "id": "des-035",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Call-centre agents at Harrowgate Mutual work in a Carbon workspace. Team leads want agents to stay inside it: links to other Foundry applications should disappear from the navigation menu, while navigation between the workspace's own modules keeps working. What should the workspace editor do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Revoke the agents' view access to the workspace's modules",
+        "why": "Agents would lose the applications they need. A workspace does not replace permissions on its contents."
+      },
+      {
+        "id": "b",
+        "text": "Remove every module from the list of anchored modules",
+        "why": "Anchored modules are the permanent tabs agents use daily. Removing them takes away their tools and leaves outbound links in place."
+      },
+      {
+        "id": "c",
+        "text": "Stop promoting the workspace for the agents' organization",
+        "why": "Promotion controls whether the workspace is listed for users. It does not remove links that lead out of it."
+      },
+      {
+        "id": "d",
+        "text": "Set Navigation out of Carbon to Disabled for the workspace",
+        "why": "This hides external Foundry links and restricts the menu bar utilities, while links that use Carbon's navigation framework stay active."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Carbon can restrict navigation at workspace level. With Navigation out of Carbon disabled, external links are hidden and help, notification and account links that lead outside are restricted, but module-to-module links stay active. Some in-module actions can still lead out and are controlled through application access in Control Panel.",
+    "source": {
+      "title": "Carbon: Restrict navigation out of a workspace",
+      "url": "https://www.palantir.com/docs/foundry/carbon/restrict-workspace-nav/"
+    }
+  },
+  {
+    "id": "des-036",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Reviewers at Northmoor Procurement must read a long contract clause and enter an assessment against it. The builder plans to put the assessment inputs in a dialog opened from the clause page. Which statements reflect the Workshop guidance on overlays? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Overlays suit temporary, secondary interactions such as a short questionnaire",
+        "why": "This is the stated use for overlays: brief tasks that do not need the page underneath."
+      },
+      {
+        "id": "b",
+        "text": "Overlays are preferred for analysis that needs several layers visible at once",
+        "why": "The guidance says the opposite: avoid overlays for analytical sections where users view multiple layers of information together."
+      },
+      {
+        "id": "c",
+        "text": "Each section should get an outer drop shadow whenever a page uses an overlay",
+        "why": "Shaded styles are for one element per page, typically the main content or primary modal."
+      },
+      {
+        "id": "d",
+        "text": "A dialog blocks the background, so the inputs should sit beside the clause text",
+        "why": "A dialog prevents scrolling or interacting with background content. When users must refer to long text while typing, inputs go next to it or the text is repeated in a non-blocking area."
+      },
+      {
+        "id": "e",
+        "text": "Stacking several collapsible sections is the recommended substitute for a dialog",
+        "why": "The FAQs advise against stacking collapsible sections."
+      }
+    ],
+    "answer": [
+      "a",
+      "d"
+    ],
+    "explanation": "Overlay guidance in Workshop: use overlays for temporary and secondary interactions, avoid them where users need to see several layers of information at once, and remember that a dialog blocks the content behind it, so reference text and inputs must be usable together.",
+    "source": {
+      "title": "Workshop: Application design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices/"
+    }
+  },
+  {
+    "id": "des-tf-01",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "A Slate application can be made accessible on the public internet so that people without Foundry accounts can submit data into Foundry.",
+    "answer": true,
+    "explanation": "Slate supports public applications without the builder configuring servers, DNS or authentication. Individuals without Foundry accounts can upload or submit data, subject to validation logic and other safety measures. This is a reason to choose Slate for external data collection.",
+    "source": {
+      "title": "Slate: Overview",
+      "url": "https://www.palantir.com/docs/foundry/slate/overview/"
+    }
+  },
+  {
+    "id": "des-tf-02",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Notepad is the recommended tool for building dashboards in which charts filter dynamically in response to user inputs and chart selections.",
+    "answer": false,
+    "correction": "Notepad does not support dynamic filtering based on user inputs or chart selections; dashboards should be built as Quiver dashboards (object or time series data), Contour dashboards (tabular data) or in Workshop.",
+    "explanation": "Notepad is a rich-text editor for notes, documentation and periodic or templated reports. Its documentation lists dashboards as a poor fit because it does not support dynamic filtering from user inputs or chart selections.",
+    "source": {
+      "title": "Notepad: Overview",
+      "url": "https://www.palantir.com/docs/foundry/notepad/overview/"
+    }
+  },
+  {
+    "id": "des-tf-03",
+    "domain": "design",
+    "objective": "tool-selection",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "When a configured Object View is created for an object type, it becomes the default view, and users can still switch back to the standard Object View.",
+    "answer": true,
+    "explanation": "Standard Object Views exist for every object type with no configuration. A configured Object View, built with Workshop, becomes the default once created, but the standard view remains available alongside it and users can toggle between them.",
+    "source": {
+      "title": "Object Views: Overview",
+      "url": "https://www.palantir.com/docs/foundry/object-views/overview/"
+    }
+  },
+  {
+    "id": "des-tf-04",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "Palantir's ontology design guidance recommends creating a separate object type for each source system when the same real-world entity appears in several systems.",
+    "answer": false,
+    "correction": "The guidance recommends merging the sources in a pipeline, with precedence rules for conflicting values, and backing a single object type that represents the real-world entity.",
+    "explanation": "Separate object types per source system for one entity is the System Silos anti-pattern. It leaves no unified view and forces actions, links and applications to be built several times.",
+    "source": {
+      "title": "Ontology design: Anti-patterns",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-anti-patterns/"
+    }
+  },
+  {
+    "id": "des-tf-05",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "hard",
+    "format": "truefalse",
+    "stem": "According to the ontology structural guidance, derived properties are evaluated at runtime, so at high scale (above roughly 10,000 objects per query) a deliberate, documented denormalization can be an appropriate trade-off.",
+    "answer": true,
+    "explanation": "The guidance says to use derived properties freely at low to moderate scale. Above roughly 10,000 objects per query they may add latency, and denormalization may then be appropriate as a conscious, documented decision and not as the default.",
+    "source": {
+      "title": "Ontology design: Structural guidance",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-structural-guidance/"
+    }
+  },
+  {
+    "id": "des-tf-06",
+    "domain": "design",
+    "objective": "ontology-pipeline-design",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "The four core ontology design principles carry equal weight, so when two of them conflict a team may follow whichever it prefers.",
+    "answer": false,
+    "correction": "The four core ontology design principles are presented in priority order, and when two conflict the higher-priority principle takes precedence (domain-driven design first).",
+    "explanation": "The principles are domain-driven design, do not repeat yourself, open for extension and closed for modification, and composition over deep hierarchies. The documentation lists them in priority order for resolving conflicts.",
+    "source": {
+      "title": "Ontology design: Best practices",
+      "url": "https://www.palantir.com/docs/foundry/ontology/ontology-best-practices/"
+    }
+  },
+  {
+    "id": "des-tf-07",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "The action log records successful action submissions only; a failed submission does not produce an action log object.",
+    "answer": true,
+    "explanation": "The action log models successful submissions of an action type as objects so that decisions can be analysed as data. Failures are not logged there; action metrics are the capability that tracks them.",
+    "source": {
+      "title": "Action types: Action log",
+      "url": "https://www.palantir.com/docs/foundry/action-types/action-log/"
+    }
+  },
+  {
+    "id": "des-tf-08",
+    "domain": "design",
+    "objective": "operational-workflows",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "An edit submitted through an Action is visible only in the application where it was submitted until the next pipeline build of the object type's backing dataset.",
+    "answer": false,
+    "correction": "Changes made through an Action are committed to the Ontology when the user submits it and are reflected in all user applications, without waiting for a pipeline build.",
+    "explanation": "Actions are the mechanism for capturing user decisions as Ontology edits. Because the edit is committed to the Ontology and not to one application, every application reading those objects shows it.",
+    "source": {
+      "title": "Action types: Overview",
+      "url": "https://www.palantir.com/docs/foundry/action-types/overview/"
+    }
+  },
+  {
+    "id": "des-tf-09",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Workshop design guidance recommends applying an outer drop shadow to every section of a page so that all content appears equally important.",
+    "answer": false,
+    "correction": "Workshop design guidance recommends applying shaded styles such as an outer drop shadow only once per page, for example on the main content or primary modal, to keep the visual hierarchy clear.",
+    "explanation": "Borders and elevation exist to show what matters most. A drop shadow signals important content, an inner shadow lesser importance, and if everything is elevated the hierarchy disappears.",
+    "source": {
+      "title": "Workshop: Application design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices/"
+    }
+  },
+  {
+    "id": "des-tf-10",
+    "domain": "design",
+    "objective": "ux-design",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "Workshop design guidance suggests keeping whitespace at roughly 30 to 40 percent of the screen and showing no more than ten visible components in a single view.",
+    "answer": true,
+    "explanation": "Both figures come from the guidance on avoiding overcrowding: maintain sufficient whitespace, ideally 30 to 40 percent of the screen, and limit visible components, including buttons, panels and widgets, to ten per view.",
+    "source": {
+      "title": "Workshop: Application design best practices",
+      "url": "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices/"
+    }
+  }
+]

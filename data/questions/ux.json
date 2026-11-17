@@ -1,0 +1,1262 @@
+[
+  {
+    "id": "ux-001",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Harbourline Freight's dispatch team works in a Workshop module that lists delayed Shipment objects. Analysts occasionally want to take the currently filtered shipments, slice them with ad hoc charts and filters, and save the result to revisit later. The builders do not want to add and maintain more chart widgets for these one-off questions. What should they add to the module?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A button whose event opens Object Explorer on the filtered object set.",
+        "why": "Object Explorer already provides point-and-click filtering, charts and saved explorations, and the Workshop event passes the current object set to it, so nothing new has to be built or maintained."
+      },
+      {
+        "id": "b",
+        "text": "A button whose Export event downloads the filtered shipments to Excel for offline pivoting.",
+        "why": "An export takes the data out of the platform as a one-time copy; analysts lose the live object set and cannot save an exploration that stays current."
+      },
+      {
+        "id": "c",
+        "text": "An extra page of Chart: XY widgets covering each property the analysts might ask about.",
+        "why": "This is exactly the growing set of widgets the builders want to avoid maintaining, and it still cannot anticipate every ad hoc question."
+      },
+      {
+        "id": "d",
+        "text": "A Notepad: Embedded Document widget in which analysts can write up what they find.",
+        "why": "An embedded document is for reading or editing text; it does not let analysts filter or chart the object set."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Workshop's application events can open another Foundry tool, including Object Explorer, and hand it the current value of a variable such as an object set. Redirecting to Object Explorer gives analysts its built-in filters, charts and saved explorations instead of rebuilding that functionality inside the module.",
+    "source": {
+      "title": "Workshop: Events",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/"
+    }
+  },
+  {
+    "id": "ux-002",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "At Calder Water, a supervisor filters Incident objects in Object Explorer down to open, high-severity incidents and arranges a few charts. She wants her team to reopen this view every Monday and see whichever incidents match at that time. Which TWO statements describe what she should do or expect? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Save it as an exploration, which keeps the filters and layout and shows current results when reopened.",
+        "why": "A saved exploration stores the search parameters, filters and layout, so reopening it runs the same search against the latest data."
+      },
+      {
+        "id": "b",
+        "text": "Save it as public in a location the team can reach; teammates still need their own access to the Incident data.",
+        "why": "A public save is available to anyone with access to the chosen location, but sharing the exploration does not share access to the underlying objects."
+      },
+      {
+        "id": "c",
+        "text": "Save it as a list, because a list re-runs its filters each time someone opens it.",
+        "why": "A saved list is a static set of objects that only changes when it is updated by hand, so it would not show Monday's matches."
+      },
+      {
+        "id": "d",
+        "text": "Save it as private and send the link, since a private save is readable by anyone holding the link.",
+        "why": "A private save goes into her home folder and is by default accessible only to her; a link does not change that."
+      },
+      {
+        "id": "e",
+        "text": "Share the saved exploration, which also grants its viewers access to the objects it returns.",
+        "why": "Saving or sharing an exploration never grants data access; each viewer needs the appropriate role on the data itself."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Object Explorer distinguishes explorations, which retain search parameters, filters and layout and therefore reflect the latest results, from lists, which are static. Either can be saved privately or publicly, and in both cases access to the saved resource is separate from access to the objects behind it.",
+    "source": {
+      "title": "Object Explorer: Save explorations",
+      "url": "https://www.palantir.com/docs/foundry/object-explorer/save-explorations/"
+    }
+  },
+  {
+    "id": "ux-003",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Vantor Logistics is reviewing its Workshop and Quiver workflows and wants to send users to the tool that already does what they need instead of rebuilding it. Match each user need to the hand-off that serves it best.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "A dispatcher selects a row in a Workshop table and needs the full detail page for that one object.",
+        "why": "The Open Object view event opens the Object View for the object passed to it, which is the central page for a single object's properties and links."
+      },
+      {
+        "id": "l2",
+        "text": "An analyst has outgrown a Free-form Analysis widget in Workshop and needs richer analysis tools.",
+        "why": "The Free-form Analysis widget offers Open in Quiver, which copies the analysis into a full Quiver analysis for more complex work."
+      },
+      {
+        "id": "l3",
+        "text": "A manager wants a formatted document generated from a standard template for the selected customer.",
+        "why": "The Notepad: New Notepad Button widget generates a document from a published template, using Workshop variables as the template inputs."
+      },
+      {
+        "id": "l4",
+        "text": "An engineer has narrowed an object set inside a Quiver analysis and wants a fresh exploration on it with point-and-click charts.",
+        "why": "An object set card in Quiver can be opened directly in Object Explorer, which starts a new exploration from that set without exporting it first."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Workshop event: Open Object view"
+      },
+      {
+        "id": "r2",
+        "text": "Open in Quiver"
+      },
+      {
+        "id": "r3",
+        "text": "Notepad: New Notepad Button widget"
+      },
+      {
+        "id": "r4",
+        "text": "Open in Object Explorer"
+      },
+      {
+        "id": "r5",
+        "text": "Notepad: Embedded Document widget"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Foundry applications hand work to each other rather than duplicating features: Workshop events open Object Views and other applications, the Free-form Analysis widget can continue in Quiver, Quiver object sets open in Object Explorer, and the New Notepad Button turns Workshop state into a templated document. The Embedded Document widget only displays an existing document inside Workshop, so it fits none of these needs.",
+    "source": {
+      "title": "Workshop: Events",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/"
+    }
+  },
+  {
+    "id": "ux-004",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Tessera Rail shows the same 'wheel wear trend' chart in a Workshop module, in the Locomotive Object View and in a Carbon workspace. Each copy was built separately and they have drifted apart. The team wants one definition of the chart that stays consistent everywhere. Which approach fits best?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Build it once in Quiver, publish it as a dashboard, and embed it in all three.",
+        "why": "A published Quiver dashboard can be embedded in Workshop modules, Object Views and Carbon workspaces, so one maintained definition serves every location."
+      },
+      {
+        "id": "b",
+        "text": "Rebuild it as a Chart: XY widget and copy the widget's configuration into each application.",
+        "why": "Copying configuration still leaves several independent definitions that will drift again, and a Workshop widget is not what a Carbon workspace hosts directly."
+      },
+      {
+        "id": "c",
+        "text": "Export the chart as an image each week and place that image in all three applications.",
+        "why": "A static image is stale as soon as the data changes and loses interactivity; it also adds a weekly manual task."
+      },
+      {
+        "id": "d",
+        "text": "Keep the three copies and make one owner responsible for applying each change to all of them.",
+        "why": "This keeps the duplicated definitions and relies on manual discipline, which is how the copies drifted in the first place."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Quiver dashboards are read-only, interactive views that can stand alone or be embedded in other Foundry applications, including Workshop modules, Notepad documents, Carbon workspaces and Object Views. Embedding one published dashboard means a single definition is maintained and every host shows the same content.",
+    "source": {
+      "title": "Quiver: Dashboards",
+      "url": "https://www.palantir.com/docs/foundry/quiver/dashboards-overview/"
+    }
+  },
+  {
+    "id": "ux-005",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Brightwell Clinics splits a large Workshop application into a parent module and an embedded 'Appointment detail' child module. In the child, the interface variable `selectedStatus` has a default value of 'Open', but when the child runs inside the parent that default is never applied. The variable is mapped to a parent variable in the Embedded Module widget. What explains this, and what is the fix?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Mapped interface variables use the parent's variable definition, so set the default there.",
+        "why": "For a mapped variable Workshop uses the parent's definition and ignores the child's, including its default value, so the default has to live in the parent."
+      },
+      {
+        "id": "b",
+        "text": "Embedded modules load lazily, so add an event in the child that waits before reading the default.",
+        "why": "Lazy initialisation affects when the child starts loading, not which variable definition supplies the value; the child's default is never used for a mapped variable."
+      },
+      {
+        "id": "c",
+        "text": "Defaults only apply to object set variables, so convert `selectedStatus` into an object set variable.",
+        "why": "Default values are not limited to object set variables; the cause is that the child's definition is not used once the variable is mapped."
+      },
+      {
+        "id": "d",
+        "text": "The child must be republished after each parent publish before its own defaults are picked up.",
+        "why": "Republishing does not help, because the child's default for a mapped interface variable is ignored regardless of version."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "When a parent variable is mapped to a child's module interface variable, the two modules share one variable and the parent's definition backs it. Defaults, function backing and other recompute behaviour defined on the child's side are not used, so shared state must be defined in the parent.",
+    "source": {
+      "title": "Workshop: Embedded module widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/embedded-modules/"
+    }
+  },
+  {
+    "id": "ux-006",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "hard",
+    "format": "hotspot",
+    "stem": "Operators at Norvale Energy work every alert in a Workshop triage module. The diagram shows where they go from it: for every single alert they open the sensor trend dashboard in a new tab, compare, and switch back, while the other destinations are used only as labelled. The team wants to remove the most disruptive context switch while keeping one maintained definition of the content. Select the region whose content should be embedded in the triage module instead of being opened separately.",
+    "figure": {
+      "width": 640,
+      "height": 360,
+      "alt": "A Workshop alert triage module on the left with arrows to four destinations on the right: a Quiver sensor trend dashboard used for every alert, Object Explorer used ad hoc, an asset Object View used rarely, and a Notepad shift report used at the end of a shift.",
+      "regions": [
+        {
+          "id": "r1",
+          "label": "Alert triage module",
+          "x": 40,
+          "y": 152,
+          "w": 170,
+          "h": 56,
+          "why": "This is the host application the operators already work in; it is where content gets embedded, not the content to embed."
+        },
+        {
+          "id": "r2",
+          "label": "Sensor trend dashboard",
+          "x": 430,
+          "y": 24,
+          "w": 180,
+          "h": 56,
+          "why": "It is needed for every alert, and a published Quiver dashboard can be embedded in Workshop with its inputs mapped to module variables, so the trend follows the selected alert without a tab switch and stays defined once in Quiver."
+        },
+        {
+          "id": "r3",
+          "label": "Object Explorer",
+          "x": 430,
+          "y": 108,
+          "w": 180,
+          "h": 56,
+          "why": "Ad hoc exploration is occasional and open-ended, which suits a redirect to Object Explorer rather than permanent space in the triage screen."
+        },
+        {
+          "id": "r4",
+          "label": "Asset Object View",
+          "x": 430,
+          "y": 192,
+          "w": 180,
+          "h": 56,
+          "why": "The full asset page is rarely needed, so opening it on demand costs little; embedding it would add weight to every alert for little gain."
+        },
+        {
+          "id": "r5",
+          "label": "Notepad shift report",
+          "x": 430,
+          "y": 276,
+          "w": 180,
+          "h": 56,
+          "why": "The report is written once at the end of a shift, not per alert, so a hand-off to Notepad at that point is appropriate."
+        }
+      ],
+      "edges": [
+        {
+          "from": "r1",
+          "to": "r2",
+          "label": "every alert"
+        },
+        {
+          "from": "r1",
+          "to": "r3",
+          "label": "ad hoc"
+        },
+        {
+          "from": "r1",
+          "to": "r4",
+          "label": "rarely"
+        },
+        {
+          "from": "r1",
+          "to": "r5",
+          "label": "end of shift"
+        }
+      ]
+    },
+    "answer": [
+      "r2"
+    ],
+    "explanation": "Embed what users need in context on every pass through the workflow, and redirect for occasional or open-ended tasks. A published Quiver dashboard can be embedded in a Workshop module through the Quiver dashboard widget, with dashboard inputs and outputs mapped to Workshop variables, so the chart reacts to the selected alert while remaining a single definition maintained in Quiver.",
+    "source": {
+      "title": "Quiver: Embed in a Workshop module",
+      "url": "https://www.palantir.com/docs/foundry/quiver/dashboards-workshop/"
+    }
+  },
+  {
+    "id": "ux-007",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Planners at Osprey Airways use a Workshop module to reassign aircraft to flights through an Action. They want to try several reassignments and see the effect in the module's table before anything is written to the Ontology. What should the builder configure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enable Scenarios and set the button's Action to apply to the active scenario.",
+        "why": "With Apply to Scenario enabled, the Action's edits exist only in the scenario, and scenario-aware widgets such as the Object Table show the result without changing the Ontology."
+      },
+      {
+        "id": "b",
+        "text": "Add a confirmation step to the Action so that planners can cancel just before they submit it.",
+        "why": "A confirmation only delays a real write; planners still cannot see the effect of a reassignment without committing it."
+      },
+      {
+        "id": "c",
+        "text": "Point the module at a copy of the object type and copy the approved edits back by hand.",
+        "why": "A duplicated object type has to be kept in sync and the edits re-entered manually, which is slow and error-prone compared with a scenario."
+      },
+      {
+        "id": "d",
+        "text": "Have planners submit the Action for real and add a second Action that reverts the edits.",
+        "why": "This writes trial changes to the Ontology where other users and applications see them, which is what the planners want to avoid."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "A scenario is a fork of Ontology data produced by applying Actions to it rather than to the Ontology. In Workshop, a button's Action can be set to apply to a scenario variable from the Scenario Manager, and scenario-aware widgets then display the modified values while the Ontology stays untouched.",
+    "source": {
+      "title": "Workshop Scenarios: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/workshop/scenarios-getting-started/"
+    }
+  },
+  {
+    "id": "ux-008",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A Workshop module at Marlow Logistics lets planners edit delivery routes inside a scenario. The Object Table shows the scenario's values, but a Metric Card showing total planned distance still shows the Ontology's figure. The Metric Card has no scenario setting of its own. How should the builder make it reflect the scenario?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Back the metric with an object set aggregation variable that has the scenario selected.",
+        "why": "Object set aggregation variables accept a scenario, so the aggregation is computed with the scenario's edits applied and any widget reading the variable shows the what-if value."
+      },
+      {
+        "id": "b",
+        "text": "Apply the scenario first, because Metric Cards are only ever able to read committed Ontology values.",
+        "why": "Applying commits the edits, which defeats the what-if; a Metric Card can show scenario values when its variable is evaluated against the scenario."
+      },
+      {
+        "id": "c",
+        "text": "Replace the Metric Card with a Scenario Summary widget, which displays the scenario's aggregated totals.",
+        "why": "The Scenario Summary widget lists the Actions in a scenario; it does not compute aggregates such as total distance."
+      },
+      {
+        "id": "d",
+        "text": "Trigger a Refresh data in module event after each Action so that the Metric Card reloads its value.",
+        "why": "Refreshing reloads data from the Ontology, which has not changed, so the card would still show the committed figure."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Some widgets, such as the Object Table and Chart: XY, are scenario-aware and can load data from a scenario directly. For widgets that are not, the scenario is supplied through variables: object set aggregation variables and object property variables have a Scenario configuration, so their values are computed with the scenario's modifications applied.",
+    "source": {
+      "title": "Workshop Scenarios: Getting started",
+      "url": "https://www.palantir.com/docs/foundry/workshop/scenarios-getting-started/"
+    }
+  },
+  {
+    "id": "ux-009",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "hard",
+    "format": "discrete",
+    "stem": "Planners at Fenwick Foods build a scenario in Workshop that contains three Actions plus a demand forecast produced by a model. A button with an Apply scenario event lets an approver commit the scenario. At apply time, one of the three Actions fails its validation. Which statement correctly describes the outcome?",
+    "options": [
+      {
+        "id": "a",
+        "text": "No Action from the scenario is applied, because its Actions are applied as one transaction.",
+        "why": "Applying a scenario is transactional: either every Action in it is applied or, if any Action fails validation, none of them is."
+      },
+      {
+        "id": "b",
+        "text": "The two valid Actions are applied to the Ontology and the failing Action is skipped.",
+        "why": "There is no partial apply; a validation failure on one Action prevents all of the scenario's Actions from being applied."
+      },
+      {
+        "id": "c",
+        "text": "The forecast values produced by the model are written to the Ontology even though the Actions are not.",
+        "why": "Model results in a scenario are treated as expected outcomes and are never written to the Ontology by applying the scenario."
+      },
+      {
+        "id": "d",
+        "text": "The Actions were already written to the Ontology when they were added to the scenario, so applying changes nothing.",
+        "why": "Actions applied to a scenario exist only in that scenario; they reach the Ontology only when the scenario is applied successfully."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Applying a scenario applies its associated Actions to the Ontology transactionally, so a validation failure on any one of them means none is applied. Model results are not applied at all, because they represent expected results rather than explicitly editable values.",
+    "source": {
+      "title": "Workshop Scenarios: Apply scenarios",
+      "url": "https://www.palantir.com/docs/foundry/workshop/scenarios-apply/"
+    }
+  },
+  {
+    "id": "ux-010",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Compliance analysts at Arden Mutual maintain the thresholds that flag suspicious transactions. Today each threshold change is a ticket for a data engineer, who edits transform code. The analysts should author and change this logic themselves in a point-and-click editor, and every change must be reviewed before it takes effect. Which approach fits best?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Deploy Foundry Rules, with a Rule Editor for analysts and rule proposals for approval.",
+        "why": "Foundry Rules gives business users a low-code rule editor, and its proposal objects provide a submit, review and approve step before a rule change becomes active."
+      },
+      {
+        "id": "b",
+        "text": "Give analysts edit access to the code repository and protect the main branch with required reviews.",
+        "why": "This adds review but still requires analysts to write transform code, which is not the point-and-click authoring they need."
+      },
+      {
+        "id": "c",
+        "text": "Build a Workshop scenario so analysts can try new thresholds and compare which transactions get flagged.",
+        "why": "Scenarios support what-if analysis on Ontology edits; they do not manage the logic a pipeline applies to transaction data."
+      },
+      {
+        "id": "d",
+        "text": "Expose the thresholds as inputs of a TypeScript Function that engineers republish when analysts ask.",
+        "why": "Engineers remain in the loop for every change, and there is no built-in authoring or review flow for the analysts."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Foundry Rules (previously Taurus) lets users manage business logic through a point-and-click, low-code interface and applies those rules to datasets, objects and time series for use cases such as alert generation. Rule changes can be routed through proposals, which work like pull requests on rules and give an audit and review step.",
+    "source": {
+      "title": "Foundry Rules: Overview",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/overview/"
+    }
+  },
+  {
+    "id": "ux-011",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Quillon Mining deployed Foundry Rules from the standard workflow template. An engineer authors a new vibration rule in the Rule Editor and selects Submit changes, yet the alerts output dataset shows no rows from the rule. Which TWO steps are needed before the rule's results appear? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Approve the rule's proposal in the Proposal Reviewer so that the rule becomes active.",
+        "why": "Submit changes only creates a proposal; the rule is created or changed when that proposal is approved."
+      },
+      {
+        "id": "b",
+        "text": "Build the rules writeback dataset and the output dataset, or wait for their schedule to run.",
+        "why": "Rules take effect in the transforms pipeline, which reads the rules writeback dataset and writes the output dataset, so both must be built for new results to appear."
+      },
+      {
+        "id": "c",
+        "text": "Add the new rule's ID by hand to the generated transform so that the pipeline includes it.",
+        "why": "The pipeline reads all rules from the rules writeback dataset; individual rules are not registered in code."
+      },
+      {
+        "id": "d",
+        "text": "Republish the Rules Workshop application so that the newly authored rule is saved.",
+        "why": "Rules are stored as objects through Actions, not in the Workshop module's configuration, so republishing the module has no effect on them."
+      },
+      {
+        "id": "e",
+        "text": "Save the workflow configuration again so that the pipeline is regenerated for the new rule.",
+        "why": "The workflow configuration defines inputs and outputs for all rules; it does not need to change when a rule is added."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "In the standard Foundry Rules workflow, an authored rule is first a proposal and becomes an active rule object once approved. The rule's effect is produced by a transforms pipeline that takes the workflow inputs and the rules writeback dataset and populates the output dataset, so those datasets must be built, typically on a schedule.",
+    "source": {
+      "title": "Foundry Rules: Author and run a rule",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/author-and-run-a-rule/"
+    }
+  },
+  {
+    "id": "ux-012",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "At Pinecrest Utilities, rule authors write Foundry Rules that raise equipment alerts. A downstream alert inbox expects every row to carry a severity, an assignee and a machine ID with the right types, but authors keep producing inconsistent columns. The workflow owner wants this enforced at authoring time rather than cleaned up afterwards. What should the owner do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Define the columns, types and required flags on the workflow output configuration.",
+        "why": "A workflow output fixes the column names, types and required flags; authors then fill a matching form at the end of each rule, so every rule writes rows in the expected shape."
+      },
+      {
+        "id": "b",
+        "text": "Add a transform after the output dataset that renames and casts whatever columns the rules emit.",
+        "why": "This repairs the data after the fact and has to guess at each author's column choices, which is the clean-up the owner wants to avoid."
+      },
+      {
+        "id": "c",
+        "text": "Ask proposal reviewers to reject any rule whose output columns do not look right to them.",
+        "why": "Manual review catches some mistakes but does not enforce a schema, and it leaves consistency to individual judgement."
+      },
+      {
+        "id": "d",
+        "text": "Enable the Select columns logic board so that authors can pick the right columns in each rule.",
+        "why": "That board lets an author narrow the columns carried between logic steps; it does not make any particular output columns or types mandatory."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "In the Foundry Rules workflow configuration, each workflow output corresponds to a dataset and defines the name and type of its columns and whether each must be provided. The rule output step presents these as a form to rule authors, which lets the workflow owner enforce the exact columns and types that every rule produces.",
+    "source": {
+      "title": "Foundry Rules: Configure workflow",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/configure-workflow/"
+    }
+  },
+  {
+    "id": "ux-013",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Account managers at Lindqvist Supply select a Customer in a Workshop module and need a formatted account summary as a PDF, built from a standard layout that the reporting team maintains. Which addition to the module meets this need?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A Notepad: New Notepad Button widget that maps the customer to a published template.",
+        "why": "The widget generates a document from a published Notepad template using Workshop variables as template inputs, and can export the result as a PDF."
+      },
+      {
+        "id": "b",
+        "text": "A button with an Export event that downloads the selected customer's properties to an Excel file.",
+        "why": "An export produces raw tabular data, not a formatted document that follows the reporting team's layout."
+      },
+      {
+        "id": "c",
+        "text": "A Notepad: Embedded Document widget that shows one shared summary document for all customers.",
+        "why": "The embedded document widget displays an existing document; it does not generate a new one per selected customer."
+      },
+      {
+        "id": "d",
+        "text": "A Markdown widget that lays out the customer's properties, which users then print from the browser.",
+        "why": "This duplicates the layout inside Workshop, away from the template the reporting team maintains, and relies on browser printing."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Notepad templates are blueprints that take inputs such as strings, objects or object sets. Workshop's Notepad: New Notepad Button widget links Workshop variables to those inputs to generate a document on demand, with an option to download it as a PDF, so the layout stays owned in Notepad while the trigger lives in the operational app.",
+    "source": {
+      "title": "Notepad: Generate and export documents from Workshop",
+      "url": "https://www.palantir.com/docs/foundry/notepad/workshop-templates/"
+    }
+  },
+  {
+    "id": "ux-014",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Redfern Rail runs its 'Depot overview' Workshop module as a tab in a Carbon workspace. A button in the module uses an Open Object view event for the selected Wagon. Users ask what will happen to their place in the depot overview when they click it. What is the behaviour?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The Object View opens in a new Carbon tab, and the depot overview stays open in its own tab.",
+        "why": "Inside a Carbon workspace, Workshop's application events open the target in a new Carbon tab, so the originating module keeps its state."
+      },
+      {
+        "id": "b",
+        "text": "The Object View replaces the depot overview in the same tab, so users navigate back afterwards.",
+        "why": "Application events do not replace the current module; they open the target separately."
+      },
+      {
+        "id": "c",
+        "text": "The Object View opens in a separate browser tab that sits outside the Carbon workspace.",
+        "why": "A new browser tab is the behaviour for a standalone module; within Carbon the target opens as a Carbon tab."
+      },
+      {
+        "id": "d",
+        "text": "The event does nothing inside Carbon, where only menu bar items are able to open modules.",
+        "why": "Workshop events are a supported way to trigger navigation to other modules from within a Carbon workspace."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Workshop's application events (Open Workshop module, Object view, Object Explorer and others) normally open the target resource in a new browser tab. When the module is running in a Carbon workspace, the same events open the target in a new Carbon tab, letting users step through a workflow without losing the state of the module they came from.",
+    "source": {
+      "title": "Workshop: Events",
+      "url": "https://www.palantir.com/docs/foundry/workshop/concepts-events/"
+    }
+  },
+  {
+    "id": "ux-015",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "hard",
+    "format": "discrete",
+    "stem": "Saltmarsh Retail has an 'Orders' Workshop module and a separate 'Order investigation' module. From a selected order, users should jump to the investigation module with that order already loaded. The builder is deciding how to pass the selection across. Which statement about passing values into the target module is correct?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An Open Workshop module event can map current variables to the target's module interface variables.",
+        "why": "Selecting the target module in the event shows its module interface, and current variable values are passed to those interface variables when the event fires."
+      },
+      {
+        "id": "b",
+        "text": "Any variable in the target module can be set from the URL, whether or not it has an external ID.",
+        "why": "Only variables that are part of the module interface, which requires an external ID, can be initialised from outside the module."
+      },
+      {
+        "id": "c",
+        "text": "If the URL parameters change after the target module has loaded, its interface variables update to match.",
+        "why": "Interface variables are initialised from URL parameters when the module first loads; later URL changes do not update them."
+      },
+      {
+        "id": "d",
+        "text": "The Open Workshop module event renders the target module as an overlay inside the current module.",
+        "why": "The event opens the target as a separate module in a new tab; showing a module inside another is done with an Embedded Module widget."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "A module's interface is the set of variables, each given an external ID, that can be mapped from a parent when embedded or initialised from the URL. The Open Workshop module event uses that interface to pass current values to the target module, which avoids constructing URLs by hand; values are read at load time only.",
+    "source": {
+      "title": "Workshop: Module interface",
+      "url": "https://www.palantir.com/docs/foundry/workshop/module-interface/"
+    }
+  },
+  {
+    "id": "ux-016",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Halden Aerospace built a 'Maintenance history' Workshop module. It should appear as a tab in the Object Views of both the Aircraft and the Engine object types, and the team wants to maintain it in one place. Which tab type should they use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add the existing Workshop module as a tab in each of the two Object Views.",
+        "why": "An existing Workshop module can be embedded directly as an Object View tab and the same module can back tabs in multiple Object Views, so there is one module to maintain."
+      },
+      {
+        "id": "b",
+        "text": "Create a managed Workshop module tab in the Aircraft Object View and reference that managed tab from Engine.",
+        "why": "Managed modules belong to their Object View, with permissions kept in sync with it, and cannot be reused elsewhere."
+      },
+      {
+        "id": "c",
+        "text": "Recreate the content with the legacy tab builder, because legacy tabs are shared across object types.",
+        "why": "New tabs can no longer be added with the legacy builder, and it offers less flexibility than a Workshop-backed tab."
+      },
+      {
+        "id": "d",
+        "text": "Create a managed Workshop module tab in each Object View and copy the widgets from one to the other.",
+        "why": "This produces two separate modules that must be kept in step by hand, which is the duplication the team wants to avoid."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Each Object View tab contains a Workshop module. A managed Workshop module is created for one Object View, has its permissions synchronised with it and cannot be reused, whereas an existing Workshop module can be embedded as a tab in several Object Views, which is the maintainable choice for shared content.",
+    "source": {
+      "title": "Object Views: Configure tabs",
+      "url": "https://www.palantir.com/docs/foundry/object-views/config-tabs/"
+    }
+  },
+  {
+    "id": "ux-017",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "Ostrava Health embeds a 'Patient vitals' child module in several parent Workshop modules through the Embedded Module widget. After rollout, some users see a 'failed to load module' error where the child should be, and the child's data no longer refreshes on its own even though auto-refresh is enabled in the child's settings. Which TWO statements explain these observations? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The child is a separate resource with its own permissions, so users also need view access to it.",
+        "why": "A user who can view the parent but not the child sees a failed-to-load error in place of the embedded module."
+      },
+      {
+        "id": "b",
+        "text": "Module-level settings of a child, such as auto-refresh, are not used when it is embedded.",
+        "why": "Routing, state saving and auto-refresh configured on a child are not inherited when it is embedded, so auto-refresh has to be handled by the module that hosts it."
+      },
+      {
+        "id": "c",
+        "text": "Parents embed the child's latest saved draft, which may be incomplete and stop refreshing.",
+        "why": "The Embedded Module widget always uses the child's published version, not unpublished drafts."
+      },
+      {
+        "id": "d",
+        "text": "Each parent keeps its own copy of the child, so settings must be repeated in every copy.",
+        "why": "The parents reference one child module; there are no per-parent copies of its configuration."
+      },
+      {
+        "id": "e",
+        "text": "Mapped interface variables need identical defaults in parent and child, or loading fails.",
+        "why": "For mapped variables the parent's definition is used and the child's default is ignored; a mismatch does not cause a load failure."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "Embedded child modules remain separate resources: viewers need permission on both parent and child. Module-level configuration of the child, including routing, state saving and auto-refresh, is not applied when the module is embedded, so such behaviour must be configured on the parent and, where needed, passed down through the module interface.",
+    "source": {
+      "title": "Workshop: Embed Workshop modules",
+      "url": "https://www.palantir.com/docs/foundry/workshop/embedding-workshop-modules-overview/"
+    }
+  },
+  {
+    "id": "ux-018",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "medium",
+    "format": "matching",
+    "stem": "Ironbridge Manufacturing is consolidating several tools into one Workshop application and wants to reuse existing content rather than rebuild it. Match each requirement to the Workshop feature that embeds the right content.",
+    "left": [
+      {
+        "id": "l1",
+        "text": "Show charts that analysts already maintain in Quiver, reacting to the machine selected in the module.",
+        "why": "The Quiver dashboard widget embeds a published dashboard and maps its inputs and outputs to Workshop variables such as the selected object."
+      },
+      {
+        "id": "l2",
+        "text": "Show the configured detail layout of the selected Machine exactly as it appears elsewhere in the platform.",
+        "why": "The Object View widget displays an embedded full or panel Object View for the input object, reusing the layout configured for the object type."
+      },
+      {
+        "id": "l3",
+        "text": "Render the same custom card, built as its own module, once for every Work Order in an object set.",
+        "why": "A Loop layout embeds a child module repeatedly, once per item of an object set or array."
+      },
+      {
+        "id": "l4",
+        "text": "Let engineers add sensor series and derive their own plots without leaving the module.",
+        "why": "The Time Series Analysis widget lets users add time series from the Ontology and build derived plots inside Workshop."
+      }
+    ],
+    "right": [
+      {
+        "id": "r1",
+        "text": "Quiver dashboard widget"
+      },
+      {
+        "id": "r2",
+        "text": "Object View widget"
+      },
+      {
+        "id": "r3",
+        "text": "Loop layout"
+      },
+      {
+        "id": "r4",
+        "text": "Time Series Analysis widget"
+      },
+      {
+        "id": "r5",
+        "text": "Iframe widget"
+      }
+    ],
+    "answer": {
+      "l1": "r1",
+      "l2": "r2",
+      "l3": "r3",
+      "l4": "r4"
+    },
+    "explanation": "Workshop can host content owned by other applications: published Quiver dashboards, Object Views, other Workshop modules (through the Embedded Module widget or a Loop layout for repetition) and time series exploration. Each of these is a native, variable-aware embed, so a generic Iframe widget is not needed for any of the four requirements.",
+    "source": {
+      "title": "Workshop: Embed Workshop modules",
+      "url": "https://www.palantir.com/docs/foundry/workshop/embedding-workshop-modules-overview/"
+    }
+  },
+  {
+    "id": "ux-019",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Schedulers at Dunmore Transit apply several Actions to a scenario in a Workshop module. Before deciding anything, they want to see exactly which Actions the selected scenario contains and drop one that was added by mistake. Which widget provides this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Scenario Summary, which lists the scenario's Actions and lets users remove individual ones.",
+        "why": "The Scenario Summary widget shows the Actions associated with the selected scenario, and users can remove specific Actions or undo recent changes to the list."
+      },
+      {
+        "id": "b",
+        "text": "Scenario Selector, which lets users pick one or more scenarios from a list of candidates.",
+        "why": "The selector chooses which scenario is active; it does not show or edit the Actions inside a scenario."
+      },
+      {
+        "id": "c",
+        "text": "Scenario Manager, which lets users create, select and delete whole scenarios in the module.",
+        "why": "The manager works at the level of whole scenarios, not the individual Actions a scenario contains."
+      },
+      {
+        "id": "d",
+        "text": "Object Table with scenario comparison, which shows changed property values side by side.",
+        "why": "The table shows the resulting values, not the list of Actions that produced them, and it cannot remove an Action."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Workshop has three scenario-specific widgets with distinct roles: the Scenario Manager creates and manages scenarios, the Scenario Selector picks among candidate scenarios, and the Scenario Summary displays the Actions in a selected scenario and allows individual Actions to be removed.",
+    "source": {
+      "title": "Workshop: Scenario Summary widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-scenario-summary/"
+    }
+  },
+  {
+    "id": "ux-020",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Wexford Port stores approved berth-plan scenarios as objects. In a review module, managers must choose one or more of these saved scenarios to compare in a table, but they must not be able to create new scenarios there. How should the builder set this up?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Load the saved scenarios into a scenario array variable and feed it to a Scenario Selector.",
+        "why": "A scenario array variable can be loaded from an object set of scenario objects, and the Scenario Selector lets users choose among those candidates without offering scenario creation."
+      },
+      {
+        "id": "b",
+        "text": "Add a Scenario Manager widget to the module and instruct the managers not to use its Create button.",
+        "why": "The Scenario Manager is designed for creating, editing and deleting scenarios, so the restriction would rest on instructions rather than configuration."
+      },
+      {
+        "id": "c",
+        "text": "Add an Object Table listing the scenario objects and enable inline editing on its columns.",
+        "why": "Listing the objects shows their metadata but does not by itself produce a scenario variable for scenario-aware widgets, and editing is not what reviewers need."
+      },
+      {
+        "id": "d",
+        "text": "Add one Scenario Summary widget per saved scenario and let the managers read through them.",
+        "why": "Summaries list each scenario's Actions; they neither let users select scenarios nor drive a comparison table."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Saved scenarios are loaded through the variable system: a scenario array variable can be populated from an object set of objects that represent scenarios. The Scenario Selector widget takes candidate scenarios and outputs a single scenario or an array, giving users selection for comparison without the ability to create scenarios.",
+    "source": {
+      "title": "Workshop: Scenario Selector widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-scenario-selector/"
+    }
+  },
+  {
+    "id": "ux-021",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Planners at Corran Steel build what-if scenarios in a Workshop module but lose them whenever they close the browser. They also want each scenario they keep to carry a description and its author so colleagues can find it. Which TWO statements describe how to meet these needs? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Configure saving so scenarios are stored as objects in the Ontology; unsaved scenarios last only for the session.",
+        "why": "Scenarios created in Workshop are temporary by default and are removed when the session ends; saving persists them as objects for reuse and collaboration."
+      },
+      {
+        "id": "b",
+        "text": "Add properties such as description and author to the scenario object type and fill them through the save Action.",
+        "why": "The object that represents a saved scenario can hold extra metadata properties, populated from the parameters of the Action used to save it, for example with the current user."
+      },
+      {
+        "id": "c",
+        "text": "Apply each scenario at the end of the day so that it is still available in the next session.",
+        "why": "Applying commits the scenario's Actions to the Ontology; it does not keep the what-if for later and makes the trial edits real."
+      },
+      {
+        "id": "d",
+        "text": "Enable auto-refresh on the module so that scenarios are reloaded once the browser is reopened.",
+        "why": "Auto-refresh reloads data while a module is open; it does not persist session-only scenarios."
+      },
+      {
+        "id": "e",
+        "text": "Keep the description in a string variable in the module, which is stored together with the scenario.",
+        "why": "A module variable is not saved with a scenario; scenario metadata belongs on the object that represents the saved scenario."
+      }
+    ],
+    "answer": [
+      "a",
+      "b"
+    ],
+    "explanation": "By default a Workshop scenario exists only within the current session. Saving a scenario creates an object that represents it, and that object can carry workflow metadata such as a description or creator, set through the save Action, which makes saved scenarios easy to organise, find and share.",
+    "source": {
+      "title": "Workshop Scenarios: Save scenarios",
+      "url": "https://www.palantir.com/docs/foundry/workshop/scenarios-save/"
+    }
+  },
+  {
+    "id": "ux-022",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "medium",
+    "format": "hotspot",
+    "stem": "Stanmoor Grid uses Foundry Rules to raise equipment alerts, which its operators work in an alert inbox module. The diagram shows the flow from authoring a rule to the inbox. An engineer wants to know where approved rules are actually evaluated against the sensor data. Select the region where rule logic is applied to the workflow inputs.",
+    "figure": {
+      "width": 640,
+      "height": 360,
+      "alt": "A flow from a Rule Editor page to a Proposal Reviewer page to rule objects; rule objects and input datasets both feed a transforms pipeline, which writes an output dataset read by an alert inbox module.",
+      "regions": [
+        {
+          "id": "e1",
+          "label": "Rule Editor page",
+          "x": 30,
+          "y": 36,
+          "w": 160,
+          "h": 56,
+          "why": "Authors define and preview rule logic here and submit it as a proposal; the editor does not produce the workflow's output rows."
+        },
+        {
+          "id": "e2",
+          "label": "Proposal Reviewer page",
+          "x": 240,
+          "y": 36,
+          "w": 160,
+          "h": 56,
+          "why": "Reviewers approve or reject proposed rule changes here; approval changes the rule objects but does not evaluate rules against data."
+        },
+        {
+          "id": "e3",
+          "label": "Rule objects",
+          "x": 450,
+          "y": 36,
+          "w": 160,
+          "h": 56,
+          "why": "Rule objects store each rule's metadata and logic; they are an input to the pipeline rather than the place where logic runs."
+        },
+        {
+          "id": "e4",
+          "label": "Input datasets",
+          "x": 30,
+          "y": 152,
+          "w": 160,
+          "h": 56,
+          "why": "These hold the data the rules are evaluated on; they are read by the pipeline and contain no rule logic."
+        },
+        {
+          "id": "e5",
+          "label": "Transforms pipeline",
+          "x": 240,
+          "y": 152,
+          "w": 160,
+          "h": 56,
+          "why": "The pipeline generated by the workflow configuration takes the input datasets and the rules writeback dataset, applies the rules and writes the resulting rows."
+        },
+        {
+          "id": "e6",
+          "label": "Output dataset",
+          "x": 240,
+          "y": 268,
+          "w": 160,
+          "h": 56,
+          "why": "This holds the rows produced by all rules that use the output; it is the result of rule evaluation, not where evaluation happens."
+        },
+        {
+          "id": "e7",
+          "label": "Alert inbox module",
+          "x": 450,
+          "y": 268,
+          "w": 160,
+          "h": 56,
+          "why": "The inbox consumes the alerts for operators to work; it sits downstream of rule evaluation."
+        }
+      ],
+      "edges": [
+        {
+          "from": "e1",
+          "to": "e2",
+          "label": "proposal"
+        },
+        {
+          "from": "e2",
+          "to": "e3",
+          "label": "approve"
+        },
+        {
+          "from": "e3",
+          "to": "e5",
+          "label": "rules"
+        },
+        {
+          "from": "e4",
+          "to": "e5"
+        },
+        {
+          "from": "e5",
+          "to": "e6"
+        },
+        {
+          "from": "e6",
+          "to": "e7"
+        }
+      ]
+    },
+    "answer": [
+      "e5"
+    ],
+    "explanation": "The Foundry Rules workflow configuration generates a transforms pipeline, and that pipeline is where rules take effect. It combines the datasets backing the workflow inputs with the writeback dataset of rules, applies the rules, and populates the output datasets, so new or changed rules show results only after the pipeline builds.",
+    "source": {
+      "title": "Foundry Rules: Workflow configuration",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/foundry-rules-workflow-configuration/"
+    }
+  },
+  {
+    "id": "ux-023",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Rule authors at Thornbury Insurance write Foundry Rules over the Claim object type. They now need to join claims to the linked Policy objects inside their rules, but Policy does not appear as an option in the Rule Editor. Who makes it available, and where?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The workflow owner adds Policy and its link type as inputs in the workflow configuration.",
+        "why": "The objects, datasets and link types offered to rule authors are defined as workflow inputs by the workflow owner in the workflow configuration."
+      },
+      {
+        "id": "b",
+        "text": "Each rule author imports the dataset that backs Policy from inside the Rule Editor when needed.",
+        "why": "Authors can only choose from inputs already configured for the workflow; they cannot bring in arbitrary data from the editor."
+      },
+      {
+        "id": "c",
+        "text": "A reviewer approves a proposal that mentions Policy, which then registers it for use in all rules.",
+        "why": "Proposals govern changes to individual rules; they do not change which inputs the workflow exposes."
+      },
+      {
+        "id": "d",
+        "text": "An Ontology editor switches on a rules setting for Policy on the object type in Ontology Manager.",
+        "why": "Availability in Foundry Rules is controlled by the workflow's configured inputs, not by a per-object-type setting."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "The workflow configuration editor is where a workflow owner tailors Foundry Rules to a use case, including which datasets and object types rule authors may use as inputs. When an object type is added as an input, the owner also selects which of its link types are available for joining objects in rules.",
+    "source": {
+      "title": "Foundry Rules: Workflow configuration",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/foundry-rules-workflow-configuration/"
+    }
+  },
+  {
+    "id": "ux-024",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "Greyfell Bank runs Foundry Rules for transaction monitoring. Policy states that a change to a rule may only be approved by that rule's author or by a small superuser group, while anyone on the team may still propose changes. How should this be enforced?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Restrict the approve-proposal Action's submission criteria to the rule's author or a superuser.",
+        "why": "Proposals are approved through ordinary Actions, so the Action's submission criteria can require the current user to be the author of the related rule or a superuser, without limiting who can propose."
+      },
+      {
+        "id": "b",
+        "text": "Restrict view access to the Rules Workshop application to rule authors and the superuser group.",
+        "why": "This would stop other team members from proposing changes at all, and it does not tie approval to the author of the specific rule."
+      },
+      {
+        "id": "c",
+        "text": "Grant the Editor role on the rules output dataset only to rule authors and the superuser group.",
+        "why": "Dataset roles control who can edit or build the dataset, not who may approve a proposal about a given rule."
+      },
+      {
+        "id": "d",
+        "text": "Remove the Proposal Reviewer page so that rule changes take effect as soon as they are submitted.",
+        "why": "Dropping review removes the approval step entirely, which is the opposite of restricting who can approve."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Foundry Rules builds its change-management flow from standard objects and Actions, so it is governed like any other Ontology workflow. Restricting who can approve edits or deletions of a rule is done by configuring the corresponding approval Actions so that the user must be the rule author associated with the proposal or a superuser.",
+    "source": {
+      "title": "Foundry Rules: Permissions for editing rules",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/rule-permissions/"
+    }
+  },
+  {
+    "id": "ux-tf-01",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "A list saved from Object Explorer is a static set of objects that does not change unless it is updated manually.",
+    "answer": true,
+    "explanation": "Object Explorer lets users save results as a list, which is a fixed set of objects, in contrast to a saved exploration, which keeps the search parameters and filters and so reflects current data when reopened. Choosing between the two depends on whether the user wants a snapshot of specific objects or a reusable live query.",
+    "source": {
+      "title": "Object Explorer: Save lists",
+      "url": "https://www.palantir.com/docs/foundry/object-explorer/save-lists/"
+    }
+  },
+  {
+    "id": "ux-tf-02",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Sharing a saved Object Explorer exploration also gives its viewers access to the underlying objects.",
+    "answer": false,
+    "correction": "Sharing a saved Object Explorer exploration does not share access to the underlying objects; each viewer also needs the appropriate role on the data.",
+    "explanation": "A saved exploration is a resource with its own access, determined by where it is saved, and it is separate from the permissions on the objects it queries. A viewer who can open the exploration but lacks access to the data will not see those objects.",
+    "source": {
+      "title": "Object Explorer: Save explorations",
+      "url": "https://www.palantir.com/docs/foundry/object-explorer/save-explorations/"
+    }
+  },
+  {
+    "id": "ux-tf-03",
+    "domain": "ux",
+    "objective": "redirects",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Selecting Open in Quiver from Workshop's Free-form Analysis widget creates a duplicate analysis, so later changes made in Quiver are not reflected back in the widget.",
+    "answer": true,
+    "explanation": "The Free-form Analysis widget lets users hand an analysis over to Quiver when they need more advanced tools. The hand-off creates a separate Quiver analysis, so it is a one-way redirect: work continued in Quiver does not flow back into the analysis path shown in the Workshop widget.",
+    "source": {
+      "title": "Workshop: Free-form Analysis widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widget-free-form-analysis/"
+    }
+  },
+  {
+    "id": "ux-tf-04",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "The Embedded Module widget in Workshop displays the child module's most recently saved version, even if that version has not been published.",
+    "answer": false,
+    "correction": "The Embedded Module widget in Workshop always uses the published version of the child module.",
+    "explanation": "When a child module is selected in the Embedded Module widget, the parent always renders the child's published version. Edits saved in the child therefore reach every parent that embeds it only after the child is published, which gives builders a controlled release point for shared content.",
+    "source": {
+      "title": "Workshop: Embedded module widget",
+      "url": "https://www.palantir.com/docs/foundry/workshop/embedded-modules/"
+    }
+  },
+  {
+    "id": "ux-tf-05",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "An existing Workshop module added as an Object View tab can be used in more than one Object View, whereas a managed Workshop module tab cannot be reused.",
+    "answer": true,
+    "explanation": "Object View tabs are backed by Workshop modules of two kinds. Managed modules are created for a specific Object View, with permissions kept in sync with it, and cannot be reused; existing modules built in Workshop can be embedded as tabs in several Object Views, which keeps shared content in one place.",
+    "source": {
+      "title": "Object Views: Configure tabs",
+      "url": "https://www.palantir.com/docs/foundry/object-views/config-tabs/"
+    }
+  },
+  {
+    "id": "ux-tf-06",
+    "domain": "ux",
+    "objective": "embedding",
+    "difficulty": "hard",
+    "format": "truefalse",
+    "stem": "When a variable changes inside an embedded Workshop child module, the parent module's variables update automatically even if they are not mapped through the module interface.",
+    "answer": false,
+    "correction": "Variables changed inside an embedded Workshop child module do not propagate to the parent automatically; the parent sees a change only through variables mapped to the child's module interface.",
+    "explanation": "Each embedded module has its own variable scope. Parent and child, or sibling modules, communicate only through module interface variables that are mapped in the embedding configuration; a child can change such a shared variable through events, and everything referencing it then responds.",
+    "source": {
+      "title": "Workshop: Embed Workshop modules",
+      "url": "https://www.palantir.com/docs/foundry/workshop/embedding-workshop-modules-overview/"
+    }
+  },
+  {
+    "id": "ux-tf-07",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "To use a model as part of a Workshop scenario, the model is wrapped in a Function and invoked through a function-backed Action.",
+    "answer": true,
+    "explanation": "Scenarios are built by applying Actions, so a model takes part in a what-if through the same mechanism: the model is wrapped in a Function, and a function-backed Action that uses it is applied to the scenario. The model's estimates then appear in the scenario alongside the other edits.",
+    "source": {
+      "title": "Workshop Scenarios: Core concepts",
+      "url": "https://www.palantir.com/docs/foundry/workshop/scenarios-concepts/"
+    }
+  },
+  {
+    "id": "ux-tf-08",
+    "domain": "ux",
+    "objective": "scenarios",
+    "difficulty": "hard",
+    "format": "truefalse",
+    "stem": "When a Workshop scenario is applied, the values estimated by its models are written to the Ontology together with the edits made by its Actions.",
+    "answer": false,
+    "correction": "When a Workshop scenario is applied, only its Actions are applied to the Ontology; model results are not written, because they represent expected results rather than editable values.",
+    "explanation": "Applying a scenario commits the Actions associated with it, as a single transaction. Model output shown in the scenario is a projection of what is expected to happen and is deliberately left out of what gets written to the Ontology.",
+    "source": {
+      "title": "Workshop Scenarios: Apply scenarios",
+      "url": "https://www.palantir.com/docs/foundry/workshop/scenarios-apply/"
+    }
+  },
+  {
+    "id": "ux-tf-09",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "easy",
+    "format": "truefalse",
+    "stem": "In Foundry Rules, each rule is stored as a standard object whose properties include rule metadata and the rule's logic.",
+    "answer": true,
+    "explanation": "Foundry Rules keeps rules in the Ontology as ordinary objects with metadata properties such as name, description and author, optional custom properties, and a logic property holding the rule's conditions. Because rules are objects, they can be listed, filtered, permissioned and changed through Actions like any other object.",
+    "source": {
+      "title": "Foundry Rules: Object model",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/object-model/"
+    }
+  },
+  {
+    "id": "ux-tf-10",
+    "domain": "ux",
+    "objective": "foundry-rules",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "Rule proposals are mandatory in Foundry Rules: a workflow cannot be used without a proposal review step.",
+    "answer": false,
+    "correction": "Rule proposals are an optional feature of Foundry Rules, not a requirement; the review flow is built from standard objects and Actions and can be customised.",
+    "explanation": "Proposals give Foundry Rules an audit and review process similar to pull requests, with objects that record the proposed change, its author, status and reviewer. They are a feature rather than a requirement, and because the flow uses standard objects and Actions it can be adapted to an organisation's own change-management rules.",
+    "source": {
+      "title": "Foundry Rules: Object model",
+      "url": "https://www.palantir.com/docs/foundry/foundry-rules/object-model/"
+    }
+  }
+]

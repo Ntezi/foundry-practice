@@ -1,0 +1,77 @@
+{
+  "name": "Foundry Practice",
+  "certification": "Palantir Foundry Application Developer",
+  "baseline": {
+    "label": "2026 Application Developer Certification Guide (attached guide, not redistributed)",
+    "questions": 60,
+    "minutes": 120,
+    "passPercent": 70,
+    "navigation": "forward-only"
+  },
+  "practice": {
+    "secondsPerQuestion": 120,
+    "lengths": [10, 20, 30, 60]
+  },
+  "domains": [
+    {
+      "id": "design",
+      "title": "Application Design",
+      "weightPercent": 30,
+      "questions": 18,
+      "objectives": [
+        { "id": "tool-selection", "title": "Choose the right Foundry application for a workflow" },
+        { "id": "ontology-pipeline-design", "title": "Design ontology and pipelines from business requirements" },
+        { "id": "operational-workflows", "title": "Turn dashboards into operational workflows" },
+        { "id": "ux-design", "title": "Optimize application and cross-application UX" }
+      ]
+    },
+    {
+      "id": "implementation",
+      "title": "Application Implementation",
+      "weightPercent": 30,
+      "questions": 18,
+      "objectives": [
+        { "id": "object-types", "title": "Implement object type changes" },
+        { "id": "link-types", "title": "Implement link type changes" },
+        { "id": "actions", "title": "Implement Action types" },
+        { "id": "typescript-functions", "title": "Implement TypeScript Functions" },
+        { "id": "quiver", "title": "Implement interactive Quiver analyses" },
+        { "id": "workshop", "title": "Implement Workshop modules" }
+      ]
+    },
+    {
+      "id": "ux",
+      "title": "UX and Cross-Application Workflows",
+      "weightPercent": 20,
+      "questions": 12,
+      "objectives": [
+        { "id": "redirects", "title": "Redirect users to tools with the functionality they need" },
+        { "id": "embedding", "title": "Embed applications within one another" },
+        { "id": "scenarios", "title": "Configure Scenarios for what-if analysis" },
+        { "id": "foundry-rules", "title": "Configure Foundry Rules for user-managed logic" }
+      ]
+    },
+    {
+      "id": "maintenance",
+      "title": "Application Maintenance",
+      "weightPercent": 20,
+      "questions": 12,
+      "objectives": [
+        { "id": "release-management", "title": "Apply release management best practices" },
+        { "id": "data-freshness", "title": "Keep application data fresh and correct" },
+        { "id": "ontology-changes", "title": "Identify resources affected by Ontology changes" },
+        { "id": "migration", "title": "Plan migration strategies" },
+        { "id": "debugging", "title": "Debug application issues" }
+      ]
+    }
+  ],
+  "formats": [
+    { "id": "single", "label": "Single-select", "inGuide": true },
+    { "id": "multi", "label": "Multi-select", "inGuide": true },
+    { "id": "discrete", "label": "Discrete options", "inGuide": true },
+    { "id": "hotspot", "label": "Hotspot", "inGuide": true },
+    { "id": "matching", "label": "Matching", "inGuide": true },
+    { "id": "truefalse", "label": "True/False", "inGuide": false }
+  ],
+  "difficulties": ["easy", "medium", "hard"]
+}

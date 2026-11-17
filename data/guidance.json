@@ -1,0 +1,23 @@
+{
+  "checkedOn": "2026-11-17",
+  "officialGuide": {
+    "title": "Application Developer Associate Certification Exam Guide (learn.palantir.com)",
+    "url": "https://learn.palantir.com/page/palantir-application-developer-associate-certification-exam-guide"
+  },
+  "announcement": {
+    "title": "Palantir certifications are getting a refresh (Palantir Developer Community, 27 July 2026, updated 3 August 2026)",
+    "url": "https://community.palantir.com/t/palantir-certifications-are-getting-a-refresh-with-a-brand-new-ai-engineer-exam-launching-3-august/7022"
+  },
+  "summary": "This simulator follows the 2026 Application Developer Certification Guide its author studied from (60 questions, 120 minutes, four weighted sections). Palantir refreshed its Associate exams on 3 August 2026, and the current official Associate guide describes a different exam. Treat a pass here as evidence of topic knowledge, not as a prediction of the live exam result.",
+  "rows": [
+    { "topic": "Questions", "simulator": "60", "official": "85" },
+    { "topic": "Duration", "simulator": "120 minutes", "official": "3 hours" },
+    { "topic": "Passing score", "simulator": "70% (42 of 60)", "official": "70%" },
+    { "topic": "Navigation", "simulator": "Forward-only: no return to a question after advancing", "official": "\"Questions are sequential\"" },
+    { "topic": "Question formats", "simulator": "Single-select, multi-select, discrete options, hotspot, matching", "official": "The launch announcement describes the Associate exams as multiple-choice. Hotspot, matching and discrete options are not mentioned." },
+    { "topic": "True/False", "simulator": "Practice only, plus an optional mix in mock forms labelled as a practice variation", "official": "Not mentioned in the official guide or the announcement" },
+    { "topic": "Content outline", "simulator": "Four sections: Application Design 30%, Application Implementation 30%, UX and Cross-Application Workflows 20%, Application Maintenance 20%", "official": "Eight domains, no published weights: Ontology Schema Design and Workflow Assembly; Action Types and Write-Back Patterns; Ontology Functions; Workshop Application Development; OSDK, APIs, and External Applications; Automate and Operational Workflows; AIP Logic and AI-Powered Applications; Application Security, Governance, and Operations" },
+    { "topic": "Topics the simulator does not cover", "simulator": "Quiver, Scenarios, Foundry Rules, Object Views and Carbon are covered because the baseline guide lists them", "official": "OSDK and external applications, Automate, AIP Logic, Python functions, and security and governance are exam domains that this question bank covers only in passing or not at all" },
+    { "topic": "Conditions", "simulator": "Runs in your browser, no proctoring", "official": "Timed and open-book per the announcement, valid for two years" }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "foundry-practice",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent, unofficial mock-exam and practice site for the Palantir Foundry Application Developer certification",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "test": "node --test",
+    "build": "node scripts/validate.mjs && node scripts/bundle.mjs",
+    "serve": "node scripts/serve.mjs",
+    "dev": "npm run build && node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
