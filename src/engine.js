@@ -148,11 +148,14 @@ export function mockQuestionIds(form, tfMix) {
   return form.questions.map((id) => swap.get(id) || id);
 }
 
-/** Draws the Associate mock: a random quota per official domain from the exam's formats, then mixed. */
+/**
+ * Draws the Associate mock: a random quota per official domain from the exam's formats, then mixed.
+ * Questions marked `associateMock: false` (for example ones on an API the current guide no longer lists) stay in Practice only.
+ */
 export function assembleExam(exam, bank, rng = Math.random) {
   const picked = [];
   for (const [domain, n] of Object.entries(exam.quotas)) {
-    const pool = shuffle(bank.filter((q) => q.domain === domain && exam.formats.includes(q.format)), rng);
+    const pool = shuffle(bank.filter((q) => q.domain === domain && exam.formats.includes(q.format) && q.associateMock !== false), rng);
     picked.push(...pool.slice(0, n));
   }
   return shuffle(picked, rng).map((q) => q.id);

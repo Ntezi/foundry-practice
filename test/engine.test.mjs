@@ -110,6 +110,8 @@ test('the Associate mock follows the official guide: 85 questions, 180 minutes, 
 
 test('each Associate mock is a fresh draw from the bank', () => {
   const { bank } = fakeBank();
+  const held = bank.filter((q) => q.domain === 'functions' && q.format === 'single').slice(0, 20).map((q) => (q.associateMock = false, q.id));
+  for (let i = 0; i < 5; i++) assert.ok(assembleExam(A, bank).every((id) => !held.includes(id)), 'questions marked associateMock: false are never drawn');
   const a = assembleExam(A, bank), b = assembleExam(A, bank);
   assert.equal(a.length, 85);
   assert.notDeepEqual(a, b);

@@ -14,7 +14,7 @@
       },
       {
         "id": "b",
-        "text": "Grant the group the Viewer role on the project and let its contents inherit the grant",
+        "text": "Grant the group the Viewer role on the project and let its contents inherit it",
         "why": "Correct. A role granted on a project is inherited by every resource inside it, so one group grant covers current and future resources at exactly the level needed."
       },
       {
@@ -134,7 +134,7 @@
       },
       {
         "id": "b",
-        "text": "Build a restricted view on `care_events` and use it as the datasource for both consumers",
+        "text": "Build a restricted view on `care_events` and use it as the single datasource for both consumers",
         "why": "Correct. A restricted view filters dataset rows by policy wherever it is read, and it can also back the object type, so one policy covers both the Ontology and non-Ontology access."
       },
       {
@@ -259,7 +259,7 @@
       },
       {
         "id": "c",
-        "text": "She lacks access to the `Delivery` data; add her to the group that can view those objects",
+        "text": "She can open the module but lacks access to the `Delivery` data; add her to the group that can view it",
         "why": "Correct. Opening a module and reading the data it shows are permissioned separately, so she needs the data access her colleagues already have."
       },
       {
@@ -451,7 +451,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Action effects run as the automation owner, so the criteria are evaluated against Dara",
+        "text": "Action effects run as the automation owner, so the submission criteria are evaluated against Dara",
         "why": "Correct. Action, Logic and Function effects execute as the owner, and the owner must satisfy the action's submission criteria."
       },
       {
@@ -542,7 +542,7 @@
       },
       {
         "id": "d",
-        "text": "Save the schedule in project-scoped mode, scoped to the projects it builds in",
+        "text": "Save the schedule in project-scoped mode, scoped to the projects whose datasets it builds",
         "why": "Correct. A project-scoped schedule runs independently of any user's permissions and only changes if the set of projects it is scoped to changes."
       }
     ],

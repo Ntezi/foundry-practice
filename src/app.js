@@ -67,6 +67,8 @@ function renderNav(cur) {
 
 // ---------- session lifecycle ----------
 let lastAnnounced = null;
+let shownAt = 0; // when the current question was drawn, to ignore a double-click meant for the previous one
+const ADVANCE_GUARD_MS = 500;
 
 function finishSession() {
   if (!S) return;
@@ -335,7 +337,7 @@ function viewSession({ focus = 'heading' } = {}) {
     ${navigatorHtml()}
     <div class="sr" id="timer-live" aria-live="polite"></div>
   </div>`;
-  if (focus === 'heading') { $('#q-heading').focus({ preventScroll: true }); scrollTo(0, 0); }
+  if (focus === 'heading') { $('#q-heading').focus({ preventScroll: true }); scrollTo(0, 0); shownAt = Date.now(); }
   tick();
 }
 
@@ -378,8 +380,8 @@ async function endSession() {
 function sessionAct(act, el) {
   const q = currentQ();
   switch (act) {
-    case 'lock': return advanceMock(false);
-    case 'skip': return advanceMock(true);
+    // In a forward-only exam a second click must not lock or skip the question that has only just appeared.
+    case 'lock': case 'skip': if (Date.now() - shownAt < ADVANCE_GUARD_MS) return; return advanceMock(act === 'skip');
     case 'end': return endSession();
     case 'prev': if (S.index > 0) { S.index--; save(); viewSession(); } return;
     case 'next': if (S.index < S.qids.length - 1) { S.index++; save(); viewSession(); } return;
@@ -568,7 +570,7 @@ function viewProgress() {
 function viewAbout() {
   setTitle('About & scoring');
   const A = examOf('associate'), G = examOf('guide2026');
-  const mc = (d) => bank.filter((q) => q.domain === d && A.formats.includes(q.format)).length;
+  const mc = (d) => bank.filter((q) => q.domain === d && A.formats.includes(q.format) && q.associateMock !== false).length;
   const fmtCounts = blueprint.formats.map((f) => `${bank.filter((q) => q.format === f.id).length} ${f.label}`).join(', ');
   const list = (items) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
   main.innerHTML = `<div class="page narrow prose">
@@ -580,7 +582,7 @@ function viewAbout() {
     <h3>Where the guide is silent and the simulator has to assume</h3>${list(guidance.assumptions)}
     <p class="muted small">Checked on ${esc(guidance.checkedOn)} against <a href="${esc(guidance.officialGuide.url)}" target="_blank" rel="noopener">${esc(guidance.officialGuide.title)} ↗</a> and <a href="${esc(guidance.announcement.url)}" target="_blank" rel="noopener">${esc(guidance.announcement.title)} ↗</a>. Official guidance changes; check it before you book.</p>
     <h2>The Associate mock: ${A.questions} questions, ${A.minutes} minutes</h2>
-    <div class="table-scroll"><table class="table"><caption class="sr">Official domains, questions per mock and bank size</caption><thead><tr><th scope="col">Official domain</th><th scope="col">Per mock</th><th scope="col">Multiple-choice in bank</th><th scope="col">All formats</th></tr></thead><tbody>
+    <div class="table-scroll"><table class="table"><caption class="sr">Official domains, questions per mock and bank size</caption><thead><tr><th scope="col">Official domain</th><th scope="col">Per mock</th><th scope="col">Mock pool</th><th scope="col">All formats</th></tr></thead><tbody>
       ${blueprint.domains.map((d) => `<tr><th scope="row">${d.number ? `${d.number}. ` : ''}${esc(d.title)}<div class="muted small">${d.objectives.map((o) => esc(o.title)).join(' · ')}</div></th><td>${A.quotas[d.id] || '<span class="muted">not used</span>'}</td><td>${mc(d.id)}</td><td>${bank.filter((q) => q.domain === d.id).length}</td></tr>`).join('')}
     </tbody></table></div>
     <p>The bank holds ${bank.length} questions (${fmtCounts}). Each Associate mock is drawn at random from the multiple-choice questions of the eight official domains.</p>

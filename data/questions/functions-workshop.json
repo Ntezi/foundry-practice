@@ -1,1307 +1,1307 @@
 [
- {
-  "id": "fn-001",
-  "domain": "functions",
-  "objective": "paradigm",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "Operations analysts at Larkfield Logistics want a function that reads a free-text carrier email together with the related `Shipment` object and proposes a delay reason. Nobody on the team writes code, and they want to adjust the prompt themselves as they learn what works. Which way of building the function fits this team?",
-  "options": [
-   {
-    "id": "a",
-    "text": "A TypeScript v2 function that calls a language model through a model alias",
-    "why": "TypeScript v2 can call language models, but it needs a code repository and developers, which this team does not have."
-   },
-   {
-    "id": "b",
-    "text": "An AIP Logic function whose blocks pass the email and object to an LLM",
-    "why": "Correct. AIP Logic is the no-code environment for LLM-powered functions that use the Ontology, so analysts can build, test and tune the prompt themselves."
-   },
-   {
-    "id": "c",
-    "text": "A Python function that parses the email text with regular expressions",
-    "why": "Fixed patterns handle free text poorly, and Python still needs someone to write, test and release code."
-   },
-   {
-    "id": "d",
-    "text": "A chain of Workshop variable transformations applied to the email text",
-    "why": "Variable transformations cover simple operations such as concatenation, comparisons and date math; they cannot interpret free text."
-   }
-  ],
-  "answer": [
-   "b"
-  ],
-  "explanation": "AIP Logic is a no-code environment for building, testing and releasing LLM-backed functions that take Ontology objects or text as inputs. It suits interpretive tasks on unstructured text and maintainers who do not write code. TypeScript v2 and Python functions suit logic that developers own in a repository.",
-  "source": {
-   "title": "AIP Logic: Overview",
-   "url": "https://www.palantir.com/docs/foundry/logic/overview/"
+  {
+    "id": "fn-001",
+    "domain": "functions",
+    "objective": "paradigm",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Operations analysts at Larkfield Logistics want a function that reads a free-text carrier email together with the related `Shipment` object and proposes a delay reason. Nobody on the team writes code, and they want to adjust the prompt themselves as they learn what works. Which way of building the function fits this team?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A TypeScript v2 function that calls a language model through a model alias",
+        "why": "TypeScript v2 can call language models, but it needs a code repository and developers, which this team does not have."
+      },
+      {
+        "id": "b",
+        "text": "An AIP Logic function whose blocks pass the email and object to an LLM",
+        "why": "Correct. AIP Logic is the no-code environment for LLM-powered functions that use the Ontology, so analysts can build, test and tune the prompt themselves."
+      },
+      {
+        "id": "c",
+        "text": "A Python function that parses the email text with regular expressions",
+        "why": "Fixed patterns handle free text poorly, and Python still needs someone to write, test and release code."
+      },
+      {
+        "id": "d",
+        "text": "A chain of Workshop variable transformations applied to the email text",
+        "why": "Variable transformations cover simple operations such as concatenation, comparisons and date math; they cannot interpret free text."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "AIP Logic is a no-code environment for building, testing and releasing LLM-backed functions that take Ontology objects or text as inputs. It suits interpretive tasks on unstructured text and maintainers who do not write code. TypeScript v2 and Python functions suit logic that developers own in a repository.",
+    "source": {
+      "title": "AIP Logic: Overview",
+      "url": "https://www.palantir.com/docs/foundry/logic/overview/"
+    }
+  },
+  {
+    "id": "fn-002",
+    "domain": "functions",
+    "objective": "paradigm",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A data science team at Brennick Foods has a scoring routine written with Python libraries. The same routine must back a numeric variable in a Workshop module and also be called from a Pipeline Builder pipeline, and the team wants to keep a single implementation. Which option supports both uses?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A TypeScript v2 function, because it runs in a full Node.js runtime",
+        "why": "TypeScript v2 functions can be used in Workshop but cannot be called from Pipeline Builder, and the routine would have to be rewritten."
+      },
+      {
+        "id": "b",
+        "text": "An AIP Logic function that wraps the routine in an Execute function block",
+        "why": "AIP Logic functions are not usable in Pipeline Builder, and a deterministic scoring routine does not need an LLM-oriented tool."
+      },
+      {
+        "id": "c",
+        "text": "A TypeScript v1 function, because it has the longest list of examples",
+        "why": "TypeScript v1 cannot be called from Pipeline Builder either, and the documentation steers new work away from v1."
+      },
+      {
+        "id": "d",
+        "text": "A Python function published from a Python functions repository",
+        "why": "Correct. Python functions can be queried from Workshop and are the only function type that Pipeline Builder can call, so one implementation serves both."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "The feature support table lists every function type as usable in Workshop, but only Python functions as usable in Pipeline Builder. When the logic already depends on Python libraries and Python-skilled maintainers, a Python function avoids a second implementation.",
+    "source": {
+      "title": "Functions: Feature support by language",
+      "url": "https://www.palantir.com/docs/foundry/functions/language-feature-support/"
+    }
+  },
+  {
+    "id": "fn-003",
+    "domain": "functions",
+    "objective": "paradigm",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "Castlemere Credit Union must add a late-payment fee to `Loan` objects through an Action. The fee formula is fixed by policy, auditors expect the same inputs to produce the same fee every time, and the engineering team wants the logic in code review. A prototype uses an AIP Logic function whose Use LLM block is asked to do the arithmetic. What should the team do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Write the formula as a TypeScript v2 or Python function that backs the Action",
+        "why": "Correct. A coded function is deterministic, lives in a repository where it can be reviewed and versioned, and can return the Ontology edits for a function-backed Action."
+      },
+      {
+        "id": "b",
+        "text": "Keep the Use LLM block and set its temperature to the lowest value for repeatable output",
+        "why": "A low temperature makes model output more repeatable, but the fee is still generated by a model rather than computed by a fixed formula."
+      },
+      {
+        "id": "c",
+        "text": "Keep the Use LLM block and add few-shot examples of correct fees",
+        "why": "Examples improve how often the model is right; they do not turn a model response into a guaranteed calculation."
+      },
+      {
+        "id": "d",
+        "text": "Compute the fee with Workshop variable transformations and pass it in",
+        "why": "That puts the policy in one module's browser logic, so any other place that applies the Action could submit a different fee."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Choose the paradigm by what the logic needs. A fixed calculation that must be repeatable and reviewable belongs in deterministic code, and a TypeScript v2 or Python function can express the edit for a function-backed Action. LLM-backed logic is for interpretation and generation, not arithmetic that policy defines exactly.",
+    "source": {
+      "title": "Functions: Overview",
+      "url": "https://www.palantir.com/docs/foundry/functions/overview/"
+    }
+  },
+  {
+    "id": "fn-004",
+    "domain": "functions",
+    "objective": "paradigm",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Halden Rail is deciding whether a new functions repository should use TypeScript v1 or TypeScript v2. The team lists what the functions must do. Which requirements can only be met with TypeScript v2? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Editing objects through an Ontology interface that several object types implement",
+        "why": "Correct. Of the two TypeScript versions, only v2 supports accessing and editing Ontology interfaces."
+      },
+      {
+        "id": "b",
+        "text": "Returning a value that backs a numeric variable in a Workshop module",
+        "why": "Both versions can be queried from Workshop, so this requirement does not decide the choice."
+      },
+      {
+        "id": "c",
+        "text": "Using an NPM library that relies on Node.js core modules such as `fs` and `crypto`",
+        "why": "Correct. TypeScript v2 runs in a full Node.js runtime, which makes libraries that need core modules usable."
+      },
+      {
+        "id": "d",
+        "text": "Calling a webhook directly from the function body without publishing it as a function first",
+        "why": "This is the reverse: v1 calls webhooks directly, while v2 needs the webhook published as a webhook function."
+      },
+      {
+        "id": "e",
+        "text": "Running document OCR on a media item that is attached to an object",
+        "why": "Document-specific media operations are a v1 capability; v2 has only partial media support."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "TypeScript v2 is the recommended version for new work: it runs serverless in a full Node.js runtime and has first-class Ontology SDK support, including Ontology interfaces. A few capabilities, such as direct webhook calls and full media operations, remain specific to v1, so the choice should follow the actual requirements.",
+    "source": {
+      "title": "Functions: Feature support by language",
+      "url": "https://www.palantir.com/docs/foundry/functions/language-feature-support/"
+    }
+  },
+  {
+    "id": "fn-005",
+    "domain": "functions",
+    "objective": "paradigm",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Serverless functions are enabled at Orrin Biolabs, and a developer is about to publish a Python function. A colleague suggests switching it to deployed execution \"to be safe\". Which requirements would be valid reasons to choose a deployed function? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The function must be selectable as a function-backed variable in Workshop",
+        "why": "Both serverless and deployed Python functions appear in Workshop, so this does not require a deployment."
+      },
+      {
+        "id": "b",
+        "text": "The function calls an external API through a third-party client library",
+        "why": "Correct. Serverless functions reach external sources through the client of the provided source object; third-party clients need a deployed function."
+      },
+      {
+        "id": "c",
+        "text": "Costs should only be incurred while the function is actually executing",
+        "why": "That describes serverless; a deployment costs compute for as long as it is running."
+      },
+      {
+        "id": "d",
+        "text": "The function needs a GPU to run model inference at an acceptable speed",
+        "why": "Correct. GPU allocation is available to deployed functions and not to serverless ones."
+      },
+      {
+        "id": "e",
+        "text": "Several versions of the function must be callable on demand during an upgrade",
+        "why": "Serverless can run different versions on demand; a deployment hosts a single version at a time."
+      }
+    ],
+    "answer": [
+      "b",
+      "d"
+    ],
+    "explanation": "Serverless is the recommended default because it needs no upkeep, bills only on execution and can run multiple versions side by side. Deployed execution is for the narrower cases that need a long-lived container, such as GPUs, third-party clients for external calls or local caching.",
+    "source": {
+      "title": "Functions: Deploy functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/functions-deployed/"
+    }
+  },
+  {
+    "id": "fn-006",
+    "domain": "functions",
+    "objective": "query-edit",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A developer at Pendry Aviation is writing her first TypeScript v2 function to back an Action that sets `status` on a `WorkOrder`. She has imported `createEditBatch` and `Edits` from `@osdk/functions`. How does a TypeScript v2 function hand its edits to the Action?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It assigns `workOrder.status = \"Closed\"` on the loaded object and returns `void`",
+        "why": "Assigning to object properties with a void return is the TypeScript v1 pattern; v2 does not collect edits implicitly."
+      },
+      {
+        "id": "b",
+        "text": "It calls a `save()` method on the OSDK client before the function returns",
+        "why": "There is no save step in the edit-batch model; the function does not write to the Ontology itself."
+      },
+      {
+        "id": "c",
+        "text": "It records edits on a batch from `createEditBatch(client)` and returns `batch.getEdits()`",
+        "why": "Correct. The batch tracks every edit, and the function returns them as an array of the declared `Edits` type for the Action to apply."
+      },
+      {
+        "id": "d",
+        "text": "It returns the modified `WorkOrder` instance so the Action can compare it with the original",
+        "why": "Returning an object instance is a normal query result, not a set of Ontology edits the Action can apply."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "TypeScript v2 makes edits explicit: the function declares an `Edits` type for the entities it may change, builds an edit batch from the client, records updates, creates, deletes and links on it, and returns the batch contents. The edits are only applied when the function runs as a function-backed Action.",
+    "source": {
+      "title": "Functions: TypeScript v2 Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-ontology-edits/"
+    }
+  },
+  {
+    "id": "fn-007",
+    "domain": "functions",
+    "objective": "query-edit",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "In the ontology of Trewin Facilities, each `Ticket` belongs to one `Employee` through a one-to-many link backed by the foreign key property `assignedEmployeeId` on `Ticket`. A TypeScript v2 function must reassign a ticket to another employee. Which edit and declaration are correct?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Call `batch.link(employee, \"assignedTickets\", ticket)` and declare `Edits.Link<Employee, \"assignedTickets\">`",
+        "why": "`link` and `Edits.Link` are for many-to-many link types; this link is stored as a property on `Ticket`."
+      },
+      {
+        "id": "b",
+        "text": "Update `assignedEmployeeId` on the ticket with `batch.update` and declare `Edits.Object<Ticket>`",
+        "why": "Correct. A foreign-key-backed link is changed by editing the foreign key property, so it is an object edit on `Ticket`."
+      },
+      {
+        "id": "c",
+        "text": "Update the `assignedTickets` array on the employee and declare `Edits.Object<Employee>`",
+        "why": "The link is not held as a property on `Employee`, so there is nothing on that side to update."
+      },
+      {
+        "id": "d",
+        "text": "Delete the ticket and create it again with the new employee, declaring `Edits.Object<Employee>`",
+        "why": "Recreating the object discards its history for no reason, and the declaration names the wrong object type."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "One-to-one and one-to-many links are backed by a foreign key property, so setting or clearing them is an object edit on the type that holds the key. Only many-to-many links use `link` and `unlink` and are declared with `Edits.Link`. The declared edit types are what give the Action its provenance.",
+    "source": {
+      "title": "Functions: TypeScript v2 Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-ontology-edits/"
+    }
+  },
+  {
+    "id": "fn-008",
+    "domain": "functions",
+    "objective": "query-edit",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "A TypeScript v1 function at Marlowe Freight returned the 50 most delayed `Delivery` objects with `.orderBy(...).take(50)`. A developer is porting it to TypeScript v2, where the `Delivery` object set has several hundred thousand objects. Which approach returns the right 50 objects without loading far more than needed?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Iterate the whole object set with `asyncIter()`, sort the array by delay and slice the first 50",
+        "why": "This streams every delivery into the function just to keep 50 of them, which is slow and wasteful at this scale."
+      },
+      {
+        "id": "b",
+        "text": "Call `fetchPage` once with `$orderBy` and `$pageSize: 50` and return `page.data` as it is",
+        "why": "A page can come back with fewer results even when more exist, so a single call does not guarantee 50 objects."
+      },
+      {
+        "id": "c",
+        "text": "Call `.aggregate()` with a `$groupBy` on the delay property and read the first 50 groups",
+        "why": "An aggregation returns grouped metrics, not the delivery objects the caller needs."
+      },
+      {
+        "id": "d",
+        "text": "Call `fetchPage` with `$orderBy`, following `nextPageToken` until 50 are collected",
+        "why": "Correct. Ordering is passed to `fetchPage` together with a page size, and the loop continues until it has 50 objects or no next page token remains."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "TypeScript v2 has no `.take()` or `.limit()`. Ordering is supplied as `$orderBy` in the options of `fetchPage()` or `asyncIter()`, and `$pageSize` is only an upper bound for one page. To collect the first n ordered objects, fetch successive pages until n are collected or the token runs out.",
+    "source": {
+      "title": "Functions: Migrate from TypeScript v1 to TypeScript v2",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-migration/"
+    }
+  },
+  {
+    "id": "fn-009",
+    "domain": "functions",
+    "objective": "query-edit",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "A TypeScript v2 function at Sedgwick Retail must return the number of open `PurchaseOrder` objects per `supplierId` for a Workshop chart. There are millions of orders and tens of thousands of suppliers. Which statements about writing this with the Ontology SDK are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The open-orders filter belongs in a chained `.where()` before `.aggregate()` is called",
+        "why": "Correct. The aggregate request only takes `$select` and an optional `$groupBy`, so filtering is done on the object set first."
+      },
+      {
+        "id": "b",
+        "text": "The filter can be passed as a `where` key inside the `.aggregate()` request object",
+        "why": "The aggregate request has no `where` key; the object set must be filtered before aggregating."
+      },
+      {
+        "id": "c",
+        "text": "A high-cardinality exact grouping can become approximate without the result saying so",
+        "why": "Correct. Exact grouping has a maximum bucket count; beyond it the result is approximate, so raise the limit with `$exactWithLimit` or narrow the set."
+      },
+      {
+        "id": "d",
+        "text": "Adding a custom key to `$select` lets the function rename the count in the result",
+        "why": "There is no metric aliasing; any `$select` key other than `$count` or a `property:metric` string is a type error."
+      },
+      {
+        "id": "e",
+        "text": "Streaming the orders with `asyncIter()` and counting them in a `Map` costs about the same",
+        "why": "That loads millions of objects into the function, whereas an aggregation is computed by the Ontology backend."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "In TypeScript v2 a single `.aggregate()` call takes `$select` for the metrics and `$groupBy` for the buckets, and the backend does the work without loading objects. Filters are applied with `.where()` beforehand. Exact groupings are only accurate while the distinct values fit in the bucket limit, which matters for high-cardinality properties.",
+    "source": {
+      "title": "Functions: Migrate from TypeScript v1 to TypeScript v2",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-migration/"
+    }
+  },
+  {
+    "id": "fn-010",
+    "domain": "functions",
+    "objective": "query-edit",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A Python function at Whitlow Insurance backs an Action that adds a tag to a `Claim`. It gets an editable claim from the edits container, runs `editable_claim.tags.append(new_tag)` and returns `ontology_edits.get_edits()`. The Action succeeds but the tag never appears. What is wrong?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The function must edit the original `claim` argument rather than the editable view",
+        "why": "Objects passed to Python functions are read-only; changing them raises an exception instead of recording an edit."
+      },
+      {
+        "id": "b",
+        "text": "Appending in place records no edit; assign a modified copy of the list back to the property",
+        "why": "Correct. Only assignment to the property registers an edit, so the modified copy must be assigned to `editable_claim.tags`."
+      },
+      {
+        "id": "c",
+        "text": "Array properties cannot be edited from Python functions and need TypeScript",
+        "why": "Python functions can edit array properties as long as the new list is assigned to the property."
+      },
+      {
+        "id": "d",
+        "text": "The decorator must declare the array with `OntologyLinkType(Claim, \"tags\")`",
+        "why": "`OntologyLinkType` declares many-to-many link types; `tags` is a property of `Claim`, which is covered by declaring `Claim`."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "In Python edit functions an editable object exposes array properties as ordinary lists, but an edit is recorded only when the property is assigned. In-place mutation is silently dropped, so the pattern is to copy the list, modify the copy and assign it back. The same applies to fields of struct properties.",
+    "source": {
+      "title": "Functions: Python Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/functions/python-ontology-edits/"
+    }
+  },
+  {
+    "id": "fn-011",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "difficulty": "easy",
+    "format": "multi",
+    "stem": "A developer at Dunmore Energy tags and releases a TypeScript v2 functions repository. The checks pass, but `estimateOutage` does not appear among the published functions. It is written as a named export in `src/helpers/outages.ts`. Which conditions must the function meet to be published? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "It is defined in a file inside `src/functions` whose name matches the function name",
+        "why": "Correct. Functions are discovered from files in the functions directory, and `estimateOutage` must live in `estimateOutage.ts`."
+      },
+      {
+        "id": "b",
+        "text": "It is a method on a class that the repository exports from its root `index.ts`",
+        "why": "Exporting a class from `index.ts` is how TypeScript v1 publishes functions, not v2."
+      },
+      {
+        "id": "c",
+        "text": "It carries the `@Function()` decorator imported from `@foundry/functions-api`",
+        "why": "The decorator belongs to TypeScript v1; v2 identifies functions by file location and default export."
+      },
+      {
+        "id": "d",
+        "text": "It is the default export of its file",
+        "why": "Correct. Foundry detects a TypeScript v2 function through `export default`, one function per file."
+      },
+      {
+        "id": "e",
+        "text": "It is the only function in the repository that is released under that tag",
+        "why": "Tagging a version publishes all functions in the repository; there is no one-function limit."
+      }
+    ],
+    "answer": [
+      "a",
+      "d"
+    ],
+    "explanation": "TypeScript v2 replaces the v1 decorators with a file convention: each published function is the default export of a `.ts` file in the functions directory (subdirectories are allowed), and the file name matches the function name. Input and output types must also be supported function types.",
+    "source": {
+      "title": "Functions: Getting started with TypeScript v2 functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-getting-started/"
+    }
+  },
+  {
+    "id": "fn-012",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "To tidy a TypeScript v2 repository, a developer at Fairholt Claims moves `approveClaim.ts` from `src/functions` into `src/functions/claims/` without changing its code, then tags a patch release. A Workshop module and an Action both use `approveClaim` through version ranges. What is the effect of the move?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Nothing changes for consumers, because the function name and signature are the same",
+        "why": "In TypeScript v2 a function is identified by its file path, not only by its name and signature."
+      },
+      {
+        "id": "b",
+        "text": "The release fails, because functions may not be placed in subdirectories",
+        "why": "Grouping functions into subdirectories of the functions directory is supported and recommended."
+      },
+      {
+        "id": "c",
+        "text": "The version ranges resolve to the moved function as a compatible patch upgrade",
+        "why": "A range selects versions of the same function; the moved file is a different function, so the range does not reach it."
+      },
+      {
+        "id": "d",
+        "text": "The moved file is published as a new function, so consumers do not follow it",
+        "why": "Correct. The file path uniquely identifies the published function, so a new path produces a new function that consumers must be repointed to."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "A TypeScript v2 function is uniquely identified by its file path, so changing the path publishes a new function rather than a new version of the old one. Treat a move like any other change to a published interface: plan it, and update the Workshop modules and Actions that reference the function.",
+    "source": {
+      "title": "Functions: Getting started with TypeScript v2 functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-getting-started/"
+    }
+  },
+  {
+    "id": "fn-013",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "An Action at Ivelle Pharma is backed by `closeBatch` with auto upgrade enabled from version 1.2.0, which edits only `Batch` objects. The function team releases 1.3.0, which also creates an `AuditNote` object and declares it in its edits. Since then the Action fails for every user. What explains the failure, and what is the appropriate fix?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Users lack edit permission on `AuditNote`; grant them Editor on the object type's datasource",
+        "why": "The failure is not about user permissions, and widening data access to fix a failing Action is the wrong reflex."
+      },
+      {
+        "id": "b",
+        "text": "Auto upgrade ignores minor releases; switch the Action to pin version 1.3.0 by hand",
+        "why": "Minor and patch releases are exactly what auto upgrade resolves to; the new version is being picked up, which is why it fails."
+      },
+      {
+        "id": "c",
+        "text": "The Action's provenance comes from its selected minimum version; select 1.3.0 instead",
+        "why": "Correct. Edits outside the provenance of the selected minimum version fail, so the Action must be updated to the version that declares `AuditNote`."
+      },
+      {
+        "id": "d",
+        "text": "A function rule cannot create objects; add a separate Create object rule for `AuditNote`",
+        "why": "Functions can create objects, and a function rule cannot be combined with other Ontology rules in the same Action."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "With auto upgrade, an Action depends on a version range but takes its provenance, meaning the object types it may edit, from the minimum version chosen in the rule. If a newer release returns edits outside that provenance, execution fails. Adding an edited type is therefore a change that the Action owner has to adopt on purpose.",
+    "source": {
+      "title": "Action types: Function-backed actions, getting started",
+      "url": "https://www.palantir.com/docs/foundry/action-types/function-actions-getting-started/"
+    }
+  },
+  {
+    "id": "fn-014",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Before tagging a new release of a Python functions repository, a developer at Corran Water wants to know which of her changes the built-in backward compatibility checks will warn about. Which changes are flagged as breaking? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Adding a new optional input at the end of a function's signature",
+        "why": "Adding an optional input is a backward compatible change and is not flagged."
+      },
+      {
+        "id": "b",
+        "text": "Swapping the order of two existing inputs in a function's signature",
+        "why": "Correct. Reordering an input is one of the signature changes the checks warn about."
+      },
+      {
+        "id": "c",
+        "text": "Rewriting a query so that the function returns the same result faster",
+        "why": "A performance improvement with unchanged behaviour is backward compatible and invisible to the checks."
+      },
+      {
+        "id": "d",
+        "text": "Removing an input that was optional and that few callers ever set",
+        "why": "Correct. Dropping any input is flagged, even an optional one, because callers may be passing it."
+      },
+      {
+        "id": "e",
+        "text": "Changing a rounding rule inside the function so that results differ slightly",
+        "why": "This may well break consumers, but the checks look at signatures and cannot see changes in internal behaviour."
+      }
+    ],
+    "answer": [
+      "b",
+      "d"
+    ],
+    "explanation": "The checks compare signatures with the previous release and warn about dropped functions, dropped or reordered inputs, new required inputs and incompatible type changes. They are not exhaustive: a behavioural change inside the implementation passes unnoticed, so a clean result alone does not make a minor or patch release safe.",
+    "source": {
+      "title": "Functions: Function versioning",
+      "url": "https://www.palantir.com/docs/foundry/functions/functions-versioning/"
+    }
+  },
+  {
+    "id": "fn-015",
+    "domain": "functions",
+    "objective": "testing-debugging",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A Python function backs the \"Release shipment\" Action at Kestrow Marine. Part-way through, it traverses to the shipment's linked `Inspection` objects and must stop if any of them is still open. Today users only see a generic failure and call the help desk. How should the function report the problem?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Print the reason with `print()` so it is written to the function's logs",
+        "why": "Log output helps the developer when debugging, but it is not shown to the person applying the Action."
+      },
+      {
+        "id": "b",
+        "text": "Return an empty list of edits so that the Action completes without changes",
+        "why": "The Action would appear to succeed while doing nothing, which hides the problem from the user."
+      },
+      {
+        "id": "c",
+        "text": "Raise a `UserFacingError` whose message says what is wrong and what to do",
+        "why": "Correct. A user-facing error surfaces its message where the function runs, such as an Action in Workshop, so users can fix the input themselves."
+      },
+      {
+        "id": "d",
+        "text": "Return the reason as a string and declare the function's output type as `str`",
+        "why": "A function that backs an Action must return Ontology edits; a string result would not block the release or reach the user as an error."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "TypeScript v1, TypeScript v2 and Python functions can all throw a `UserFacingError`. When the function runs in Workshop or behind an Action, the user sees that message instead of a generic failure, so it should state what was wrong and what to change.",
+    "source": {
+      "title": "Functions: User-facing errors",
+      "url": "https://www.palantir.com/docs/foundry/functions/user-facing-error/"
+    }
+  },
+  {
+    "id": "fn-016",
+    "domain": "functions",
+    "objective": "testing-debugging",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "After migrating a search function to TypeScript v2, a developer at Ashgrove Legal finds that `client(Contract).where({ summary: { $containsAnyTerm: term } })` compiles, runs without error and always returns an empty page. For the same user, a filter on `contractId` returns the expected contracts. What should she check first?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Whether the `summary` property is marked Searchable on the object type in Ontology Manager",
+        "why": "Correct. The OSDK accepts any property in a where clause, so an unmarked property compiles and a full-text predicate on it quietly matches nothing."
+      },
+      {
+        "id": "b",
+        "text": "Whether the user has been granted access to the `Contract` backing datasource",
+        "why": "The same user gets results from another filter on the same object type, so object access is not the problem."
+      },
+      {
+        "id": "c",
+        "text": "Whether the Ontology SDK was regenerated after `summary` was added to the type",
+        "why": "A property missing from the generated SDK would be a compile error, and this code compiles."
+      },
+      {
+        "id": "d",
+        "text": "Whether the function was run in live preview rather than as a published version",
+        "why": "Live preview runs real Ontology queries; only edits are not applied there."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Filtering, ordering and aggregating all require the property to be Searchable. TypeScript v1 omitted the methods for unmarked properties, so the mistake failed at compile time; the Ontology SDK accepts any property, so in TypeScript v2 it surfaces only at run time, and a term filter can return an empty page while reporting success.",
+    "source": {
+      "title": "Functions: Migrate from TypeScript v1 to TypeScript v2",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-migration/"
+    }
+  },
+  {
+    "id": "fn-017",
+    "domain": "functions",
+    "objective": "testing-debugging",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "A function-backed column at Thornbury Consulting shows the number of projects linked to each `Employee` in an Object Table. The TypeScript v2 function loops over the employees, loads every linked `Project` for each one and returns the array lengths. The column is slow, and compute usage is high. Which statements about fixing it are accurate? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Asking the Ontology for a count over each employee's linked set avoids loading projects",
+        "why": "Correct. Aggregating on the linked object set lets the backend return a number instead of every linked object."
+      },
+      {
+        "id": "b",
+        "text": "Changing the input from an object set to an array of employees removes the loading cost",
+        "why": "An object array is loaded up front, so it is less efficient than an object set, not more."
+      },
+      {
+        "id": "c",
+        "text": "`Promise.all` over the per-employee loads is faster but issues the same queries",
+        "why": "Correct. Parallel loading shortens elapsed time, but the number of queries and the resources used stay the same."
+      },
+      {
+        "id": "d",
+        "text": "Raising the function's memory setting addresses the cause of the slow column",
+        "why": "More memory lets the wasteful loading continue; it does not reduce the link traversals."
+      },
+      {
+        "id": "e",
+        "text": "Splitting it into a single-object function that Workshop calls for each row is cheaper",
+        "why": "Single-object inputs are the least efficient choice and multiply the executions."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Loading linked objects inside a loop is the most common cause of slow functions: each iteration is a round trip, and all linked objects end up in memory. Asynchronous loading improves speed but not cost. Pushing the traversal and the count to the Ontology backend is both faster and cheaper.",
+    "source": {
+      "title": "Functions: Optimize performance",
+      "url": "https://www.palantir.com/docs/foundry/functions/optimize-performance/"
+    }
+  },
+  {
+    "id": "fn-018",
+    "domain": "functions",
+    "objective": "testing-debugging",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A Python function at Glaisdale Housing is decorated with `@function(edits=[Ticket])`. A recent change makes it also create a `RepairNote` object. The Action it backs now fails, and the function's metrics in Ontology Manager show failures in the \"Undeclared object types edited\" category. What is the fix?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Give the affected users edit access to the `RepairNote` object type",
+        "why": "The failure category points at the function's declaration, not at the permissions of the people applying the Action."
+      },
+      {
+        "id": "b",
+        "text": "Change the return type hint from `list[OntologyEdit]` to `None`",
+        "why": "An edit function must keep the explicit `list[OntologyEdit]` return type for its edits to be applied."
+      },
+      {
+        "id": "c",
+        "text": "Enable auto upgrade on the Action so it resolves the newest version",
+        "why": "Choosing a different version does not help while the function still edits a type it has not declared."
+      },
+      {
+        "id": "d",
+        "text": "Add `RepairNote` to the decorator's `edits` list and release a new version",
+        "why": "Correct. Every object type a function creates, updates or deletes must be declared, and the Action then needs to use the new version."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Edit functions declare the entities they may edit: the `edits` parameter of `@function` in Python, and the `Edits` type in TypeScript v2. The declaration gives Actions their provenance, and an edit to an undeclared object type is rejected. Function metrics classify failures, which makes this cause quick to recognise.",
+    "source": {
+      "title": "Functions: Function metrics",
+      "url": "https://www.palantir.com/docs/foundry/functions/function-metrics/"
+    }
+  },
+  {
+    "id": "fn-tf-01",
+    "domain": "functions",
+    "objective": "query-edit",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "In a TypeScript v2 Ontology edit function that uses an edit batch, calling `batch.update(employee, { lastName: newName })` does not change the value that `employee.lastName` returns later in the same execution.",
+    "answer": true,
+    "explanation": "An edit batch only records the edits to be returned to the Action. The loaded object instance is not modified, so later reads of the property in the same execution still give the old value, and code that needs the new value must keep it in a variable.",
+    "source": {
+      "title": "Functions: TypeScript v2 Ontology edits",
+      "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-ontology-edits/"
+    }
+  },
+  {
+    "id": "fn-tf-02",
+    "domain": "functions",
+    "objective": "versioning-publishing",
+    "difficulty": "medium",
+    "format": "truefalse",
+    "stem": "A function version published from a global branch can be used by Workshop modules on the main branch as soon as it is published, before the branch is merged.",
+    "answer": false,
+    "correction": "A function version published from a global branch is only usable on that branch; it becomes available on main when the branch is merged and the function is published there with its stable version target.",
+    "explanation": "Functions published on a global branch are preview versions that are only available to resources on that branch. On merge, Foundry publishes the function on main with the stable version target, and resources that used the branch version switch to it.",
+    "source": {
+      "title": "Functions: Branching functions",
+      "url": "https://www.palantir.com/docs/foundry/functions/branching-functions/"
+    }
+  },
+  {
+    "id": "ws-001",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "An incident page at Varley Utilities has an \"Escalation details\" section that is only relevant when the selected incident's severity is Critical. For other incidents the section should not appear or take up any space. How should the builder set this up?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Make the section collapsible and back its collapse state with a Boolean variable",
+        "why": "A collapsed section still shows its header and can be expanded by the user, so it does not disappear."
+      },
+      {
+        "id": "b",
+        "text": "Add a Layout event to the incident table that hides the section on row selection",
+        "why": "Workshop does not offer events that change section visibility; visibility is driven by a variable."
+      },
+      {
+        "id": "c",
+        "text": "Turn on conditional visibility for the section, bound to a Boolean variable",
+        "why": "Correct. A hidden section is left out of the layout entirely, and a variable transformation can compute the Boolean from the selected incident's severity."
+      },
+      {
+        "id": "d",
+        "text": "Move the section into a drawer overlay that opens whenever an incident is selected",
+        "why": "A drawer would open for every incident and covers part of the page instead of showing the details in place."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Sections support variable-backed conditional visibility: a Boolean variable decides whether the section is part of the layout. This differs from collapse state, where the header stays visible. Visibility is changed by changing the variable, for example through a transformation or a Set variable value event.",
+    "source": {
+      "title": "Workshop: Variable-backed layouts",
+      "url": "https://www.palantir.com/docs/foundry/workshop/variable-backed-layouts/"
+    }
+  },
+  {
+    "id": "ws-002",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A dispatch module at Norcott Couriers has an \"Assign driver\" button that applies an Action to the rows selected in an Object Table. When nothing is selected the button should stay in place but be greyed out, so the toolbar does not shift. Which configuration achieves this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Conditional visibility on the button with a Boolean variable, set to disable when false",
+        "why": "Correct. A Boolean such as an \"is not empty\" transformation on the selected objects can disable the button without removing it."
+      },
+      {
+        "id": "b",
+        "text": "Conditional visibility on the section around the button, hidden when no row has been selected",
+        "why": "Hiding the section removes the button from the page, which is what the builder wants to avoid."
+      },
+      {
+        "id": "c",
+        "text": "A submission criterion on the action type that requires at least one selected object",
+        "why": "Submission criteria validate the Action itself and are worth having, but the requirement here is the button's own disabled state, which the Button Group takes from a Boolean variable."
+      },
+      {
+        "id": "d",
+        "text": "An extra Set variable value event on the button that clears the selection on click",
+        "why": "Clearing the selection does not stop the button from being clicked and loses the user's choice."
+      }
+    ],
+    "answer": [
+      "a"
+    ],
+    "explanation": "Each button in a Button Group can be tied to a Boolean variable, with a choice of what happens when it is false: the button is disabled or hidden. Disabling keeps the layout stable and signals that the action exists but is not available yet.",
+    "source": {
+      "title": "Workshop: Button Group",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-button-group/"
+    }
+  },
+  {
+    "id": "ws-003",
+    "domain": "workshop",
+    "objective": "layout-widgets",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "Warehouse leads at Quenby Supply correct stock counts for several hundred `InventoryItem` objects each week, often starting from a CSV file sent by a supplier. They want to edit many rows quickly with the keyboard inside the Workshop module, using the existing \"Update stock count\" Action. Which widget setup fits?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An Inline Action widget in the Action form layout, submitted once per item",
+        "why": "The form layout runs one guided Action at a time, which suits a few objects rather than hundreds of rows."
+      },
+      {
+        "id": "b",
+        "text": "A Button Group button that opens the Action form in a dialog for the selected item",
+        "why": "This also handles one submission at a time and adds a dialog to open and close for every item."
+      },
+      {
+        "id": "c",
+        "text": "A Media Uploader that stores the CSV file in a dataset for a pipeline to process",
+        "why": "The file would land in a dataset; it would not apply the Action or let leads review and edit rows in the module."
+      },
+      {
+        "id": "d",
+        "text": "An Inline Action widget in the Action table layout, with file upload enabled",
+        "why": "Correct. The table layout is meant for bulk edits and CSV-sourced data, with keyboard navigation and live editing."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "The Inline Action widget offers two interfaces for the same action type. The form applies one Action at a time and suits guided input on a few objects. The table, formerly the Action grid, suits large batches and data that arrives as CSV, subject to batch limits and non-conflicting edits.",
+    "source": {
+      "title": "Workshop: Inline Action",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-inline-action-form/"
+    }
+  },
+  {
+    "id": "ws-004",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "A page header at Ellory Estates should read \"Inspection for\" followed by the selected site's name and the number of days until its `nextInspection` date. The builder is about to ask a developer for a function that returns this string. What is the simpler design?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An object set aggregation variable over the selected site's properties",
+        "why": "An aggregation returns a single metric such as a sum or count; it cannot join text or compare dates."
+      },
+      {
+        "id": "b",
+        "text": "A variable transformation that chains a date difference and a string concatenation",
+        "why": "Correct. Transformations provide current date, between dates and concatenation, and they run in the browser without a function."
+      },
+      {
+        "id": "c",
+        "text": "A function-backed string variable set to recompute only when triggered by an event",
+        "why": "This still needs code to be written and published, and the header would not follow the selection without an extra event."
+      },
+      {
+        "id": "d",
+        "text": "A static string variable updated by a Set variable value event on row selection",
+        "why": "A Set variable value event copies one variable into another; it cannot compute the text."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "Variable transformations let builders chain common operations, including string, math, date and comparison steps, and reference earlier steps. They run in the browser, and operations on primitive values need no round trip to Foundry. Functions are better kept for logic that these operations cannot express.",
+    "source": {
+      "title": "Workshop: Variable transformations",
+      "url": "https://www.palantir.com/docs/foundry/workshop/variable-transformations/"
+    }
+  },
+  {
+    "id": "ws-005",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "A module at Brackwell Health uses routing and variable-backed page selection with a string variable `activePage`, whose default value is `overview`. Users report that shared links to the `audits` page flash that page for a moment and then land on the overview. What should the builder change?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set the `activePage` variable's routing behaviour to Always in URL",
+        "why": "URL inclusion controls what is written to the address bar; the default value would still win on load."
+      },
+      {
+        "id": "b",
+        "text": "Remove the default value from the `activePage` variable",
+        "why": "Correct. The variable's default takes precedence over the page ID in the URL, so the module redirects to the default page after the first render."
+      },
+      {
+        "id": "c",
+        "text": "Replace the page IDs with the page display names in the shared links",
+        "why": "Routing writes and reads page IDs; display names in the link would not select a page."
+      },
+      {
+        "id": "d",
+        "text": "Enable state saving for `activePage` and ask users to save a state",
+        "why": "State saving restores explicitly saved states; it does not change how a routed link is resolved on load."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "With routing enabled, the current page ID is written to the URL and used on load. If the module also uses variable-backed page selection, a default value on that variable overrides the page from the URL on initial render. The guidance is to leave the default empty so that routing supplies the initial value.",
+    "source": {
+      "title": "Workshop: Routing",
+      "url": "https://www.palantir.com/docs/foundry/workshop/routing/"
+    }
+  },
+  {
+    "id": "ws-006",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "Analysts at Stannard Trade Compliance want to come back to the filter selections they were using in a Workshop module, and to send the same view to colleagues. The builder plans to use state saving. Which statements about state saving are correct? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A variable is included only if it has an external ID and state saving enabled",
+        "why": "Correct. Besides the module-level toggle, each variable to be saved is enabled individually and stored under its external ID."
+      },
+      {
+        "id": "b",
+        "text": "Variables of an embedded module are saved automatically with the parent's state",
+        "why": "State saving configuration is not inherited; child variables must be exposed on the module interface and mapped from the parent."
+      },
+      {
+        "id": "c",
+        "text": "Enabled variables are restored automatically the next time each user opens the module",
+        "why": "Nothing persists automatically between sessions; a state has to be saved and then reopened or set as the default."
+      },
+      {
+        "id": "d",
+        "text": "Users must save a state themselves, then reopen it or share it with others",
+        "why": "Correct. Consumers save, open and share states in view mode, and a saved state can also be set as the module default."
+      },
+      {
+        "id": "e",
+        "text": "Saved states remain available to users when the module header is hidden",
+        "why": "The state saving menu sits in the module header, so hiding the header removes access to it."
+      }
+    ],
+    "answer": [
+      "a",
+      "d"
+    ],
+    "explanation": "A saved state stores the values of the variables enabled for state saving and, optionally, the current page. It is an explicit user action, not automatic persistence; preferences that must apply without user effort are better stored on an object. The feature depends on the module header and on external IDs.",
+    "source": {
+      "title": "Workshop: State saving",
+      "url": "https://www.palantir.com/docs/foundry/workshop/state-saving/"
+    }
+  },
+  {
+    "id": "ws-007",
+    "domain": "workshop",
+    "objective": "variables-events",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "In an alerts module at Hexcombe Transit, users choose an alert type in a Filter List. The \"Create alert\" button should open its Action form with the type parameter already set to the type they filtered on. The Filter List writes its selection to an object set filter variable. How can the builder get the chosen type into the form?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use the object set filter variable directly as the default for the type parameter",
+        "why": "A filter variable holds property and value pairs for filtering object sets; it cannot serve as a string parameter value."
+      },
+      {
+        "id": "b",
+        "text": "Read the type from the first object of the filtered set with an object property variable",
+        "why": "This reads data rather than the user's choice, and gives nothing when no alert of that type exists yet."
+      },
+      {
+        "id": "c",
+        "text": "Enable routing on the filter variable and read the type back from the URL",
+        "why": "Object set filter variables are one of the variable types that cannot be written to the URL."
+      },
+      {
+        "id": "d",
+        "text": "Put a string variable in the filter's default and enable updating used variables",
+        "why": "Correct. With filter value extraction on, the selected term is written to that string variable, which can then be the parameter default."
+      }
+    ],
+    "answer": [
+      "d"
+    ],
+    "explanation": "Filter value extraction works by defining the filter variable's default with variables as its values and turning on \"Update used variables on filter value changes\". When the user's filter matches that shape, the chosen values are written to those variables. String terms and numeric or date ranges can be extracted.",
+    "source": {
+      "title": "Workshop: Object set filter variables",
+      "url": "https://www.palantir.com/docs/foundry/workshop/object-set-filter-variables/"
+    }
+  },
+  {
+    "id": "ws-008",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
+    "difficulty": "easy",
+    "format": "single",
+    "stem": "On a ticket detail page at Lowther Telecom, a Button Group button applies the \"Close ticket\" Action. Once the ticket has really been closed, the module should return to the ticket list page. If validation fails or the user cancels, they should stay where they are. How should the builder configure this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chain the page switch to the same button with the \"On start of action submission\" trigger",
+        "why": "This fires when submission begins, so the user would be moved even if the Action then fails."
+      },
+      {
+        "id": "b",
+        "text": "Chain the page switch with the \"On successful completion of action submission\" trigger",
+        "why": "Correct. The event runs only after the Action has been submitted successfully, so failed or cancelled attempts leave the user on the page."
+      },
+      {
+        "id": "c",
+        "text": "Enable auto-refresh on the ticket object set so that the page reacts to the edit",
+        "why": "Auto-refresh reloads data when objects change; it does not navigate between pages."
+      },
+      {
+        "id": "d",
+        "text": "Place a second \"Back to list\" button next to \"Close ticket\" for users to select",
+        "why": "This adds a manual step and does nothing to tie the navigation to a successful close."
+      }
+    ],
+    "answer": [
+      "b"
+    ],
+    "explanation": "A button that triggers an Action can also run a Workshop event at a point in the Action's lifecycle: when submission starts or when it completes successfully. The success trigger is the usual way to navigate, refresh data or update variables only after a write has gone through.",
+    "source": {
+      "title": "Workshop: Button Group",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widgets-button-group/"
+    }
+  },
+  {
+    "id": "ws-009",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "At Merrow Shipping, a \"Recalculate route plan\" button applies a function-backed Action that takes several minutes. Users see no progress, assume it failed and select the button again, which starts duplicate runs. Which design changes address the problem without weakening validation? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Have the Action only record a request object, and run the long step in an automation",
+        "why": "Correct. The Action returns quickly, functions run asynchronously in Automate, and the request object's status tracks the work instead of a waiting browser."
+      },
+      {
+        "id": "b",
+        "text": "Raise the function's time limit so that the button's Action can wait for the result",
+        "why": "Users would still stare at a pending form with no status, and nothing stops them from submitting again."
+      },
+      {
+        "id": "c",
+        "text": "Disable the button with a Boolean variable while a request is open, and show its status",
+        "why": "Correct. Conditional disabling prevents duplicate submissions, and a status property gives users the feedback they were missing."
+      },
+      {
+        "id": "d",
+        "text": "Remove the Action's submission criteria so that repeated submissions are accepted faster",
+        "why": "This removes validation and makes duplicates easier, which is the opposite of what is needed."
+      },
+      {
+        "id": "e",
+        "text": "Set the module's variables to recompute automatically so that the result appears sooner",
+        "why": "Recompute behaviour does not shorten the calculation or show whether a run is under way."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Long work does not belong in a call that the user waits on. A quick Action can create or update a request object, an automation can run the function in the background, and the module can read the request's status. Disabling the trigger while a request is open stops duplicate submissions.",
+    "source": {
+      "title": "Functions: Use functions in the platform",
+      "url": "https://www.palantir.com/docs/foundry/functions/use-functions/"
+    }
+  },
+  {
+    "id": "ws-010",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A Pivot Table at Oakhurst Education groups `School` objects by district. The builder needs a value per school for the number of linked `Complaint` objects that are open, so it can be aggregated in the pivot. `Complaint` is one link away from `School`, and the team would rather not write code or change the Ontology. What should the builder use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A function-backed column that returns a map from each school to its count",
+        "why": "Function-backed columns work in the Object Table but have narrower widget support, and this needs code to be written and released."
+      },
+      {
+        "id": "b",
+        "text": "A new `openComplaints` property added to `School` by the data pipeline",
+        "why": "It would work, but it changes the pipeline and the Ontology for something the module can compute itself."
+      },
+      {
+        "id": "c",
+        "text": "A Workshop derived property that aggregates across the link with a filter",
+        "why": "Correct. Module-level derived properties compute linked aggregations at query time without code, and they can be used in pivot tables."
+      },
+      {
+        "id": "d",
+        "text": "An object set aggregation variable that counts all open complaints",
+        "why": "This yields a single number for the whole set, not a value for each school."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Workshop derived properties are defined per object type inside a module and are computed at query time, for example an aggregation over a one-to-many link with a static filter. They work in more widgets than function-backed columns, including pivot tables, but support only one link traversal and can add query latency.",
+    "source": {
+      "title": "Workshop: Derived properties",
+      "url": "https://www.palantir.com/docs/foundry/workshop/derived-properties/"
+    }
+  },
+  {
+    "id": "ws-011",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "difficulty": "hard",
+    "format": "multi",
+    "stem": "A module at Dalby Offshore has a long scrolling page of thirty charts that is slow to open. On another tab, a custom planning widget loses its unsaved inputs whenever users switch tabs and come back. Which widget display optimization settings address these two problems? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set every chart to Eagerly mount and Never unmount so that all are ready at once",
+        "why": "Eager mounting adds each chart's loading work to the initial load, which makes the slow page slower."
+      },
+      {
+        "id": "b",
+        "text": "Set the charts below the first screen to Delay until on-screen",
+        "why": "Correct. Those charts start loading only when scrolled into view, which cuts the work done at page load."
+      },
+      {
+        "id": "c",
+        "text": "Set the planning widget to Unmount when off-screen",
+        "why": "This is the most aggressive unmount setting and would reset the widget even more often."
+      },
+      {
+        "id": "d",
+        "text": "Move the thirty charts into section headers so that they render only once",
+        "why": "Widgets in section headers or module headers do not support display optimization at all."
+      },
+      {
+        "id": "e",
+        "text": "Set the planning widget to Never unmount with normal mounting",
+        "why": "Correct. The widget stays mounted after its first load, so its state survives tab switches."
+      }
+    ],
+    "answer": [
+      "b",
+      "e"
+    ],
+    "explanation": "By default a widget mounts when its layout renders and unmounts when it does not. Display optimization changes this per widget: delaying mount helps long pages, and never unmounting preserves state. Keeping widgets mounted costs memory and requests, so it should be applied narrowly and measured with the Performance Profiler.",
+    "source": {
+      "title": "Workshop: Widget display optimization",
+      "url": "https://www.palantir.com/docs/foundry/workshop/widget-display-optimization/"
+    }
+  },
+  {
+    "id": "ws-012",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "difficulty": "medium",
+    "format": "multi",
+    "stem": "A control-room module at Pinehaven Logistics has auto-refresh enabled and watches an `Order` object set. Supervisors notice two things: a table column showing each order's linked `Shipment` status goes stale, and a `Driver` list inside a drawer is only up to date some time after the drawer is opened. Which explanations match how auto-refresh works? Select TWO.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Linked object types are not watched unless they are registered as well",
+        "why": "Correct. Watching `Order` does not refresh linked `Shipment` properties; the linked type must be watched explicitly."
+      },
+      {
+        "id": "b",
+        "text": "Auto-refresh reacts to edits made through Actions but not to updates from data pipelines",
+        "why": "Updates from Actions, data integration and streaming sources can all trigger a refresh."
+      },
+      {
+        "id": "c",
+        "text": "A watched object set only triggers refreshes while a visible widget is using it",
+        "why": "Correct. A set used only in a closed drawer is not refreshed until it becomes visible, when the pending reload is applied."
+      },
+      {
+        "id": "d",
+        "text": "Auto-refresh settings of an embedded module are inherited by its parent module",
+        "why": "Auto-refresh is not carried over when embedding; each module is configured separately."
+      },
+      {
+        "id": "e",
+        "text": "Auto-refresh pauses whenever any variable recomputes automatically",
+        "why": "Recompute behaviour does not pause auto-refresh; a refresh can in fact cause automatic variables to recompute."
+      }
+    ],
+    "answer": [
+      "a",
+      "c"
+    ],
+    "explanation": "Auto-refresh watches the object sets a builder registers and reloads the module's data when they change. It does not follow links on its own, and it only acts on sets used by visible widgets, delaying updates for hidden ones. Both behaviours limit load, and both look like stale data if overlooked.",
+    "source": {
+      "title": "Workshop: Auto-refresh",
+      "url": "https://www.palantir.com/docs/foundry/workshop/auto-refresh/"
+    }
+  },
+  {
+    "id": "ws-013",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "difficulty": "hard",
+    "format": "single",
+    "stem": "To speed up a module at Rushmere Finance, a builder moved its heavy audit widgets into a section with conditional visibility, hidden unless the function-backed Boolean variable `hasOpenAudits` is true. In the Performance Profiler, `hasOpenAudits` is still computed every time the module loads. What explains this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Lazy variable loading applies in view mode only, and the profiler runs in edit mode",
+        "why": "Lazy loading applies in both view and edit mode, and the profiler mirrors what users experience."
+      },
+      {
+        "id": "b",
+        "text": "Function-backed variables are always computed on load, whatever uses them",
+        "why": "Function-backed variables are also deferred until something visible or required needs them."
+      },
+      {
+        "id": "c",
+        "text": "The variable controls the layout, so it is needed even while the section is hidden",
+        "why": "Correct. A variable that drives conditional visibility is treated as in use, because Workshop needs its value to decide what to render."
+      },
+      {
+        "id": "d",
+        "text": "Sections with conditional visibility keep their widgets mounted by default",
+        "why": "By default widgets unmount when their layout is not rendered; that is not why the variable is computed."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "Lazy loading defers a variable until a visible widget, a layout or another required variable needs it. Variables that control layout, such as conditional visibility, count as needed even when the section they control is hidden. Hiding a section therefore stops its widgets' work, not the calculation that decides its visibility.",
+    "source": {
+      "title": "Workshop: Variable recompute behavior",
+      "url": "https://www.palantir.com/docs/foundry/workshop/variable-recompute/"
+    }
+  },
+  {
+    "id": "ws-014",
+    "domain": "workshop",
+    "objective": "performance-deployment",
+    "difficulty": "medium",
+    "format": "single",
+    "stem": "A published module at Tolland Mining lets users pick one site in an Object Dropdown. The selected-site variable has the external ID `site` and is enabled for state saving, and users rely on states they saved months ago. The builder now wants to replace the dropdown with a widget that allows several sites to be selected. How can the change be made so that those saved states keep loading?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Give the new widget's output variable the same display name as the old variable",
+        "why": "Saved states refer to the external ID, so matching the display name alone preserves nothing."
+      },
+      {
+        "id": "b",
+        "text": "Create the new variable with a clearer external ID and enable it for state saving",
+        "why": "Existing saved states hold the value under the old ID, so they would no longer populate the selection."
+      },
+      {
+        "id": "c",
+        "text": "Keep the external ID `site` on the output variable of the new widget",
+        "why": "Correct. Values are stored by external ID, so the widget can be swapped as long as its output variable keeps that ID."
+      },
+      {
+        "id": "d",
+        "text": "Publish the change with automatic publishing switched off so that old states stay valid",
+        "why": "Publishing settings decide which version viewers get; they do not keep the variable's identifier stable."
+      }
+    ],
+    "answer": [
+      "c"
+    ],
+    "explanation": "External IDs are the stable part of a module's interface: saved states store variable values under them, and module interface variables are addressed by them. The documentation gives this exact case: a single-select widget can be replaced by a multi-select one and saved states keep working if the output variable keeps its external ID.",
+    "source": {
+      "title": "Workshop: State saving",
+      "url": "https://www.palantir.com/docs/foundry/workshop/state-saving/"
+    }
   }
- },
- {
-  "id": "fn-002",
-  "domain": "functions",
-  "objective": "paradigm",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "A data science team at Brennick Foods has a scoring routine written with Python libraries. The same routine must back a numeric variable in a Workshop module and also be called from a Pipeline Builder pipeline, and the team wants to keep a single implementation. Which option supports both uses?",
-  "options": [
-   {
-    "id": "a",
-    "text": "A TypeScript v2 function, because it runs in a full Node.js runtime",
-    "why": "TypeScript v2 functions can be used in Workshop but cannot be called from Pipeline Builder, and the routine would have to be rewritten."
-   },
-   {
-    "id": "b",
-    "text": "An AIP Logic function that wraps the routine in an Execute function block",
-    "why": "AIP Logic functions are not usable in Pipeline Builder, and a deterministic scoring routine does not need an LLM-oriented tool."
-   },
-   {
-    "id": "c",
-    "text": "A TypeScript v1 function, because it has the longest list of examples",
-    "why": "TypeScript v1 cannot be called from Pipeline Builder either, and the documentation steers new work away from v1."
-   },
-   {
-    "id": "d",
-    "text": "A Python function published from a Python functions repository",
-    "why": "Correct. Python functions can be queried from Workshop and are the only function type that Pipeline Builder can call, so one implementation serves both."
-   }
-  ],
-  "answer": [
-   "d"
-  ],
-  "explanation": "The feature support table lists every function type as usable in Workshop, but only Python functions as usable in Pipeline Builder. When the logic already depends on Python libraries and Python-skilled maintainers, a Python function avoids a second implementation.",
-  "source": {
-   "title": "Functions: Feature support by language",
-   "url": "https://www.palantir.com/docs/foundry/functions/language-feature-support/"
-  }
- },
- {
-  "id": "fn-003",
-  "domain": "functions",
-  "objective": "paradigm",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "Castlemere Credit Union must add a late-payment fee to `Loan` objects through an Action. The fee formula is fixed by policy, auditors expect the same inputs to produce the same fee every time, and the engineering team wants the logic in code review. A prototype uses an AIP Logic function whose Use LLM block is asked to do the arithmetic. What should the team do?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Write the formula as a TypeScript v2 or Python function that backs the Action",
-    "why": "Correct. A coded function is deterministic, lives in a repository where it can be reviewed and versioned, and can return the Ontology edits for a function-backed Action."
-   },
-   {
-    "id": "b",
-    "text": "Keep the Use LLM block and set its temperature to the lowest value for repeatable output",
-    "why": "A low temperature makes model output more repeatable, but the fee is still generated by a model rather than computed by a fixed formula."
-   },
-   {
-    "id": "c",
-    "text": "Keep the Use LLM block and add few-shot examples of correct fees",
-    "why": "Examples improve how often the model is right; they do not turn a model response into a guaranteed calculation."
-   },
-   {
-    "id": "d",
-    "text": "Compute the fee with Workshop variable transformations and pass it in",
-    "why": "That puts the policy in one module's browser logic, so any other place that applies the Action could submit a different fee."
-   }
-  ],
-  "answer": [
-   "a"
-  ],
-  "explanation": "Choose the paradigm by what the logic needs. A fixed calculation that must be repeatable and reviewable belongs in deterministic code, and a TypeScript v2 or Python function can express the edit for a function-backed Action. LLM-backed logic is for interpretation and generation, not arithmetic that policy defines exactly.",
-  "source": {
-   "title": "Functions: Overview",
-   "url": "https://www.palantir.com/docs/foundry/functions/overview/"
-  }
- },
- {
-  "id": "fn-004",
-  "domain": "functions",
-  "objective": "paradigm",
-  "difficulty": "medium",
-  "format": "multi",
-  "stem": "Halden Rail is deciding whether a new functions repository should use TypeScript v1 or TypeScript v2. The team lists what the functions must do. Which requirements can only be met with TypeScript v2? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "Editing objects through an Ontology interface that several object types implement",
-    "why": "Correct. Of the two TypeScript versions, only v2 supports accessing and editing Ontology interfaces."
-   },
-   {
-    "id": "b",
-    "text": "Returning a value that backs a numeric variable in a Workshop module",
-    "why": "Both versions can be queried from Workshop, so this requirement does not decide the choice."
-   },
-   {
-    "id": "c",
-    "text": "Using an NPM library that relies on Node.js core modules such as `fs` and `crypto`",
-    "why": "Correct. TypeScript v2 runs in a full Node.js runtime, which makes libraries that need core modules usable."
-   },
-   {
-    "id": "d",
-    "text": "Calling a webhook directly from the function body without publishing it as a function first",
-    "why": "This is the reverse: v1 calls webhooks directly, while v2 needs the webhook published as a webhook function."
-   },
-   {
-    "id": "e",
-    "text": "Running document OCR on a media item that is attached to an object",
-    "why": "Document-specific media operations are a v1 capability; v2 has only partial media support."
-   }
-  ],
-  "answer": [
-   "a",
-   "c"
-  ],
-  "explanation": "TypeScript v2 is the recommended version for new work: it runs serverless in a full Node.js runtime and has first-class Ontology SDK support, including Ontology interfaces. A few capabilities, such as direct webhook calls and full media operations, remain specific to v1, so the choice should follow the actual requirements.",
-  "source": {
-   "title": "Functions: Feature support by language",
-   "url": "https://www.palantir.com/docs/foundry/functions/language-feature-support/"
-  }
- },
- {
-  "id": "fn-005",
-  "domain": "functions",
-  "objective": "paradigm",
-  "difficulty": "medium",
-  "format": "multi",
-  "stem": "Serverless functions are enabled at Orrin Biolabs, and a developer is about to publish a Python function. A colleague suggests switching it to deployed execution \"to be safe\". Which requirements would be valid reasons to choose a deployed function? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "The function must be selectable as a function-backed variable in Workshop",
-    "why": "Both serverless and deployed Python functions appear in Workshop, so this does not require a deployment."
-   },
-   {
-    "id": "b",
-    "text": "The function calls an external API through a third-party client library",
-    "why": "Correct. Serverless functions reach external sources through the client of the provided source object; third-party clients need a deployed function."
-   },
-   {
-    "id": "c",
-    "text": "Costs should only be incurred while the function is actually executing",
-    "why": "That describes serverless; a deployment costs compute for as long as it is running."
-   },
-   {
-    "id": "d",
-    "text": "The function needs a GPU to run model inference at an acceptable speed",
-    "why": "Correct. GPU allocation is available to deployed functions and not to serverless ones."
-   },
-   {
-    "id": "e",
-    "text": "Several versions of the function must be callable on demand during an upgrade",
-    "why": "Serverless can run different versions on demand; a deployment hosts a single version at a time."
-   }
-  ],
-  "answer": [
-   "b",
-   "d"
-  ],
-  "explanation": "Serverless is the recommended default because it needs no upkeep, bills only on execution and can run multiple versions side by side. Deployed execution is for the narrower cases that need a long-lived container, such as GPUs, third-party clients for external calls or local caching.",
-  "source": {
-   "title": "Functions: Deploy functions",
-   "url": "https://www.palantir.com/docs/foundry/functions/functions-deployed/"
-  }
- },
- {
-  "id": "fn-006",
-  "domain": "functions",
-  "objective": "query-edit",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "A developer at Pendry Aviation is writing her first TypeScript v2 function to back an Action that sets `status` on a `WorkOrder`. She has imported `createEditBatch` and `Edits` from `@osdk/functions`. How does a TypeScript v2 function hand its edits to the Action?",
-  "options": [
-   {
-    "id": "a",
-    "text": "It assigns `workOrder.status = \"Closed\"` on the loaded object and returns `void`",
-    "why": "Assigning to object properties with a void return is the TypeScript v1 pattern; v2 does not collect edits implicitly."
-   },
-   {
-    "id": "b",
-    "text": "It calls a `save()` method on the OSDK client before the function returns",
-    "why": "There is no save step in the edit-batch model; the function does not write to the Ontology itself."
-   },
-   {
-    "id": "c",
-    "text": "It records edits on a batch from `createEditBatch(client)` and returns `batch.getEdits()`",
-    "why": "Correct. The batch tracks every edit, and the function returns them as an array of the declared `Edits` type for the Action to apply."
-   },
-   {
-    "id": "d",
-    "text": "It returns the modified `WorkOrder` instance so the Action can compare it with the original",
-    "why": "Returning an object instance is a normal query result, not a set of Ontology edits the Action can apply."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "TypeScript v2 makes edits explicit: the function declares an `Edits` type for the entities it may change, builds an edit batch from the client, records updates, creates, deletes and links on it, and returns the batch contents. The edits are only applied when the function runs as a function-backed Action.",
-  "source": {
-   "title": "Functions: TypeScript v2 Ontology edits",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-ontology-edits/"
-  }
- },
- {
-  "id": "fn-007",
-  "domain": "functions",
-  "objective": "query-edit",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "In the ontology of Trewin Facilities, each `Ticket` belongs to one `Employee` through a one-to-many link backed by the foreign key property `assignedEmployeeId` on `Ticket`. A TypeScript v2 function must reassign a ticket to another employee. Which edit and declaration are correct?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Call `batch.link(employee, \"assignedTickets\", ticket)` and declare `Edits.Link<Employee, \"assignedTickets\">`",
-    "why": "`link` and `Edits.Link` are for many-to-many link types; this link is stored as a property on `Ticket`."
-   },
-   {
-    "id": "b",
-    "text": "Update `assignedEmployeeId` on the ticket with `batch.update` and declare `Edits.Object<Ticket>`",
-    "why": "Correct. A foreign-key-backed link is changed by editing the foreign key property, so it is an object edit on `Ticket`."
-   },
-   {
-    "id": "c",
-    "text": "Update the `assignedTickets` array on the employee and declare `Edits.Object<Employee>`",
-    "why": "The link is not held as a property on `Employee`, so there is nothing on that side to update."
-   },
-   {
-    "id": "d",
-    "text": "Delete the ticket and create it again with the new employee, declaring `Edits.Object<Employee>`",
-    "why": "Recreating the object discards its history for no reason, and the declaration names the wrong object type."
-   }
-  ],
-  "answer": [
-   "b"
-  ],
-  "explanation": "One-to-one and one-to-many links are backed by a foreign key property, so setting or clearing them is an object edit on the type that holds the key. Only many-to-many links use `link` and `unlink` and are declared with `Edits.Link`. The declared edit types are what give the Action its provenance.",
-  "source": {
-   "title": "Functions: TypeScript v2 Ontology edits",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-ontology-edits/"
-  }
- },
- {
-  "id": "fn-008",
-  "domain": "functions",
-  "objective": "query-edit",
-  "difficulty": "hard",
-  "format": "single",
-  "stem": "A TypeScript v1 function at Marlowe Freight returned the 50 most delayed `Delivery` objects with `.orderBy(...).take(50)`. A developer is porting it to TypeScript v2, where the `Delivery` object set has several hundred thousand objects. Which approach returns the right 50 objects without loading far more than needed?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Iterate the whole object set with `asyncIter()`, sort the array by delay and slice the first 50",
-    "why": "This streams every delivery into the function just to keep 50 of them, which is slow and wasteful at this scale."
-   },
-   {
-    "id": "b",
-    "text": "Call `fetchPage` once with `$orderBy` and `$pageSize: 50` and return `page.data` as it is",
-    "why": "A page can come back with fewer results even when more exist, so a single call does not guarantee 50 objects."
-   },
-   {
-    "id": "c",
-    "text": "Call `.aggregate()` with a `$groupBy` on the delay property and read the first 50 groups",
-    "why": "An aggregation returns grouped metrics, not the delivery objects the caller needs."
-   },
-   {
-    "id": "d",
-    "text": "Call `fetchPage` with `$orderBy`, following `nextPageToken` until 50 are collected",
-    "why": "Correct. Ordering is passed to `fetchPage` together with a page size, and the loop continues until it has 50 objects or no next page token remains."
-   }
-  ],
-  "answer": [
-   "d"
-  ],
-  "explanation": "TypeScript v2 has no `.take()` or `.limit()`. Ordering is supplied as `$orderBy` in the options of `fetchPage()` or `asyncIter()`, and `$pageSize` is only an upper bound for one page. To collect the first n ordered objects, fetch successive pages until n are collected or the token runs out.",
-  "source": {
-   "title": "Functions: Migrate from TypeScript v1 to TypeScript v2",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-migration/"
-  }
- },
- {
-  "id": "fn-009",
-  "domain": "functions",
-  "objective": "query-edit",
-  "difficulty": "hard",
-  "format": "multi",
-  "stem": "A TypeScript v2 function at Sedgwick Retail must return the number of open `PurchaseOrder` objects per `supplierId` for a Workshop chart. There are millions of orders and tens of thousands of suppliers. Which statements about writing this with the Ontology SDK are correct? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "The open-orders filter belongs in a chained `.where()` before `.aggregate()` is called",
-    "why": "Correct. The aggregate request only takes `$select` and an optional `$groupBy`, so filtering is done on the object set first."
-   },
-   {
-    "id": "b",
-    "text": "The filter can be passed as a `where` key inside the `.aggregate()` request object",
-    "why": "The aggregate request has no `where` key; the object set must be filtered before aggregating."
-   },
-   {
-    "id": "c",
-    "text": "A high-cardinality exact grouping can become approximate without the result saying so",
-    "why": "Correct. Exact grouping has a maximum bucket count; beyond it the result is approximate, so raise the limit with `$exactWithLimit` or narrow the set."
-   },
-   {
-    "id": "d",
-    "text": "Adding a custom key to `$select` lets the function rename the count in the result",
-    "why": "There is no metric aliasing; any `$select` key other than `$count` or a `property:metric` string is a type error."
-   },
-   {
-    "id": "e",
-    "text": "Streaming the orders with `asyncIter()` and counting them in a `Map` costs about the same",
-    "why": "That loads millions of objects into the function, whereas an aggregation is computed by the Ontology backend."
-   }
-  ],
-  "answer": [
-   "a",
-   "c"
-  ],
-  "explanation": "In TypeScript v2 a single `.aggregate()` call takes `$select` for the metrics and `$groupBy` for the buckets, and the backend does the work without loading objects. Filters are applied with `.where()` beforehand. Exact groupings are only accurate while the distinct values fit in the bucket limit, which matters for high-cardinality properties.",
-  "source": {
-   "title": "Functions: Migrate from TypeScript v1 to TypeScript v2",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-migration/"
-  }
- },
- {
-  "id": "fn-010",
-  "domain": "functions",
-  "objective": "query-edit",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "A Python function at Whitlow Insurance backs an Action that adds a tag to a `Claim`. It gets an editable claim from the edits container, runs `editable_claim.tags.append(new_tag)` and returns `ontology_edits.get_edits()`. The Action succeeds but the tag never appears. What is wrong?",
-  "options": [
-   {
-    "id": "a",
-    "text": "The function must edit the original `claim` argument rather than the editable view",
-    "why": "Objects passed to Python functions are read-only; changing them raises an exception instead of recording an edit."
-   },
-   {
-    "id": "b",
-    "text": "Appending in place records no edit; assign a modified copy of the list back",
-    "why": "Correct. Only assignment to the property registers an edit, so the modified copy must be assigned to `editable_claim.tags`."
-   },
-   {
-    "id": "c",
-    "text": "Array properties cannot be edited from Python functions and need TypeScript",
-    "why": "Python functions can edit array properties as long as the new list is assigned to the property."
-   },
-   {
-    "id": "d",
-    "text": "The decorator must declare the array with `OntologyLinkType(Claim, \"tags\")`",
-    "why": "`OntologyLinkType` declares many-to-many link types; `tags` is a property of `Claim`, which is covered by declaring `Claim`."
-   }
-  ],
-  "answer": [
-   "b"
-  ],
-  "explanation": "In Python edit functions an editable object exposes array properties as ordinary lists, but an edit is recorded only when the property is assigned. In-place mutation is silently dropped, so the pattern is to copy the list, modify the copy and assign it back. The same applies to fields of struct properties.",
-  "source": {
-   "title": "Functions: Python Ontology edits",
-   "url": "https://www.palantir.com/docs/foundry/functions/python-ontology-edits/"
-  }
- },
- {
-  "id": "fn-011",
-  "domain": "functions",
-  "objective": "versioning-publishing",
-  "difficulty": "easy",
-  "format": "multi",
-  "stem": "A developer at Dunmore Energy tags and releases a TypeScript v2 functions repository. The checks pass, but `estimateOutage` does not appear among the published functions. It is written as a named export in `src/helpers/outages.ts`. Which conditions must the function meet to be published? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "It is defined in a file inside `src/functions` whose name matches the function name",
-    "why": "Correct. Functions are discovered from files in the functions directory, and `estimateOutage` must live in `estimateOutage.ts`."
-   },
-   {
-    "id": "b",
-    "text": "It is a method on a class that the repository exports from its root `index.ts`",
-    "why": "Exporting a class from `index.ts` is how TypeScript v1 publishes functions, not v2."
-   },
-   {
-    "id": "c",
-    "text": "It carries the `@Function()` decorator imported from `@foundry/functions-api`",
-    "why": "The decorator belongs to TypeScript v1; v2 identifies functions by file location and default export."
-   },
-   {
-    "id": "d",
-    "text": "It is the default export of its file",
-    "why": "Correct. Foundry detects a TypeScript v2 function through `export default`, one function per file."
-   },
-   {
-    "id": "e",
-    "text": "It is the only function in the repository that is released under that tag",
-    "why": "Tagging a version publishes all functions in the repository; there is no one-function limit."
-   }
-  ],
-  "answer": [
-   "a",
-   "d"
-  ],
-  "explanation": "TypeScript v2 replaces the v1 decorators with a file convention: each published function is the default export of a `.ts` file in the functions directory (subdirectories are allowed), and the file name matches the function name. Input and output types must also be supported function types.",
-  "source": {
-   "title": "Functions: Getting started with TypeScript v2 functions",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-getting-started/"
-  }
- },
- {
-  "id": "fn-012",
-  "domain": "functions",
-  "objective": "versioning-publishing",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "To tidy a TypeScript v2 repository, a developer at Fairholt Claims moves `approveClaim.ts` from `src/functions` into `src/functions/claims/` without changing its code, then tags a patch release. A Workshop module and an Action both use `approveClaim` through version ranges. What is the effect of the move?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Nothing changes for consumers, because the function name and signature are the same",
-    "why": "In TypeScript v2 a function is identified by its file path, not only by its name and signature."
-   },
-   {
-    "id": "b",
-    "text": "The release fails, because functions may not be placed in subdirectories",
-    "why": "Grouping functions into subdirectories of the functions directory is supported and recommended."
-   },
-   {
-    "id": "c",
-    "text": "The version ranges resolve to the moved function as a compatible patch upgrade",
-    "why": "A range selects versions of the same function; the moved file is a different function, so the range does not reach it."
-   },
-   {
-    "id": "d",
-    "text": "The moved file is published as a new function, so consumers do not follow it",
-    "why": "Correct. The file path uniquely identifies the published function, so a new path produces a new function that consumers must be repointed to."
-   }
-  ],
-  "answer": [
-   "d"
-  ],
-  "explanation": "A TypeScript v2 function is uniquely identified by its file path, so changing the path publishes a new function rather than a new version of the old one. Treat a move like any other change to a published interface: plan it, and update the Workshop modules and Actions that reference the function.",
-  "source": {
-   "title": "Functions: Getting started with TypeScript v2 functions",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-getting-started/"
-  }
- },
- {
-  "id": "fn-013",
-  "domain": "functions",
-  "objective": "versioning-publishing",
-  "difficulty": "hard",
-  "format": "single",
-  "stem": "An Action at Ivelle Pharma is backed by `closeBatch` with auto upgrade enabled from version 1.2.0, which edits only `Batch` objects. The function team releases 1.3.0, which also creates an `AuditNote` object and declares it in its edits. Since then the Action fails for every user. What explains the failure, and what is the appropriate fix?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Users lack edit permission on `AuditNote`; grant them Editor on the object type's datasource",
-    "why": "The failure is not about user permissions, and widening data access to fix a failing Action is the wrong reflex."
-   },
-   {
-    "id": "b",
-    "text": "Auto upgrade ignores minor releases; switch the Action to pin version 1.3.0 by hand",
-    "why": "Minor and patch releases are exactly what auto upgrade resolves to; the new version is being picked up, which is why it fails."
-   },
-   {
-    "id": "c",
-    "text": "The Action's provenance comes from its selected minimum version; select 1.3.0 instead",
-    "why": "Correct. Edits outside the provenance of the selected minimum version fail, so the Action must be updated to the version that declares `AuditNote`."
-   },
-   {
-    "id": "d",
-    "text": "A function rule cannot create objects; add a separate Create object rule for `AuditNote`",
-    "why": "Functions can create objects, and a function rule cannot be combined with other Ontology rules in the same Action."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "With auto upgrade, an Action depends on a version range but takes its provenance, meaning the object types it may edit, from the minimum version chosen in the rule. If a newer release returns edits outside that provenance, execution fails. Adding an edited type is therefore a change that the Action owner has to adopt on purpose.",
-  "source": {
-   "title": "Action types: Function-backed actions, getting started",
-   "url": "https://www.palantir.com/docs/foundry/action-types/function-actions-getting-started/"
-  }
- },
- {
-  "id": "fn-014",
-  "domain": "functions",
-  "objective": "versioning-publishing",
-  "difficulty": "medium",
-  "format": "multi",
-  "stem": "Before tagging a new release of a Python functions repository, a developer at Corran Water wants to know which of her changes the built-in backward compatibility checks will warn about. Which changes are flagged as breaking? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "Adding a new optional input at the end of a function's signature",
-    "why": "Adding an optional input is a backward compatible change and is not flagged."
-   },
-   {
-    "id": "b",
-    "text": "Swapping the order of two existing inputs in a function's signature",
-    "why": "Correct. Reordering an input is one of the signature changes the checks warn about."
-   },
-   {
-    "id": "c",
-    "text": "Rewriting a query so that the function returns the same result faster",
-    "why": "A performance improvement with unchanged behaviour is backward compatible and invisible to the checks."
-   },
-   {
-    "id": "d",
-    "text": "Removing an input that was optional and that few callers ever set",
-    "why": "Correct. Dropping any input is flagged, even an optional one, because callers may be passing it."
-   },
-   {
-    "id": "e",
-    "text": "Changing a rounding rule inside the function so that results differ slightly",
-    "why": "This may well break consumers, but the checks look at signatures and cannot see changes in internal behaviour."
-   }
-  ],
-  "answer": [
-   "b",
-   "d"
-  ],
-  "explanation": "The checks compare signatures with the previous release and warn about dropped functions, dropped or reordered inputs, new required inputs and incompatible type changes. They are not exhaustive: a behavioural change inside the implementation passes unnoticed, so a clean result alone does not make a minor or patch release safe.",
-  "source": {
-   "title": "Functions: Function versioning",
-   "url": "https://www.palantir.com/docs/foundry/functions/functions-versioning/"
-  }
- },
- {
-  "id": "fn-015",
-  "domain": "functions",
-  "objective": "testing-debugging",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "A Python function backs the \"Release shipment\" Action at Kestrow Marine. Part-way through, it traverses to the shipment's linked `Inspection` objects and must stop if any of them is still open. Today users only see a generic failure and call the help desk. How should the function report the problem?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Print the reason with `print()` so it is written to the function's logs",
-    "why": "Log output helps the developer when debugging, but it is not shown to the person applying the Action."
-   },
-   {
-    "id": "b",
-    "text": "Return an empty list of edits so that the Action completes without changes",
-    "why": "The Action would appear to succeed while doing nothing, which hides the problem from the user."
-   },
-   {
-    "id": "c",
-    "text": "Raise a `UserFacingError` whose message says what is wrong and what to do",
-    "why": "Correct. A user-facing error surfaces its message where the function runs, such as an Action in Workshop, so users can fix the input themselves."
-   },
-   {
-    "id": "d",
-    "text": "Return the reason as a string and declare the function's output type as `str`",
-    "why": "A function that backs an Action must return Ontology edits; a string result would not block the release or reach the user as an error."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "TypeScript v1, TypeScript v2 and Python functions can all throw a `UserFacingError`. When the function runs in Workshop or behind an Action, the user sees that message instead of a generic failure, so it should state what was wrong and what to change.",
-  "source": {
-   "title": "Functions: User-facing errors",
-   "url": "https://www.palantir.com/docs/foundry/functions/user-facing-error/"
-  }
- },
- {
-  "id": "fn-016",
-  "domain": "functions",
-  "objective": "testing-debugging",
-  "difficulty": "hard",
-  "format": "single",
-  "stem": "After migrating a search function to TypeScript v2, a developer at Ashgrove Legal finds that `client(Contract).where({ summary: { $containsAnyTerm: term } })` compiles, runs without error and always returns an empty page. For the same user, a filter on `contractId` returns the expected contracts. What should she check first?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Whether the `summary` property is marked Searchable in Ontology Manager",
-    "why": "Correct. The OSDK accepts any property in a where clause, so an unmarked property compiles and a full-text predicate on it quietly matches nothing."
-   },
-   {
-    "id": "b",
-    "text": "Whether the user has been granted access to the `Contract` backing datasource",
-    "why": "The same user gets results from another filter on the same object type, so object access is not the problem."
-   },
-   {
-    "id": "c",
-    "text": "Whether the Ontology SDK was regenerated after `summary` was added to the type",
-    "why": "A property missing from the generated SDK would be a compile error, and this code compiles."
-   },
-   {
-    "id": "d",
-    "text": "Whether the function was run in live preview rather than as a published version",
-    "why": "Live preview runs real Ontology queries; only edits are not applied there."
-   }
-  ],
-  "answer": [
-   "a"
-  ],
-  "explanation": "Filtering, ordering and aggregating all require the property to be Searchable. TypeScript v1 omitted the methods for unmarked properties, so the mistake failed at compile time; the Ontology SDK accepts any property, so in TypeScript v2 it surfaces only at run time, and a term filter can return an empty page while reporting success.",
-  "source": {
-   "title": "Functions: Migrate from TypeScript v1 to TypeScript v2",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-migration/"
-  }
- },
- {
-  "id": "fn-017",
-  "domain": "functions",
-  "objective": "testing-debugging",
-  "difficulty": "hard",
-  "format": "multi",
-  "stem": "A function-backed column at Thornbury Consulting shows the number of projects linked to each `Employee` in an Object Table. The TypeScript v2 function loops over the employees, loads every linked `Project` for each one and returns the array lengths. The column is slow, and compute usage is high. Which statements about fixing it are accurate? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "Asking the Ontology for a count over each employee's linked set avoids loading projects",
-    "why": "Correct. Aggregating on the linked object set lets the backend return a number instead of every linked object."
-   },
-   {
-    "id": "b",
-    "text": "Changing the input from an object set to an array of employees removes the loading cost",
-    "why": "An object array is loaded up front, so it is less efficient than an object set, not more."
-   },
-   {
-    "id": "c",
-    "text": "`Promise.all` over the per-employee loads is faster but issues the same queries",
-    "why": "Correct. Parallel loading shortens elapsed time, but the number of queries and the resources used stay the same."
-   },
-   {
-    "id": "d",
-    "text": "Raising the function's memory setting addresses the cause of the slow column",
-    "why": "More memory lets the wasteful loading continue; it does not reduce the link traversals."
-   },
-   {
-    "id": "e",
-    "text": "Splitting it into a single-object function that Workshop calls for each row is cheaper",
-    "why": "Single-object inputs are the least efficient choice and multiply the executions."
-   }
-  ],
-  "answer": [
-   "a",
-   "c"
-  ],
-  "explanation": "Loading linked objects inside a loop is the most common cause of slow functions: each iteration is a round trip, and all linked objects end up in memory. Asynchronous loading improves speed but not cost. Pushing the traversal and the count to the Ontology backend is both faster and cheaper.",
-  "source": {
-   "title": "Functions: Optimize performance",
-   "url": "https://www.palantir.com/docs/foundry/functions/optimize-performance/"
-  }
- },
- {
-  "id": "fn-018",
-  "domain": "functions",
-  "objective": "testing-debugging",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "A Python function at Glaisdale Housing is decorated with `@function(edits=[Ticket])`. A recent change makes it also create a `RepairNote` object. The Action it backs now fails, and the function's metrics in Ontology Manager show failures in the \"Undeclared object types edited\" category. What is the fix?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Give the affected users edit access to the `RepairNote` object type",
-    "why": "The failure category points at the function's declaration, not at the permissions of the people applying the Action."
-   },
-   {
-    "id": "b",
-    "text": "Change the return type hint from `list[OntologyEdit]` to `None`",
-    "why": "An edit function must keep the explicit `list[OntologyEdit]` return type for its edits to be applied."
-   },
-   {
-    "id": "c",
-    "text": "Enable auto upgrade on the Action so it resolves the newest version",
-    "why": "Choosing a different version does not help while the function still edits a type it has not declared."
-   },
-   {
-    "id": "d",
-    "text": "Add `RepairNote` to the `edits` list and release a new version",
-    "why": "Correct. Every object type a function creates, updates or deletes must be declared, and the Action then needs to use the new version."
-   }
-  ],
-  "answer": [
-   "d"
-  ],
-  "explanation": "Edit functions declare the entities they may edit: the `edits` parameter of `@function` in Python, and the `Edits` type in TypeScript v2. The declaration gives Actions their provenance, and an edit to an undeclared object type is rejected. Function metrics classify failures, which makes this cause quick to recognise.",
-  "source": {
-   "title": "Functions: Function metrics",
-   "url": "https://www.palantir.com/docs/foundry/functions/function-metrics/"
-  }
- },
- {
-  "id": "fn-tf-01",
-  "domain": "functions",
-  "objective": "query-edit",
-  "difficulty": "medium",
-  "format": "truefalse",
-  "stem": "In a TypeScript v2 Ontology edit function that uses an edit batch, calling `batch.update(employee, { lastName: newName })` does not change the value that `employee.lastName` returns later in the same execution.",
-  "answer": true,
-  "explanation": "An edit batch only records the edits to be returned to the Action. The loaded object instance is not modified, so later reads of the property in the same execution still give the old value, and code that needs the new value must keep it in a variable.",
-  "source": {
-   "title": "Functions: TypeScript v2 Ontology edits",
-   "url": "https://www.palantir.com/docs/foundry/functions/typescript-v2-ontology-edits/"
-  }
- },
- {
-  "id": "fn-tf-02",
-  "domain": "functions",
-  "objective": "versioning-publishing",
-  "difficulty": "medium",
-  "format": "truefalse",
-  "stem": "A function version published from a global branch can be used by Workshop modules on the main branch as soon as it is published, before the branch is merged.",
-  "answer": false,
-  "correction": "A function version published from a global branch is only usable on that branch; it becomes available on main when the branch is merged and the function is published there with its stable version target.",
-  "explanation": "Functions published on a global branch are preview versions that are only available to resources on that branch. On merge, Foundry publishes the function on main with the stable version target, and resources that used the branch version switch to it.",
-  "source": {
-   "title": "Functions: Branching functions",
-   "url": "https://www.palantir.com/docs/foundry/functions/branching-functions/"
-  }
- },
- {
-  "id": "ws-001",
-  "domain": "workshop",
-  "objective": "layout-widgets",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "An incident page at Varley Utilities has an \"Escalation details\" section that is only relevant when the selected incident's severity is Critical. For other incidents the section should not appear or take up any space. How should the builder set this up?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Make the section collapsible and back its collapse state with a Boolean variable",
-    "why": "A collapsed section still shows its header and can be expanded by the user, so it does not disappear."
-   },
-   {
-    "id": "b",
-    "text": "Add a Layout event to the incident table that hides the section on row selection",
-    "why": "Workshop does not offer events that change section visibility; visibility is driven by a variable."
-   },
-   {
-    "id": "c",
-    "text": "Turn on conditional visibility for the section, bound to a Boolean variable",
-    "why": "Correct. A hidden section is left out of the layout entirely, and a variable transformation can compute the Boolean from the selected incident's severity."
-   },
-   {
-    "id": "d",
-    "text": "Move the section into a drawer overlay that opens whenever an incident is selected",
-    "why": "A drawer would open for every incident and covers part of the page instead of showing the details in place."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "Sections support variable-backed conditional visibility: a Boolean variable decides whether the section is part of the layout. This differs from collapse state, where the header stays visible. Visibility is changed by changing the variable, for example through a transformation or a Set variable value event.",
-  "source": {
-   "title": "Workshop: Variable-backed layouts",
-   "url": "https://www.palantir.com/docs/foundry/workshop/variable-backed-layouts/"
-  }
- },
- {
-  "id": "ws-002",
-  "domain": "workshop",
-  "objective": "layout-widgets",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "A dispatch module at Norcott Couriers has an \"Assign driver\" button that applies an Action to the rows selected in an Object Table. When nothing is selected the button should stay in place but be greyed out, so the toolbar does not shift. Which configuration achieves this?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Conditional visibility on the button with a Boolean variable, set to disable when false",
-    "why": "Correct. A Boolean such as an \"is not empty\" transformation on the selected objects can disable the button without removing it."
-   },
-   {
-    "id": "b",
-    "text": "Conditional visibility on the section around the button, hidden when no row has been selected",
-    "why": "Hiding the section removes the button from the page, which is what the builder wants to avoid."
-   },
-   {
-    "id": "c",
-    "text": "A submission criterion on the action type that requires at least one selected object",
-    "why": "Submission criteria validate the Action itself and are worth having, but the requirement here is the button's own disabled state, which the Button Group takes from a Boolean variable."
-   },
-   {
-    "id": "d",
-    "text": "An extra Set variable value event on the button that clears the selection on click",
-    "why": "Clearing the selection does not stop the button from being clicked and loses the user's choice."
-   }
-  ],
-  "answer": [
-   "a"
-  ],
-  "explanation": "Each button in a Button Group can be tied to a Boolean variable, with a choice of what happens when it is false: the button is disabled or hidden. Disabling keeps the layout stable and signals that the action exists but is not available yet.",
-  "source": {
-   "title": "Workshop: Button Group",
-   "url": "https://www.palantir.com/docs/foundry/workshop/widgets-button-group/"
-  }
- },
- {
-  "id": "ws-003",
-  "domain": "workshop",
-  "objective": "layout-widgets",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "Warehouse leads at Quenby Supply correct stock counts for several hundred `InventoryItem` objects each week, often starting from a CSV file sent by a supplier. They want to edit many rows quickly with the keyboard inside the Workshop module, using the existing \"Update stock count\" Action. Which widget setup fits?",
-  "options": [
-   {
-    "id": "a",
-    "text": "An Inline Action widget in the Action form layout, submitted once per item",
-    "why": "The form layout runs one guided Action at a time, which suits a few objects rather than hundreds of rows."
-   },
-   {
-    "id": "b",
-    "text": "A Button Group button that opens the Action form in a dialog for the selected item",
-    "why": "This also handles one submission at a time and adds a dialog to open and close for every item."
-   },
-   {
-    "id": "c",
-    "text": "A Media Uploader that stores the CSV file in a dataset for a pipeline to process",
-    "why": "The file would land in a dataset; it would not apply the Action or let leads review and edit rows in the module."
-   },
-   {
-    "id": "d",
-    "text": "An Inline Action widget in the Action table layout, with file upload enabled",
-    "why": "Correct. The table layout is meant for bulk edits and CSV-sourced data, with keyboard navigation and live editing."
-   }
-  ],
-  "answer": [
-   "d"
-  ],
-  "explanation": "The Inline Action widget offers two interfaces for the same action type. The form applies one Action at a time and suits guided input on a few objects. The table, formerly the Action grid, suits large batches and data that arrives as CSV, subject to batch limits and non-conflicting edits.",
-  "source": {
-   "title": "Workshop: Inline Action",
-   "url": "https://www.palantir.com/docs/foundry/workshop/widgets-inline-action-form/"
-  }
- },
- {
-  "id": "ws-004",
-  "domain": "workshop",
-  "objective": "variables-events",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "A page header at Ellory Estates should read \"Inspection for\" followed by the selected site's name and the number of days until its `nextInspection` date. The builder is about to ask a developer for a function that returns this string. What is the simpler design?",
-  "options": [
-   {
-    "id": "a",
-    "text": "An object set aggregation variable over the selected site's properties",
-    "why": "An aggregation returns a single metric such as a sum or count; it cannot join text or compare dates."
-   },
-   {
-    "id": "b",
-    "text": "A variable transformation that chains a date difference and a string concatenation",
-    "why": "Correct. Transformations provide current date, between dates and concatenation, and they run in the browser without a function."
-   },
-   {
-    "id": "c",
-    "text": "A function-backed string variable set to recompute only when triggered by an event",
-    "why": "This still needs code to be written and published, and the header would not follow the selection without an extra event."
-   },
-   {
-    "id": "d",
-    "text": "A static string variable updated by a Set variable value event on row selection",
-    "why": "A Set variable value event copies one variable into another; it cannot compute the text."
-   }
-  ],
-  "answer": [
-   "b"
-  ],
-  "explanation": "Variable transformations let builders chain common operations, including string, math, date and comparison steps, and reference earlier steps. They run in the browser, and operations on primitive values need no round trip to Foundry. Functions are better kept for logic that these operations cannot express.",
-  "source": {
-   "title": "Workshop: Variable transformations",
-   "url": "https://www.palantir.com/docs/foundry/workshop/variable-transformations/"
-  }
- },
- {
-  "id": "ws-005",
-  "domain": "workshop",
-  "objective": "variables-events",
-  "difficulty": "hard",
-  "format": "single",
-  "stem": "A module at Brackwell Health uses routing and variable-backed page selection with a string variable `activePage`, whose default value is `overview`. Users report that shared links to the `audits` page flash that page for a moment and then land on the overview. What should the builder change?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Set the `activePage` variable's routing behaviour to Always in URL",
-    "why": "URL inclusion controls what is written to the address bar; the default value would still win on load."
-   },
-   {
-    "id": "b",
-    "text": "Remove the default value from the `activePage` variable",
-    "why": "Correct. The variable's default takes precedence over the page ID in the URL, so the module redirects to the default page after the first render."
-   },
-   {
-    "id": "c",
-    "text": "Replace the page IDs with the page display names in the shared links",
-    "why": "Routing writes and reads page IDs; display names in the link would not select a page."
-   },
-   {
-    "id": "d",
-    "text": "Enable state saving for `activePage` and ask users to save a state",
-    "why": "State saving restores explicitly saved states; it does not change how a routed link is resolved on load."
-   }
-  ],
-  "answer": [
-   "b"
-  ],
-  "explanation": "With routing enabled, the current page ID is written to the URL and used on load. If the module also uses variable-backed page selection, a default value on that variable overrides the page from the URL on initial render. The guidance is to leave the default empty so that routing supplies the initial value.",
-  "source": {
-   "title": "Workshop: Routing",
-   "url": "https://www.palantir.com/docs/foundry/workshop/routing/"
-  }
- },
- {
-  "id": "ws-006",
-  "domain": "workshop",
-  "objective": "variables-events",
-  "difficulty": "medium",
-  "format": "multi",
-  "stem": "Analysts at Stannard Trade Compliance want to come back to the filter selections they were using in a Workshop module, and to send the same view to colleagues. The builder plans to use state saving. Which statements about state saving are correct? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "A variable is included only if it has an external ID and state saving enabled",
-    "why": "Correct. Besides the module-level toggle, each variable to be saved is enabled individually and stored under its external ID."
-   },
-   {
-    "id": "b",
-    "text": "Variables of an embedded module are saved automatically with the parent's state",
-    "why": "State saving configuration is not inherited; child variables must be exposed on the module interface and mapped from the parent."
-   },
-   {
-    "id": "c",
-    "text": "Enabled variables are restored automatically the next time each user opens the module",
-    "why": "Nothing persists automatically between sessions; a state has to be saved and then reopened or set as the default."
-   },
-   {
-    "id": "d",
-    "text": "Users must save a state themselves, then reopen it or share it with others",
-    "why": "Correct. Consumers save, open and share states in view mode, and a saved state can also be set as the module default."
-   },
-   {
-    "id": "e",
-    "text": "Saved states remain available to users when the module header is hidden",
-    "why": "The state saving menu sits in the module header, so hiding the header removes access to it."
-   }
-  ],
-  "answer": [
-   "a",
-   "d"
-  ],
-  "explanation": "A saved state stores the values of the variables enabled for state saving and, optionally, the current page. It is an explicit user action, not automatic persistence; preferences that must apply without user effort are better stored on an object. The feature depends on the module header and on external IDs.",
-  "source": {
-   "title": "Workshop: State saving",
-   "url": "https://www.palantir.com/docs/foundry/workshop/state-saving/"
-  }
- },
- {
-  "id": "ws-007",
-  "domain": "workshop",
-  "objective": "variables-events",
-  "difficulty": "hard",
-  "format": "single",
-  "stem": "In an alerts module at Hexcombe Transit, users choose an alert type in a Filter List. The \"Create alert\" button should open its Action form with the type parameter already set to the type they filtered on. The Filter List writes its selection to an object set filter variable. How can the builder get the chosen type into the form?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Use the object set filter variable directly as the default for the type parameter",
-    "why": "A filter variable holds property and value pairs for filtering object sets; it cannot serve as a string parameter value."
-   },
-   {
-    "id": "b",
-    "text": "Read the type from the first object of the filtered set with an object property variable",
-    "why": "This reads data rather than the user's choice, and gives nothing when no alert of that type exists yet."
-   },
-   {
-    "id": "c",
-    "text": "Enable routing on the filter variable and read the type back from the URL",
-    "why": "Object set filter variables are one of the variable types that cannot be written to the URL."
-   },
-   {
-    "id": "d",
-    "text": "Put a string variable in the filter's default and enable updating used variables",
-    "why": "Correct. With filter value extraction on, the selected term is written to that string variable, which can then be the parameter default."
-   }
-  ],
-  "answer": [
-   "d"
-  ],
-  "explanation": "Filter value extraction works by defining the filter variable's default with variables as its values and turning on \"Update used variables on filter value changes\". When the user's filter matches that shape, the chosen values are written to those variables. String terms and numeric or date ranges can be extracted.",
-  "source": {
-   "title": "Workshop: Object set filter variables",
-   "url": "https://www.palantir.com/docs/foundry/workshop/object-set-filter-variables/"
-  }
- },
- {
-  "id": "ws-008",
-  "domain": "workshop",
-  "objective": "data-actions-functions",
-  "difficulty": "easy",
-  "format": "single",
-  "stem": "On a ticket detail page at Lowther Telecom, a Button Group button applies the \"Close ticket\" Action. Once the ticket has really been closed, the module should return to the ticket list page. If validation fails or the user cancels, they should stay where they are. How should the builder configure this?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Chain the page switch to the same button with the \"On start of action submission\" trigger",
-    "why": "This fires when submission begins, so the user would be moved even if the Action then fails."
-   },
-   {
-    "id": "b",
-    "text": "Chain the page switch with the \"On successful completion of action submission\" trigger",
-    "why": "Correct. The event runs only after the Action has been submitted successfully, so failed or cancelled attempts leave the user on the page."
-   },
-   {
-    "id": "c",
-    "text": "Enable auto-refresh on the ticket object set so that the page reacts to the edit",
-    "why": "Auto-refresh reloads data when objects change; it does not navigate between pages."
-   },
-   {
-    "id": "d",
-    "text": "Place a second \"Back to list\" button next to \"Close ticket\" for users to select",
-    "why": "This adds a manual step and does nothing to tie the navigation to a successful close."
-   }
-  ],
-  "answer": [
-   "b"
-  ],
-  "explanation": "A button that triggers an Action can also run a Workshop event at a point in the Action's lifecycle: when submission starts or when it completes successfully. The success trigger is the usual way to navigate, refresh data or update variables only after a write has gone through.",
-  "source": {
-   "title": "Workshop: Button Group",
-   "url": "https://www.palantir.com/docs/foundry/workshop/widgets-button-group/"
-  }
- },
- {
-  "id": "ws-009",
-  "domain": "workshop",
-  "objective": "data-actions-functions",
-  "difficulty": "hard",
-  "format": "multi",
-  "stem": "At Merrow Shipping, a \"Recalculate route plan\" button applies a function-backed Action that takes several minutes. Users see no progress, assume it failed and select the button again, which starts duplicate runs. Which design changes address the problem without weakening validation? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "Have the Action only record a request object, and run the long step in an automation",
-    "why": "Correct. The Action returns quickly, functions run asynchronously in Automate, and the request object's status tracks the work instead of a waiting browser."
-   },
-   {
-    "id": "b",
-    "text": "Raise the function's time limit so that the button's Action can wait for the result",
-    "why": "Users would still stare at a pending form with no status, and nothing stops them from submitting again."
-   },
-   {
-    "id": "c",
-    "text": "Disable the button with a Boolean variable while a request is open, and show its status",
-    "why": "Correct. Conditional disabling prevents duplicate submissions, and a status property gives users the feedback they were missing."
-   },
-   {
-    "id": "d",
-    "text": "Remove the Action's submission criteria so that repeated submissions are accepted faster",
-    "why": "This removes validation and makes duplicates easier, which is the opposite of what is needed."
-   },
-   {
-    "id": "e",
-    "text": "Set the module's variables to recompute automatically so that the result appears sooner",
-    "why": "Recompute behaviour does not shorten the calculation or show whether a run is under way."
-   }
-  ],
-  "answer": [
-   "a",
-   "c"
-  ],
-  "explanation": "Long work does not belong in a call that the user waits on. A quick Action can create or update a request object, an automation can run the function in the background, and the module can read the request's status. Disabling the trigger while a request is open stops duplicate submissions.",
-  "source": {
-   "title": "Functions: Use functions in the platform",
-   "url": "https://www.palantir.com/docs/foundry/functions/use-functions/"
-  }
- },
- {
-  "id": "ws-010",
-  "domain": "workshop",
-  "objective": "data-actions-functions",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "A Pivot Table at Oakhurst Education groups `School` objects by district. The builder needs a value per school for the number of linked `Complaint` objects that are open, so it can be aggregated in the pivot. `Complaint` is one link away from `School`, and the team would rather not write code or change the Ontology. What should the builder use?",
-  "options": [
-   {
-    "id": "a",
-    "text": "A function-backed column that returns a map from each school to its count",
-    "why": "Function-backed columns work in the Object Table but have narrower widget support, and this needs code to be written and released."
-   },
-   {
-    "id": "b",
-    "text": "A new `openComplaints` property added to `School` by the data pipeline",
-    "why": "It would work, but it changes the pipeline and the Ontology for something the module can compute itself."
-   },
-   {
-    "id": "c",
-    "text": "A Workshop derived property that aggregates across the link with a filter",
-    "why": "Correct. Module-level derived properties compute linked aggregations at query time without code, and they can be used in pivot tables."
-   },
-   {
-    "id": "d",
-    "text": "An object set aggregation variable that counts all open complaints",
-    "why": "This yields a single number for the whole set, not a value for each school."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "Workshop derived properties are defined per object type inside a module and are computed at query time, for example an aggregation over a one-to-many link with a static filter. They work in more widgets than function-backed columns, including pivot tables, but support only one link traversal and can add query latency.",
-  "source": {
-   "title": "Workshop: Derived properties",
-   "url": "https://www.palantir.com/docs/foundry/workshop/derived-properties/"
-  }
- },
- {
-  "id": "ws-011",
-  "domain": "workshop",
-  "objective": "performance-deployment",
-  "difficulty": "hard",
-  "format": "multi",
-  "stem": "A module at Dalby Offshore has a long scrolling page of thirty charts that is slow to open. On another tab, a custom planning widget loses its unsaved inputs whenever users switch tabs and come back. Which widget display optimization settings address these two problems? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "Set every chart to Eagerly mount and Never unmount so that all are ready at once",
-    "why": "Eager mounting adds each chart's loading work to the initial load, which makes the slow page slower."
-   },
-   {
-    "id": "b",
-    "text": "Set the charts below the first screen to Delay until on-screen",
-    "why": "Correct. Those charts start loading only when scrolled into view, which cuts the work done at page load."
-   },
-   {
-    "id": "c",
-    "text": "Set the planning widget to Unmount when off-screen",
-    "why": "This is the most aggressive unmount setting and would reset the widget even more often."
-   },
-   {
-    "id": "d",
-    "text": "Move the thirty charts into section headers so that they render only once",
-    "why": "Widgets in section headers or module headers do not support display optimization at all."
-   },
-   {
-    "id": "e",
-    "text": "Set the planning widget to Never unmount with normal mounting",
-    "why": "Correct. The widget stays mounted after its first load, so its state survives tab switches."
-   }
-  ],
-  "answer": [
-   "b",
-   "e"
-  ],
-  "explanation": "By default a widget mounts when its layout renders and unmounts when it does not. Display optimization changes this per widget: delaying mount helps long pages, and never unmounting preserves state. Keeping widgets mounted costs memory and requests, so it should be applied narrowly and measured with the Performance Profiler.",
-  "source": {
-   "title": "Workshop: Widget display optimization",
-   "url": "https://www.palantir.com/docs/foundry/workshop/widget-display-optimization/"
-  }
- },
- {
-  "id": "ws-012",
-  "domain": "workshop",
-  "objective": "performance-deployment",
-  "difficulty": "medium",
-  "format": "multi",
-  "stem": "A control-room module at Pinehaven Logistics has auto-refresh enabled and watches an `Order` object set. Supervisors notice two things: a table column showing each order's linked `Shipment` status goes stale, and a `Driver` list inside a drawer is only up to date some time after the drawer is opened. Which explanations match how auto-refresh works? Select TWO.",
-  "options": [
-   {
-    "id": "a",
-    "text": "Linked object types are not watched unless they are registered as well",
-    "why": "Correct. Watching `Order` does not refresh linked `Shipment` properties; the linked type must be watched explicitly."
-   },
-   {
-    "id": "b",
-    "text": "Auto-refresh reacts to edits made through Actions but not to updates from data pipelines",
-    "why": "Updates from Actions, data integration and streaming sources can all trigger a refresh."
-   },
-   {
-    "id": "c",
-    "text": "A watched object set only triggers refreshes while a visible widget is using it",
-    "why": "Correct. A set used only in a closed drawer is not refreshed until it becomes visible, when the pending reload is applied."
-   },
-   {
-    "id": "d",
-    "text": "Auto-refresh settings of an embedded module are inherited by its parent module",
-    "why": "Auto-refresh is not carried over when embedding; each module is configured separately."
-   },
-   {
-    "id": "e",
-    "text": "Auto-refresh pauses whenever any variable recomputes automatically",
-    "why": "Recompute behaviour does not pause auto-refresh; a refresh can in fact cause automatic variables to recompute."
-   }
-  ],
-  "answer": [
-   "a",
-   "c"
-  ],
-  "explanation": "Auto-refresh watches the object sets a builder registers and reloads the module's data when they change. It does not follow links on its own, and it only acts on sets used by visible widgets, delaying updates for hidden ones. Both behaviours limit load, and both look like stale data if overlooked.",
-  "source": {
-   "title": "Workshop: Auto-refresh",
-   "url": "https://www.palantir.com/docs/foundry/workshop/auto-refresh/"
-  }
- },
- {
-  "id": "ws-013",
-  "domain": "workshop",
-  "objective": "performance-deployment",
-  "difficulty": "hard",
-  "format": "single",
-  "stem": "To speed up a module at Rushmere Finance, a builder moved its heavy audit widgets into a section with conditional visibility, hidden unless the function-backed Boolean variable `hasOpenAudits` is true. In the Performance Profiler, `hasOpenAudits` is still computed every time the module loads. What explains this?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Lazy variable loading applies in view mode only, and the profiler runs in edit mode",
-    "why": "Lazy loading applies in both view and edit mode, and the profiler mirrors what users experience."
-   },
-   {
-    "id": "b",
-    "text": "Function-backed variables are always computed on load, whatever uses them",
-    "why": "Function-backed variables are also deferred until something visible or required needs them."
-   },
-   {
-    "id": "c",
-    "text": "The variable controls the layout, so it is needed even while the section is hidden",
-    "why": "Correct. A variable that drives conditional visibility is treated as in use, because Workshop needs its value to decide what to render."
-   },
-   {
-    "id": "d",
-    "text": "Sections with conditional visibility keep their widgets mounted by default",
-    "why": "By default widgets unmount when their layout is not rendered; that is not why the variable is computed."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "Lazy loading defers a variable until a visible widget, a layout or another required variable needs it. Variables that control layout, such as conditional visibility, count as needed even when the section they control is hidden. Hiding a section therefore stops its widgets' work, not the calculation that decides its visibility.",
-  "source": {
-   "title": "Workshop: Variable recompute behavior",
-   "url": "https://www.palantir.com/docs/foundry/workshop/variable-recompute/"
-  }
- },
- {
-  "id": "ws-014",
-  "domain": "workshop",
-  "objective": "performance-deployment",
-  "difficulty": "medium",
-  "format": "single",
-  "stem": "A published module at Tolland Mining lets users pick one site in an Object Dropdown. The selected-site variable has the external ID `site` and is enabled for state saving, and users rely on states they saved months ago. The builder now wants to replace the dropdown with a widget that allows several sites to be selected. How can the change be made so that those saved states keep loading?",
-  "options": [
-   {
-    "id": "a",
-    "text": "Give the new widget's output variable the same display name as the old variable",
-    "why": "Saved states refer to the external ID, so matching the display name alone preserves nothing."
-   },
-   {
-    "id": "b",
-    "text": "Create the new variable with a clearer external ID and enable it for state saving",
-    "why": "Existing saved states hold the value under the old ID, so they would no longer populate the selection."
-   },
-   {
-    "id": "c",
-    "text": "Keep the external ID `site` on the output variable of the new widget",
-    "why": "Correct. Values are stored by external ID, so the widget can be swapped as long as its output variable keeps that ID."
-   },
-   {
-    "id": "d",
-    "text": "Publish the change with automatic publishing switched off so that old states stay valid",
-    "why": "Publishing settings decide which version viewers get; they do not keep the variable's identifier stable."
-   }
-  ],
-  "answer": [
-   "c"
-  ],
-  "explanation": "External IDs are the stable part of a module's interface: saved states store variable values under them, and module interface variables are addressed by them. The documentation gives this exact case: a single-select widget can be replaced by a multi-select one and saved states keep working if the output variable keeps its external ID.",
-  "source": {
-   "title": "Workshop: State saving",
-   "url": "https://www.palantir.com/docs/foundry/workshop/state-saving/"
-  }
- }
 ]

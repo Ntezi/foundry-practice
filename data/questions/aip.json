@@ -52,7 +52,7 @@
       },
       {
         "id": "b",
-        "text": "Set the block's output type to a struct with one named field for each value",
+        "text": "Set the block's output type to a struct with one named, typed field for each of the values",
         "why": "Correct. A struct output lets a single LLM block return several named, typed values that later blocks can reference individually."
       },
       {
@@ -724,7 +724,7 @@
     "options": [
       {
         "id": "a",
-        "text": "An AIP Evals suite with test cases and an evaluator for the expected label",
+        "text": "An AIP Evals suite with test cases and an evaluator that checks the expected label",
         "why": "Correct. An evaluation suite runs the function over many test cases, an evaluator turns the outputs into metrics, and runs can be compared between versions."
       },
       {
@@ -772,7 +772,7 @@
       },
       {
         "id": "c",
-        "text": "Run each test case several times and judge the aggregated results",
+        "text": "Run each test case for several iterations and judge the aggregated results",
         "why": "Correct. LLM output is non-deterministic, so each test case should be run more than once; the iterations are aggregated and show how much the results vary."
       },
       {
@@ -1003,6 +1003,7 @@
     "id": "aip-026",
     "domain": "aip",
     "objective": "evaluation-debugging",
+    "associateMock": false,
     "difficulty": "hard",
     "format": "single",
     "stem": "A reviewer at Stannick Haulage is reading an AI-generated TypeScript v1 function that will back an Action. The method is decorated with `@OntologyEditFunction()` and `@Edits(Shipment)`, but its body changes a property on a `Shipment` and also a property on the linked `Carrier` object. The function runs without error in preview. What should the reviewer require before it is published?",

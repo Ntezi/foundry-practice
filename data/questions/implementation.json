@@ -2,7 +2,7 @@
   {
     "id": "imp-001",
     "domain": "ontology",
-    "objective": "modeling",
+    "objective": "identity-links",
     "guide": {
       "section": "implementation",
       "objective": "object-types"
@@ -283,8 +283,8 @@
   },
   {
     "id": "imp-006",
-    "domain": "ontology",
-    "objective": "identity-links",
+    "domain": "actions",
+    "objective": "rules-design",
     "guide": {
       "section": "implementation",
       "objective": "link-types"
@@ -488,6 +488,7 @@
       "section": "implementation",
       "objective": "typescript-functions"
     },
+    "associateMock": false,
     "difficulty": "easy",
     "format": "single",
     "stem": "In a TypeScript v1 functions repository, a builder at Ostrander Health writes `@Function() public escalateCase(c: Case): void { c.priority = 'High'; }` and publishes it. The function is meant to back an action type that edits `Case` objects. What must change in the declaration?",
@@ -572,6 +573,7 @@
       "section": "implementation",
       "objective": "typescript-functions"
     },
+    "associateMock": false,
     "difficulty": "hard",
     "format": "single",
     "stem": "A TypeScript v1 function at Solwyn Energy backs a Workshop numeric variable. It calls `Objects.search().meterReading().filter(r => r.siteId.exactMatch(siteId)).all()`, then averages `r.value` in a loop. For large sites, which have several hundred thousand readings, the function fails. Which change gives a correct result for every site?",
@@ -693,7 +695,7 @@
   {
     "id": "imp-015",
     "domain": "extended",
-    "objective": "quiver",
+    "objective": "cross-application",
     "guide": {
       "section": "implementation",
       "objective": "quiver"
@@ -741,7 +743,7 @@
   {
     "id": "imp-016",
     "domain": "workshop",
-    "objective": "data-actions-functions",
+    "objective": "variables-events",
     "guide": {
       "section": "implementation",
       "objective": "workshop"
@@ -1197,8 +1199,8 @@
   },
   {
     "id": "imp-026",
-    "domain": "actions",
-    "objective": "rules-design",
+    "domain": "functions",
+    "objective": "versioning-publishing",
     "guide": {
       "section": "implementation",
       "objective": "actions"
@@ -1353,6 +1355,7 @@
       "section": "implementation",
       "objective": "typescript-functions"
     },
+    "associateMock": false,
     "difficulty": "medium",
     "format": "single",
     "stem": "A Workshop Object Table at Penhallow Freight lists `Delivery` objects. The builder wants an 'Urgency' column computed in a TypeScript v1 function from each delivery's delay. Which function signature fits a function-backed column and follows the recommended input type?",
@@ -1390,18 +1393,19 @@
   {
     "id": "imp-029",
     "domain": "functions",
-    "objective": "query-edit",
+    "objective": "versioning-publishing",
     "guide": {
       "section": "implementation",
       "objective": "typescript-functions"
     },
+    "associateMock": false,
     "difficulty": "easy",
     "format": "single",
     "stem": "A developer at Glenrowan Energy writes a new TypeScript v1 function, tests it successfully in live preview and commits it to the master branch of the repository. A Workshop builder then tries to back a numeric variable with it but cannot find it in the function picker. What is the missing step?",
     "options": [
       {
         "id": "a",
-        "text": "Tag a version on the repository so that the functions are released and published",
+        "text": "Tag a version on the repository so that all its functions are released and published",
         "why": "Functions appear in consuming applications only after a version has been tagged and released. A commit alone does not publish them."
       },
       {
@@ -1432,11 +1436,12 @@
   {
     "id": "imp-030",
     "domain": "functions",
-    "objective": "query-edit",
+    "objective": "versioning-publishing",
     "guide": {
       "section": "implementation",
       "objective": "typescript-functions"
     },
+    "associateMock": false,
     "difficulty": "hard",
     "format": "multi",
     "stem": "A developer at Ashdown Biotech adds a class `SampleFunctions` in a new file of a TypeScript v1 functions repository. After a version is tagged and released, one of its methods is missing from the function registry while methods of other classes appear. Which conditions must hold for the method to be discovered and published? Select THREE.",
@@ -1607,7 +1612,7 @@
   {
     "id": "imp-034",
     "domain": "workshop",
-    "objective": "data-actions-functions",
+    "objective": "variables-events",
     "guide": {
       "section": "implementation",
       "objective": "workshop"
@@ -1757,7 +1762,7 @@
   {
     "id": "imp-tf-02",
     "domain": "ontology",
-    "objective": "modeling",
+    "objective": "identity-links",
     "guide": {
       "section": "implementation",
       "objective": "object-types"
@@ -1832,7 +1837,7 @@
   {
     "id": "imp-tf-06",
     "domain": "actions",
-    "objective": "security-troubleshooting",
+    "objective": "side-effects",
     "guide": {
       "section": "implementation",
       "objective": "actions"
@@ -1850,7 +1855,7 @@
   {
     "id": "imp-tf-07",
     "domain": "functions",
-    "objective": "query-edit",
+    "objective": "testing-debugging",
     "guide": {
       "section": "implementation",
       "objective": "typescript-functions"
@@ -1906,7 +1911,7 @@
   {
     "id": "imp-tf-10",
     "domain": "workshop",
-    "objective": "data-actions-functions",
+    "objective": "variables-events",
     "guide": {
       "section": "implementation",
       "objective": "workshop"

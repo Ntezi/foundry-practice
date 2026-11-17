@@ -10,6 +10,7 @@ Every file in `data/questions/` is a JSON array of question objects. `npm run va
 | `domain` | One of the official Associate guide's eight domains (`ontology`, `actions`, `functions`, `workshop`, `osdk`, `automate`, `aip`, `security`), or `extended` for topics that only the earlier 2026 PDF guide lists. See `blueprint.json`. |
 | `objective` | An objective id of that domain in `blueprint.json` (e.g. `sdk-usage`). |
 | `guide` | Optional. `{ "section": "design", "objective": "tool-selection" }` places the question in the 2026 PDF guide's four-section outline (`blueprint.guide2026`). Only questions with `guide` can be used in the fixed 60-question forms. |
+| `associateMock` | Optional. `false` keeps a question out of the 85-question Associate mock while leaving it in Practice. Used for questions on an API generation the current official guide no longer lists (TypeScript v1 functions). |
 | `difficulty` | `easy`, `medium` or `hard`. |
 | `format` | `single`, `multi`, `discrete`, `hotspot`, `matching` or `truefalse`. |
 | `stem` | The scenario and the question. Backticks render as code. For `truefalse` it is the single statement being judged. |
@@ -43,6 +44,6 @@ Every file in `data/questions/` is a JSON array of question objects. `npm run va
 
 ## Mock exams
 
-The **Associate mock** (85 questions) has no fixed form. Each attempt draws the per-domain quota in `blueprint.exams[associate].quotas` at random from the `single` and `multi` questions of that domain, so every new multiple-choice question in an official domain joins the pool automatically.
+The **Associate mock** (85 questions) has no fixed form. Each attempt draws the per-domain quota in `blueprint.exams[associate].quotas` at random from the `single` and `multi` questions of that domain (except those marked `associateMock: false`), so every new multiple-choice question in an official domain joins the pool automatically.
 
 The **2026 PDF guide mock** uses the fixed forms in `data/forms.json`: `{ "id", "title", "questions": [60 ids], "trueFalseMix": [["des-005", "des-tf-01"], ...] }`. Each form must hold 18 / 18 / 12 / 12 questions per guide section (`guide.section`), share no question with another form, and contain every one of that guide's formats. `trueFalseMix` pairs a form question with a True/False question of the same section that replaces it when the learner switches on the optional True/False mix.

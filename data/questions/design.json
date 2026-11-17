@@ -392,7 +392,7 @@
   {
     "id": "des-010",
     "domain": "ontology",
-    "objective": "modeling",
+    "objective": "identity-links",
     "guide": {
       "section": "design",
       "objective": "ontology-pipeline-design"
@@ -433,8 +433,8 @@
   },
   {
     "id": "des-011",
-    "domain": "ontology",
-    "objective": "workflow-assembly",
+    "domain": "actions",
+    "objective": "rules-design",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -460,7 +460,7 @@
       },
       {
         "id": "d",
-        "text": "Action types that let coordinators record the re-route decision on the shipment",
+        "text": "Action types that let coordinators record the re-route decision on the shipment object",
         "why": "Actions are the governed way to write a decision back to the Ontology. Once submitted, the decision is visible to every other user and application."
       }
     ],
@@ -517,8 +517,8 @@
   },
   {
     "id": "des-013",
-    "domain": "ontology",
-    "objective": "workflow-assembly",
+    "domain": "actions",
+    "objective": "side-effects",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -566,7 +566,7 @@
   {
     "id": "des-014",
     "domain": "actions",
-    "objective": "rules-design",
+    "objective": "parameters-validation",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -1163,7 +1163,7 @@
   {
     "id": "des-026",
     "domain": "ontology",
-    "objective": "modeling",
+    "objective": "workflow-assembly",
     "guide": {
       "section": "design",
       "objective": "ontology-pipeline-design"
@@ -1269,8 +1269,8 @@
   },
   {
     "id": "des-027",
-    "domain": "ontology",
-    "objective": "workflow-assembly",
+    "domain": "actions",
+    "objective": "rules-design",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -1296,7 +1296,7 @@
       },
       {
         "id": "d",
-        "text": "The decision is made in another system and never written back to Foundry",
+        "text": "The rescheduling decision is made in another system and never written back to Foundry",
         "why": "An operational application lets the user act where they decide. Here the module only reads, so it is still a dashboard."
       }
     ],
@@ -1311,8 +1311,8 @@
   },
   {
     "id": "des-028",
-    "domain": "extended",
-    "objective": "quiver",
+    "domain": "actions",
+    "objective": "rules-design",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -1353,8 +1353,8 @@
   },
   {
     "id": "des-029",
-    "domain": "ontology",
-    "objective": "workflow-assembly",
+    "domain": "actions",
+    "objective": "rules-design",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -1401,8 +1401,8 @@
   },
   {
     "id": "des-030",
-    "domain": "ontology",
-    "objective": "workflow-assembly",
+    "domain": "workshop",
+    "objective": "data-actions-functions",
     "guide": {
       "section": "design",
       "objective": "operational-workflows"
@@ -1554,7 +1554,7 @@
       },
       {
         "id": "d",
-        "text": "A scrolling Flow layout, large buttons, and a drawer for the filters",
+        "text": "A scrolling Flow layout, large buttons as tap targets, and a drawer for the filters",
         "why": "The guidance favours vertical scrolling over collapsible sections, large buttons as tap targets, and drawers for focused multi-field input."
       }
     ],

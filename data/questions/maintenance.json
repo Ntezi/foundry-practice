@@ -13,7 +13,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Switch off automatic publishing, save as often as needed, and publish a version once it is tested",
+        "text": "Switch off automatic publishing, save to the version history as often as needed, and publish once it is tested",
         "why": "Correct. With automatic publishing off, each save only adds to the version history; viewers stay on the published version until the builder publishes a newer one."
       },
       {
@@ -261,7 +261,7 @@
     "options": [
       {
         "id": "a",
-        "text": "A time since last updated check with a 26-hour threshold",
+        "text": "A time since last updated check with a threshold of 26 hours",
         "why": "Correct. This check measures the time elapsed since the dataset's last transaction, so it fires whenever the output misses its cadence, whatever caused the delay."
       },
       {
@@ -538,7 +538,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Add `console.log` statements, run the Function in live preview and read the logs",
+        "text": "Add `console.log` statements, run the Function in live preview and read the captured logs",
         "why": "Correct. Functions support console logging, and running a Function from the functions helper in the repository displays the captured logs with the result."
       },
       {
@@ -569,7 +569,7 @@
   {
     "id": "mnt-012",
     "domain": "functions",
-    "objective": "testing-debugging",
+    "objective": "query-edit",
     "guide": {
       "section": "maintenance",
       "objective": "debugging"
@@ -580,7 +580,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Load all 400 trucks with a single query filtered on the list of keys, then iterate over the result",
+        "text": "Load all 400 trucks with one query filtered on the keys, then iterate over the result",
         "why": "Correct. One bulk query replaces 400 round trips, which cuts both the waiting time and the number of Ontology requests."
       },
       {
@@ -779,7 +779,7 @@
     "options": [
       {
         "id": "a",
-        "text": "A monitoring view for the object type with a sync propagation delay rule",
+        "text": "A monitoring view for the object type with a rule on sync propagation delay",
         "why": "Correct. For Object Storage v2, object type health is monitored through monitoring views, and a sync propagation delay rule alerts when the freshness of indexed data passes a threshold."
       },
       {
@@ -1102,8 +1102,8 @@
   },
   {
     "id": "mnt-022",
-    "domain": "ontology",
-    "objective": "change-impact",
+    "domain": "functions",
+    "objective": "versioning-publishing",
     "guide": {
       "section": "maintenance",
       "objective": "migration"
@@ -1156,7 +1156,7 @@
     "options": [
       {
         "id": "a",
-        "text": "A submission criterion on the Action is not met for her; this is its message",
+        "text": "A submission criterion on the Action is not met for her; the form shows its message",
         "why": "Correct. Submission criteria combine user and parameter conditions, and when one fails the Action cannot be submitted and its configured failure message is shown to the user."
       },
       {
@@ -1203,7 +1203,7 @@
       },
       {
         "id": "b",
-        "text": "Set the estimate variable to recompute only when triggered by an event, and add a Calculate button",
+        "text": "Set the estimate variable to recompute only on an event, and add a Calculate button",
         "why": "Correct. With event-based recompute, input changes no longer rerun the Function; it runs when the user triggers the recompute event."
       },
       {

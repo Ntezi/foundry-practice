@@ -55,17 +55,17 @@
     "options": [
       {
         "id": "a",
-        "text": "Save it as an exploration, which keeps the filters and layout and shows current results when reopened.",
+        "text": "Save it as an exploration, which keeps filters and layout and shows current results when reopened.",
         "why": "A saved exploration stores the search parameters, filters and layout, so reopening it runs the same search against the latest data."
       },
       {
         "id": "b",
-        "text": "Save it as public in a location the team can reach; teammates still need their own access to the Incident data.",
+        "text": "Save it as public where the team can reach it; teammates still need their own access to Incident data.",
         "why": "A public save is available to anyone with access to the chosen location, but sharing the exploration does not share access to the underlying objects."
       },
       {
         "id": "c",
-        "text": "Save it as a list, because a list re-runs its filters each time someone opens it.",
+        "text": "Save it as a list, because a saved list re-runs its filters each time a teammate opens it.",
         "why": "A saved list is a static set of objects that only changes when it is updated by hand, so it would not show Monday's matches."
       },
       {
@@ -200,8 +200,8 @@
   },
   {
     "id": "ux-005",
-    "domain": "extended",
-    "objective": "cross-application",
+    "domain": "workshop",
+    "objective": "variables-events",
     "guide": {
       "section": "ux",
       "objective": "embedding"
@@ -212,7 +212,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Mapped interface variables use the parent's variable definition, so set the default there.",
+        "text": "Mapped interface variables use the parent's variable definition, so set the default on the parent.",
         "why": "For a mapped variable Workshop uses the parent's definition and ignores the child's, including its default value, so the default has to live in the parent."
       },
       {
@@ -348,7 +348,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Enable Scenarios and set the button's Action to apply to the active scenario.",
+        "text": "Enable Scenarios and set the button's Action to apply to the active scenario instead of the Ontology.",
         "why": "With Apply to Scenario enabled, the Action's edits exist only in the scenario, and scenario-aware widgets such as the Object Table show the result without changing the Ontology."
       },
       {
@@ -390,7 +390,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Back the metric with an object set aggregation variable that has the scenario selected.",
+        "text": "Back the metric with an object set aggregation variable that has the scenario selected in its settings.",
         "why": "Object set aggregation variables accept a scenario, so the aggregation is computed with the scenario's edits applied and any widget reading the variable shows the what-if value."
       },
       {
@@ -564,7 +564,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Define the columns, types and required flags on the workflow output configuration.",
+        "text": "Define each column's name, type and required flag on the workflow output, which authors fill in as a form.",
         "why": "A workflow output fixes the column names, types and required flags; authors then fill a matching form at the end of each rule, so every rule writes rows in the expected shape."
       },
       {
@@ -678,8 +678,8 @@
   },
   {
     "id": "ux-015",
-    "domain": "extended",
-    "objective": "cross-application",
+    "domain": "workshop",
+    "objective": "variables-events",
     "guide": {
       "section": "ux",
       "objective": "redirects"
@@ -732,7 +732,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Add the existing Workshop module as a tab in each of the two Object Views.",
+        "text": "Add the existing Workshop module as a tab in each of the two Object Views, so both tabs use the one module.",
         "why": "An existing Workshop module can be embedded directly as an Object View tab and the same module can back tabs in multiple Object Views, so there is one module to maintain."
       },
       {
@@ -762,8 +762,8 @@
   },
   {
     "id": "ux-017",
-    "domain": "extended",
-    "objective": "cross-application",
+    "domain": "workshop",
+    "objective": "performance-deployment",
     "guide": {
       "section": "ux",
       "objective": "embedding"
@@ -973,12 +973,12 @@
     "options": [
       {
         "id": "a",
-        "text": "Configure saving so scenarios are stored as objects in the Ontology; unsaved scenarios last only for the session.",
+        "text": "Configure saving so scenarios are stored as Ontology objects; unsaved scenarios last only for the session.",
         "why": "Scenarios created in Workshop are temporary by default and are removed when the session ends; saving persists them as objects for reuse and collaboration."
       },
       {
         "id": "b",
-        "text": "Add properties such as description and author to the scenario object type and fill them through the save Action.",
+        "text": "Add description and author properties to the scenario object type and fill them through the save Action.",
         "why": "The object that represents a saved scenario can hold extra metadata properties, populated from the parameters of the Action used to save it, for example with the current user."
       },
       {
@@ -1140,7 +1140,7 @@
     "options": [
       {
         "id": "a",
-        "text": "The workflow owner adds Policy and its link type as inputs in the workflow configuration.",
+        "text": "The workflow owner adds Policy and its link type as inputs in the workflow configuration editor.",
         "why": "The objects, datasets and link types offered to rule authors are defined as workflow inputs by the workflow owner in the workflow configuration."
       },
       {
@@ -1182,7 +1182,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Restrict the approve-proposal Action's submission criteria to the rule's author or a superuser.",
+        "text": "Restrict the submission criteria of the approve-proposal Action to the rule's author or a superuser.",
         "why": "Proposals are approved through ordinary Actions, so the Action's submission criteria can require the current user to be the author of the related rule or a superuser, without limiting who can propose."
       },
       {
@@ -1267,8 +1267,8 @@
   },
   {
     "id": "ux-tf-04",
-    "domain": "extended",
-    "objective": "cross-application",
+    "domain": "workshop",
+    "objective": "performance-deployment",
     "guide": {
       "section": "ux",
       "objective": "embedding"
@@ -1304,8 +1304,8 @@
   },
   {
     "id": "ux-tf-06",
-    "domain": "extended",
-    "objective": "cross-application",
+    "domain": "workshop",
+    "objective": "variables-events",
     "guide": {
       "section": "ux",
       "objective": "embedding"

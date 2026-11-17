@@ -34,6 +34,7 @@ for (const q of questions) {
   const d = domains.get(q.domain);
   if (!d) err(id, `unknown domain "${q.domain}"`);
   else if (!d.objectives.some((o) => o.id === q.objective)) err(id, `objective "${q.objective}" is not in domain "${q.domain}"`);
+  if ('associateMock' in q && q.associateMock !== false) err(id, 'associateMock may only be false (omit it otherwise)');
   if (q.guide) { // optional placement in the 2026 PDF guide's outline; required for questions used in the 60-question forms
     const sec = sections.get(q.guide.section);
     if (!sec || !sec.objectives.includes(q.guide.objective)) err(id, `guide.section/guide.objective "${q.guide.section}/${q.guide.objective}" is not in blueprint.guide2026`);
@@ -91,7 +92,9 @@ for (const q of questions) {
 for (const d of [null, ...blueprint.domains]) {
   const tf = questions.filter((q) => q.format === 'truefalse' && (!d || q.domain === d.id));
   const t = tf.filter((q) => q.answer === true).length;
-  if (tf.length && Math.abs(t - (tf.length - t)) > 2) err(`truefalse/${d ? d.id : 'all'}`, `unbalanced keys: ${t} true vs ${tf.length - t} false`);
+  // Overall the keys must be level; within a domain neither key may exceed two thirds once there are enough items to judge.
+  const lopsided = d ? tf.length >= 6 && Math.max(t, tf.length - t) * 3 > tf.length * 2 : Math.abs(t - (tf.length - t)) > 2;
+  if (lopsided) err(`truefalse/${d ? d.id : 'all'}`, `unbalanced keys: ${t} true vs ${tf.length - t} false`);
 }
 
 // The dynamic Associate mock draws a quota per domain from the exam's formats; the bank must be able to fill it.
@@ -99,7 +102,7 @@ if (!bankOnly) {
   const a = exam('associate');
   if (Object.values(a.quotas).reduce((x, y) => x + y, 0) !== a.questions) err('exam associate', 'quotas do not add up to the question count');
   for (const [dom, n] of Object.entries(a.quotas)) {
-    const have = questions.filter((q) => q.domain === dom && a.formats.includes(q.format)).length;
+    const have = questions.filter((q) => q.domain === dom && a.formats.includes(q.format) && q.associateMock !== false).length;
     if (have < n) err('exam associate', `${dom}: ${have} ${a.formats.join('/')} questions, the mock needs ${n}`);
   }
 }

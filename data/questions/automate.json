@@ -123,7 +123,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Combine the object set condition with a time condition, so evaluations are capped at the schedule's frequency",
+        "text": "Combine the object set condition with a time condition to cap how often it evaluates",
         "why": "Correct. For frequently updated objects, pairing the object condition with a time condition limits how often the automation evaluates."
       },
       {
@@ -133,17 +133,17 @@
       },
       {
         "id": "c",
-        "text": "Keep per-object execution and raise the parallelization setting",
+        "text": "Keep per-object execution and raise the parallelization setting so runs finish sooner",
         "why": "More parallelism finishes the same number of executions sooner; it does not reduce how many executions happen."
       },
       {
         "id": "d",
-        "text": "Enable Allow cycles so that repeated triggers are tolerated",
+        "text": "Enable Allow cycles so that repeated triggers from the same sensor are tolerated",
         "why": "Allow cycles relaxes cycle detection for automations that trigger each other; it does nothing to reduce evaluations."
       },
       {
         "id": "e",
-        "text": "Enable dropping of objects above the live automation scale limit",
+        "text": "Enable dropping of objects that exceed the live automation scale limit for an event",
         "why": "That setting only changes what happens when a single event exceeds the scale limit, and it discards objects rather than processing them efficiently."
       }
     ],
@@ -243,12 +243,12 @@
     "options": [
       {
         "id": "a",
-        "text": "The row-count check counts the rows in the dataset as of the committed transaction, not only the rows that the update added",
+        "text": "The row-count check counts every row in the dataset at the committed transaction, not only the added rows",
         "why": "Correct. An append-only dataset that already holds rows satisfies 'at least 1 row' after every update."
       },
       {
         "id": "b",
-        "text": "Every committed update that meets the row-count condition can trigger effects; the count does not have to cross the threshold",
+        "text": "Every committed update that meets the row-count condition can trigger effects; no threshold crossing is needed",
         "why": "Correct. The condition is not edge-triggered, so consecutive qualifying updates each trigger the automation."
       },
       {
@@ -521,12 +521,12 @@
     "options": [
       {
         "id": "a",
-        "text": "With a single object input, the Action runs once per alert, and a parallelization setting controls how many run at a time",
+        "text": "With a single object input the Action runs once per alert, and parallelization controls how many run at once",
         "why": "Correct. Single object and property reference inputs mean one execution per triggering object, tuned by parallelization."
       },
       {
         "id": "b",
-        "text": "In batch mode the batch size is a maximum; the automation does not wait for more alerts to fill a batch",
+        "text": "In batch mode the batch size is a maximum; execution does not wait for more alerts to fill a batch",
         "why": "Correct. A batch may hold fewer objects than the configured size because execution does not wait for additional objects."
       },
       {
@@ -603,7 +603,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Raise the retry count and add exponential backoff with jitter to the action effect retry policy",
+        "text": "Raise the retry count and add exponential backoff with jitter to the effect's retries",
         "why": "More retries on an operation that is not safe to repeat increase the chance of sending the correction again."
       },
       {
@@ -679,12 +679,12 @@
     "options": [
       {
         "id": "a",
-        "text": "Events of the automation are processed one at a time, in the order in which they were triggered",
+        "text": "Events of the automation are processed one at a time, in the order they were triggered",
         "why": "Correct. With queuing on, one event completes all of its effects before the next event begins, which preserves order."
       },
       {
         "id": "b",
-        "text": "It reduces conflicts between Actions editing the same object, at the cost of lower throughput",
+        "text": "It reduces conflicts between Actions editing the same object, at the cost of throughput",
         "why": "Correct. Two Actions cannot edit one object simultaneously; running events sequentially avoids that, but fewer events are processed at once."
       },
       {
@@ -694,12 +694,12 @@
       },
       {
         "id": "d",
-        "text": "It guarantees that each effect is executed exactly once per event",
+        "text": "It changes the execution guarantee so that each effect runs exactly once per event",
         "why": "Queuing does not change execution guarantees; effects remain at-least-once."
       },
       {
         "id": "e",
-        "text": "It lets automations that trigger each other run without cycle detection",
+        "text": "It lets automations that trigger each other keep running without cycle detection",
         "why": "That describes the separate Allow cycles setting, which is unrelated to ordering events."
       }
     ],
@@ -761,7 +761,7 @@
     "options": [
       {
         "id": "a",
-        "text": "Only the three failed payments are passed to the fallback; the other 37 continue to Open review case",
+        "text": "Only the three failed payments go to the fallback; the other 37 continue to Open review case",
         "why": "Correct. Fallbacks are triggered per object, so only the failed subset reaches the fallback and the rest carry on through the sequence."
       },
       {
@@ -781,7 +781,7 @@
       },
       {
         "id": "e",
-        "text": "Once the fallback succeeds, the three payments resume at Open review case",
+        "text": "Once the fallback succeeds, the three failed payments resume the sequence at Open review case",
         "why": "The sequence is not resumed after a fallback; the failed objects stop at the fallback."
       }
     ],
@@ -815,7 +815,7 @@
       },
       {
         "id": "c",
-        "text": "Manually execute the automation on an object set containing only the five test orders",
+        "text": "Manually execute the automation from its Execute tab on an object set of only the five test orders",
         "why": "Correct. Manual execution runs the configured effects immediately on a chosen object set, which is intended for testing before a wider release and for backfills."
       },
       {
@@ -924,7 +924,7 @@
       },
       {
         "id": "b",
-        "text": "The Action type was changed and no longer matches the input configuration saved on the automation",
+        "text": "The Action type was changed and no longer matches the inputs saved on the automation",
         "why": "Correct. A change to the Action that is incompatible with the automation's saved inputs causes the effect to fail after a successful evaluation."
       },
       {
@@ -934,7 +934,7 @@
       },
       {
         "id": "d",
-        "text": "The automation was muted by one of its Editors",
+        "text": "The automation was muted by one of its Editors, so its effects stopped running",
         "why": "A muted automation triggers no effects at all, so there would be no failed action execution to see."
       },
       {
@@ -973,7 +973,7 @@
       },
       {
         "id": "c",
-        "text": "Use Retry failed events, selecting the failed events and the effect to retry",
+        "text": "Use Retry failed events, selecting those events and the effect to retry",
         "why": "Correct. A manual retry re-runs the chosen effects of the chosen failed events, and it uses the latest configuration."
       },
       {
